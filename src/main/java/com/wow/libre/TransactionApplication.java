@@ -1,13 +1,13 @@
-package com.wow.libre.transaction;
+package com.wow.libre;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WowLibreTransactionApplication {
+public class TransactionApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WowLibreTransactionApplication.class, args);
+		SpringApplication.run(TransactionApplication.class, args);
 	}
 
 }

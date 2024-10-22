@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: wow-libre-transaction
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  main:
+    allow-circular-references: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:mysql://localhost:3306/transactions
+    username: root
+    password: Loquendo96@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  address: 0.0.0.0
+  port: 8091
+application:
+  dlocalgo:
+    host: https://api-sbx.dlocalgo.com
+    api-key: 'AwfbepCYXarziZPPoebSZmDMVHECabVt'
+    api-login: 'AI3ik9Hd62tNyZYqSTVItijecfTS51E3VjBuzQYy'
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 604800000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days

@@ -1,10 +1,10 @@
-package com.wow.libre.transaction;
+package com.wow.libre;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WowLibreTransactionApplicationTests {
+class TransactionApplicationTests {
 
 	@Test
 	void contextLoads() {
