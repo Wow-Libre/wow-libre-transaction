@@ -39,4 +39,8 @@ public class TransactionEntity {
     private String referenceNumber;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+    @Column(name = "payment_id")
+    private String paymentId;
+    @Column(name = "gold")
+    private boolean gold;
 }

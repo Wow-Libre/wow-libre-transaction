@@ -7,4 +7,6 @@ public interface TransactionPort {
     void save(TransactionEntity transaction, String transactionId);
 
     PaymentApplicableModel isRealPaymentApplicable(TransactionModel transaction, String transactionId);
+
+    void assignmentPaymentId(String orderId, String paymentId, String transactionId);
 }

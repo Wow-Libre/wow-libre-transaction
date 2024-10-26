@@ -3,7 +3,6 @@ package com.wow.libre.infrastructure.client;
 import com.wow.libre.domain.constant.Constants;
 import com.wow.libre.domain.dto.client.*;
 import com.wow.libre.domain.exception.*;
-import com.wow.libre.domain.shared.*;
 import com.wow.libre.infrastructure.conf.*;
 import org.slf4j.*;
 import org.springframework.core.*;
@@ -26,13 +25,13 @@ public class DLocalGoClient {
         this.configurations = configurations;
     }
 
-    public CreatePaymentResponse createPayment(CreatePaymentDto request, String transactionId) {
+    public CreatePaymentResponse createPayment(CreatePaymentRequest request, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(Constants.HEADER_TRANSACTION_ID, transactionId);
         headers.set("authorization", String.format("Bearer %s:%s", configurations.getApiKeyDLocalGoHost(),
                 configurations.getApiSecretDLocalGoHost()));
 
-        HttpEntity<CreatePaymentDto> entity = new HttpEntity<>(request, headers);
+        HttpEntity<CreatePaymentRequest> entity = new HttpEntity<>(request, headers);
 
         try {
             ResponseEntity<CreatePaymentResponse> response = restTemplate.exchange(String.format("%s/v1/payments",

@@ -96,8 +96,10 @@ CREATE TABLE transactions.transaction
 (
     id               bigint AUTO_INCREMENT NOT NULL,
     user_id          bigint      NOT NULL,
+    account_id       bigint,
+    server_id        bigint,
     price double NOT NULL,
-    status           boolean     NOT NULL,
+    status           varchar(50) NOT NULL,
     product_id       bigint,
     subscription_id  bigint,
     reference_number varchar(80) NOT NULL,

@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 @Data
-public class CreatePaymentDto {
+@Builder
+public class CreatePaymentRequest {
     private String currency;
     private Double amount;
     private String country;

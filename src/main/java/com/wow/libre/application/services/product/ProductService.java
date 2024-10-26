@@ -67,13 +67,8 @@ public class ProductService implements ProductPort {
 
     @Override
     public ProductDto product(String referenceCode, String transactionId) {
-        Optional<ProductEntity> product = products.findByReferenceNumber(referenceCode, transactionId);
+        ProductEntity productModel = getProduct(referenceCode, transactionId);
 
-        if (product.isEmpty()) {
-            throw new InternalException("Product Not Found", transactionId);
-        }
-
-        ProductEntity productModel = product.get();
         List<ProductDetailModel> productDetails = productDetailsPort.findByProductId(productModel, transactionId);
 
         return ProductDto.builder().id(productModel.getId())
@@ -90,6 +85,16 @@ public class ProductService implements ProductPort {
                 .details(productDetails)
                 .category(productModel.getProductCategoryId().getName()).build();
 
+    }
+    @Override
+    public ProductEntity getProduct(String referenceCode, String transactionId) {
+        Optional<ProductEntity> product = products.findByReferenceNumber(referenceCode, transactionId);
+
+        if (product.isEmpty()) {
+            throw new InternalException("Product Not Found", transactionId);
+        }
+
+        return product.get();
     }
 
 }
