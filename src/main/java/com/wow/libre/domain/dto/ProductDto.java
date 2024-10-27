@@ -19,6 +19,7 @@ public class ProductDto {
     private String description;
     private String imgUrl;
     private String partner;
+    private Long serverId;
     private String referenceNumber;
     private List<ProductDetailModel> details;
 }

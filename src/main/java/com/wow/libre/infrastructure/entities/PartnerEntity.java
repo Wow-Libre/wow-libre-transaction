@@ -12,5 +12,7 @@ public class PartnerEntity {
     @Column(name = "id")
     private Long id;
     private String name;
+    @Column(name = "server_id")
+    private Long serverId;
     private boolean status;
 }

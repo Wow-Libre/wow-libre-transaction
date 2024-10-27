@@ -6,5 +6,5 @@ import com.wow.libre.domain.dto.*;
 public interface PaymentPort {
     CreatePaymentRedirectDto createPayment(Long userId, CreatePaymentDto createPaymentDto, String transactionId);
 
-    void processPayment(String orderId, String transactionId);
+    void processPayment(String paymentId, String transactionId);
 }

@@ -36,7 +36,7 @@ public class SecurityConfiguration {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
                 "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "http://15.204.134" +
-                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74"));
+                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74","https://d1b1-181-51-34-17.ngrok-free.app"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
@@ -66,6 +66,7 @@ public class SecurityConfiguration {
                                         //INTERNAL API
                                         "/api/products",
                                         "/api/products/{reference}",
+                                        "/api/payment/notification",
                                         //SWAGGER
                                         "/v2/api-docs",
                                         "/swagger-resources",
@@ -77,7 +78,6 @@ public class SecurityConfiguration {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**")
                                 .permitAll()
-                                .requestMatchers("/api/server/create", "/api/server/key").hasAuthority("")
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

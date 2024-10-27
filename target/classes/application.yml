@@ -19,8 +19,8 @@ server:
 application:
   dlocalgo:
     host: https://api-sbx.dlocalgo.com
-    api-key: 'AwfbepCYXarziZPPoebSZmDMVHECabVt'
-    api-login: 'AI3ik9Hd62tNyZYqSTVItijecfTS51E3VjBuzQYy'
+    api-key: 'lrruACSgYsuGvehAnbRKhwGJtwXFQoiZ'
+    api-login: 'w6wWS4jJjS8ujDVzCTWkA4GIb2mnKQ9jvSRO5iQM'
   security:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970

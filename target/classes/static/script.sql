@@ -26,11 +26,13 @@ CREATE TABLE transactions.subscription
 
 CREATE TABLE transactions.partner
 (
-    id     bigint AUTO_INCREMENT NOT NULL,
-    name   varchar(50) NOT NULL,
-    status boolean     NOT NULL,
+    id        bigint AUTO_INCREMENT NOT NULL,
+    name      varchar(50) NOT NULL,
+    server_id bigint      NOT NULL,
+    status    boolean     NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT partner_name_uq UNIQUE (name)
+    CONSTRAINT partner_name_uq UNIQUE (name),
+    constraint partner_server_id UNIQUE (server_id)
 );
 
 CREATE TABLE transactions.product_category
@@ -103,15 +105,18 @@ CREATE TABLE transactions.transaction
     product_id       bigint,
     subscription_id  bigint,
     reference_number varchar(80) NOT NULL,
-    create_date      date        NOT NULL,
+    creation_date    date        NOT NULL,
+    payment_id       varchar(60),
+    gold             boolean,
+    currency         varchar(20) NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT transaction_product_reference_uq UNIQUE (reference_number),
     CONSTRAINT transaction_product_id FOREIGN KEY (product_id) REFERENCES transactions.product (id)
 );
 
 
-INSERT INTO transactions.partner(name, status)
-VALUES ('Wow Libre', 1);
+INSERT INTO transactions.partner(name, status, server_id)
+VALUES ('Wow Libre', 1, 1);
 
 INSERT INTO transactions.product_category(name, description, disclaimer)
 VALUES ('Monturas', 'Monturas',

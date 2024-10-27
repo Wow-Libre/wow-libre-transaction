@@ -2,6 +2,7 @@ package com.wow.libre.infrastructure.repositories.transaction;
 
 import com.wow.libre.domain.port.out.transaction.*;
 import com.wow.libre.infrastructure.entities.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -27,5 +28,15 @@ public class JpaTransactionAdapter implements SaveTransaction, ObtainTransaction
     @Override
     public Optional<TransactionEntity> findByPaymentId(String paymentId, String transactionId) {
         return transactionRepository.findByPaymentId(paymentId);
+    }
+
+    @Override
+    public List<TransactionEntity> findByUserId(Long userId, int page, int size, String transactionId) {
+        return transactionRepository.findByUserId(userId, PageRequest.of(page, size)).stream().toList();
+    }
+
+    @Override
+    public Long findByUserId(Long userId, String transactionId) {
+        return transactionRepository.countByUserId(userId);
     }
 }

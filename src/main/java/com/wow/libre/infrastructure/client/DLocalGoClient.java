@@ -30,7 +30,7 @@ public class DLocalGoClient {
         headers.set(Constants.HEADER_TRANSACTION_ID, transactionId);
         headers.set("authorization", String.format("Bearer %s:%s", configurations.getApiKeyDLocalGoHost(),
                 configurations.getApiSecretDLocalGoHost()));
-
+        headers.set("content-type","application/json");
         HttpEntity<CreatePaymentRequest> entity = new HttpEntity<>(request, headers);
 
         try {
@@ -60,5 +60,37 @@ public class DLocalGoClient {
 
     }
 
+    public PaymentDetailResponse paymentDetail(String paymentId, String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(Constants.HEADER_TRANSACTION_ID, transactionId);
+        headers.set("authorization", String.format("Bearer %s:%s", configurations.getApiKeyDLocalGoHost(),
+                configurations.getApiSecretDLocalGoHost()));
 
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<PaymentDetailResponse> response = restTemplate.exchange(String.format("%s/v1/payments/%s",
+                            configurations.getDLocalGoHost(), paymentId), HttpMethod.GET, entity,
+                    new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody());
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[DLocalGoClient] [paymentDetail] Client/Server Error: {}. The request failed with a " +
+                            "client or server error. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[DLocalGoClient] [paymentDetail] Unexpected Error: {}. An unexpected error occurred " +
+                            "during the transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
 }

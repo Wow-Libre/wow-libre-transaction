@@ -43,4 +43,5 @@ public class TransactionEntity {
     private String paymentId;
     @Column(name = "gold")
     private boolean gold;
+    private String currency;
 }

@@ -9,4 +9,7 @@ public interface ObtainTransaction {
 
     Optional<TransactionEntity> findByPaymentId(String paymentId, String transactionId);
 
+    List<TransactionEntity> findByUserId(Long userId, int page, int size, String transactionId);
+
+    Long findByUserId(Long userId, String transactionId);
 }

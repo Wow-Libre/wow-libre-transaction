@@ -24,6 +24,8 @@ import java.io.*;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 
+import static com.wow.libre.domain.constant.Constants.HEADER_USER_ID;
+
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -56,8 +58,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             final String jwt = authHeader.substring(7);
             final String email = jwtPort.extractUsername(jwt);
+            final Long userId = jwtPort.extractUserId(jwt);
 
             requestWrapper.setHeader(Constants.HEADER_EMAIL, email);
+            requestWrapper.setHeader(HEADER_USER_ID, String.valueOf(userId));
 
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
 

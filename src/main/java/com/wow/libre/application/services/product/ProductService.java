@@ -83,9 +83,11 @@ public class ProductService implements ProductPort {
                 .partner(productModel.getPartnerId().getName())
                 .referenceNumber(productModel.getReferenceNumber())
                 .details(productDetails)
+                .serverId(productModel.getPartnerId().getServerId())
                 .category(productModel.getProductCategoryId().getName()).build();
 
     }
+
     @Override
     public ProductEntity getProduct(String referenceCode, String transactionId) {
         Optional<ProductEntity> product = products.findByReferenceNumber(referenceCode, transactionId);

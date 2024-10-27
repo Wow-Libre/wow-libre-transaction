@@ -1,5 +1,6 @@
 package com.wow.libre.application.services.transaction;
 
+import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.product.*;
@@ -54,7 +55,7 @@ public class TransactionService implements TransactionPort {
 
         boolean isPayment = !productDto.isGamblingMoney();
         final String orderId = randomString.nextString();
-
+        final String description = String.format("Donation %s", productDto.getName());
         Double price = productDto.getPrice();
         Integer discountPercentage = productDto.getDiscount();
         Double discountAmount = (discountPercentage / 100) * price;
@@ -66,18 +67,25 @@ public class TransactionService implements TransactionPort {
         transactionEntity.setStatus(isPayment ? "CREATED" : "PENDING");
         transactionEntity.setGold(!isPayment);
         transactionEntity.setProductId(productDto);
-        transactionEntity.setServerId(transaction.getServerId());
+        transactionEntity.setServerId(productDto.getPartnerId().getId());
         transactionEntity.setCreationDate(LocalDateTime.now());
-        transactionEntity.setReferenceNumber(referenceNumber);
+        transactionEntity.setReferenceNumber(orderId);
         transactionEntity.setPrice(finalPrice);
+        transactionEntity.setCurrency("USD");
         transactionEntity.setUserId(transaction.getUserId());
         saveTransaction.save(transactionEntity, transactionId);
 
-        return new PaymentApplicableModel(isPayment, finalPrice, "USD", orderId);
+        return new PaymentApplicableModel(isPayment, finalPrice, "USD", orderId, description);
     }
 
     @Override
     public void assignmentPaymentId(String reference, String paymentId, String transactionId) {
+        TransactionEntity transaction = getTransactionEntity(reference, transactionId);
+        transaction.setPaymentId(paymentId);
+        saveTransaction.save(transaction, transactionId);
+    }
+
+    private TransactionEntity getTransactionEntity(String reference, String transactionId) {
         Optional<TransactionEntity> transactionEntity = obtainTransaction.findByReferenceNumber(reference,
                 transactionId);
 
@@ -85,8 +93,27 @@ public class TransactionService implements TransactionPort {
             throw new InternalException("", transactionId);
         }
 
-        TransactionEntity transaction = transactionEntity.get();
-        transaction.setPaymentId(paymentId);
-        saveTransaction.save(transaction, transactionId);
+        return transactionEntity.get();
     }
+
+    @Override
+    public TransactionEntity transaction(String reference, String transactionId) {
+        return getTransactionEntity(reference, transactionId);
+    }
+
+    @Override
+    public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
+        TransactionsDto data = new TransactionsDto();
+
+        List<Transaction> transactions = obtainTransaction.findByUserId(userId, page, size, transactionId).stream()
+                .map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
+                        transaction.getCurrency(), transaction.getStatus(), 100, transaction.getCreationDate(),
+                        transaction.getReferenceNumber(), transaction.getProductId().getName(),
+                        transaction.getProductId().getImageUrl())).toList();
+        data.setTransactions(transactions);
+        data.setSize(obtainTransaction.findByUserId(userId, transactionId));
+
+        return data;
+    }
+
 }
