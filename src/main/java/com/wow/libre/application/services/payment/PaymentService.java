@@ -42,8 +42,8 @@ public class PaymentService implements PaymentPort {
                     .currency(paymentApplicableModel.currency())
                     .description(paymentApplicableModel.description())
                     .orderId(paymentApplicableModel.orderId())
-                    .notificationUrl("https://f676-181-51-34-81.ngrok-free.app/api/payment/notification")
-                    .successUrl("http://localhost:3000/store/000001")
+                    .notificationUrl("https://883e-181-51-34-114.ngrok-free.app/api/payment/notification")
+                    .successUrl("http://localhost:3000/profile/purchases")
                     .backUrl("http://localhost:3000/store")
                     .build();
 

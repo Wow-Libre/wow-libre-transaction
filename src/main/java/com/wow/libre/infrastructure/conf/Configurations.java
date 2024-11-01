@@ -13,4 +13,10 @@ public class Configurations {
     private String apiKeyDLocalGoHost;
     @Value("${application.dlocalgo.api-login}")
     private String apiSecretDLocalGoHost;
+    @Value("${application.urls.wow-libre}")
+    private String pathLoginWowLibre;
+    @Value("${application.account.username}")
+    private String loginUsername;
+    @Value("${application.account.password}")
+    private String loginPassword;
 }

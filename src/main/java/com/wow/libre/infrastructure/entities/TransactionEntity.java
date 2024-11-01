@@ -3,15 +3,15 @@ package com.wow.libre.infrastructure.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.*;
 import java.time.*;
 
 @Data
 @Entity
 @Table(name = "transaction")
-public class TransactionEntity {
+public class TransactionEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
     @Column(name = "user_id")
     private Long userId;
@@ -44,4 +44,5 @@ public class TransactionEntity {
     @Column(name = "gold")
     private boolean gold;
     private String currency;
+    private boolean send;
 }

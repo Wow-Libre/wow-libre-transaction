@@ -109,6 +109,7 @@ CREATE TABLE transactions.transaction
     payment_id       varchar(60),
     gold             boolean,
     currency         varchar(20) NOT NULL,
+    send             boolean     NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT transaction_product_reference_uq UNIQUE (reference_number),
     CONSTRAINT transaction_product_id FOREIGN KEY (product_id) REFERENCES transactions.product (id)
@@ -130,8 +131,46 @@ VALUES ('Packs', 'Packs', 'La diversión siempre es mejor a lo grande, como en e
 INSERT INTO transactions.product
 (name, product_category_id, disclaimer, price, discount, gambling_money, gold_price, description, image_url, partner_id,
  reference_number, status)
-VALUES ('Maestro de manada de las Colinas Pardas', 1,
-        '¡Vuela por Azeroth con estilo con esta montura que ofrece reparaciones y transfiguraciones!', 20, 0, 0, 0,
-        'Description',
-        'https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blt6eecb28ec5aba217/66eb20ff55753d40e87393a8/WoW_GrizzlyHillsPackMaster_ShopBrowsingCard_Indicators_1920x1080.png?imwidth=1088&imdensity=1',
-        1, '000001', 1);
+VALUES ('Riendas de Invencible', 1,
+        '¡Vuela por Azeroth con estilo!', 20, 0, 0, 0,
+        'Forjadas por los más hábiles artesanos, las Riendas de Invencible están hechas de materiales raros y mágicos, lo que les confiere un brillo único y un diseño elegante que refleja la grandeza de quien las utiliza. Además de sus atributos físicos, estas riendas son un símbolo de fuerza y dominio, permitiendo a su portador ejecutar maniobras impresionantes y controlar a su montura con una precisión excepcional.',
+        'https://wowdevils.com/wp-content/uploads/2024/04/Riendas-de-Invencible-50818.png',
+        1, 'SYOTGT8I6P1V9WNRNT9X', 1);
+
+
+INSERT INTO transactions.packages
+    (id, code_core, product_id)
+VALUES (1, '50818', 1);
+
+INSERT INTO transactions.product_details
+    (id, product_id, title, description, img_url)
+VALUES (1, 2, 'Forjadas por los más hábiles artesanos',
+        'Con cada uso, las Riendas de Invencible brindan un sentido de invulnerabilidad, como si el usuario estuviera destinado a superar cualquier desafío. Aquellos que las poseen son reconocidos no solo como grandes guerreros, sino como leyendas en sus respectivos mundos.',
+        'https://totemz.files.wordpress.com/2010/02/invinc-2.jpg?w=600&h=450');
+INSERT INTO transactions.product_details
+    (id, product_id, title, description, img_url)
+VALUES (2, 2, 'La Herencia de los Héroes',
+        ' Las Riendas de Invencible han sido transmitidas a través de generaciones de héroes, y su legado está tejido en las historias de batallas épicas. Con cada uso, desatan una corriente de energía mágica que mejora la agilidad y resistencia de tu montura. Imagina galopar a través de los campos de batalla, con la certeza de que no hay enemigo que pueda detener tu avance. Eres más que un guerrero; eres una leyenda en ascenso.',
+        'https://wow.zamimg.com/uploads/screenshots/normal/171750.jpg');
+INSERT INTO transactions.product_details
+    (id, product_id, title, description, img_url)
+VALUES (3, 2, 'El Lazo de la Invulnerabilidad',
+        'Portar las Riendas de Invencible es aceptar un destino glorioso. Estas riendas, creadas por la unión de elementos de la naturaleza y magia arcana, te otorgan un aura de invulnerabilidad. Cada vez que tiras de ellas, te sentirás invencible, listo para desafiar a los más feroces adversarios. Con cada paso que das, el mundo se inclina ante tu valentía, convirtiéndote en un faro de esperanza para tus aliados y un terror para tus enemigos.',
+        'https://evelongames.com/wp-content/uploads/2022/12/riendas-del-invencible.jpg');
+
+
+
+CREATE TABLE transactions.client
+(
+    id              bigint AUTO_INCREMENT NOT NULL,
+    username        varchar(50) NOT NULL,
+    jwt             text        NOT NULL,
+    refresh_token   text        NOT NULL,
+    expiration_date date        NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT client_username_uq UNIQUE (username)
+)
+
+
+ALTER TABLE transactions.transaction
+    ADD COLUMN send boolean NOT NULL;

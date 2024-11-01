@@ -33,6 +33,11 @@ public class TransactionService implements TransactionPort {
     }
 
     @Override
+    public Optional<TransactionEntity> findById(Long id) {
+        return obtainTransaction.findById(id);
+    }
+
+    @Override
     public void save(TransactionEntity transaction, String transactionId) {
         saveTransaction.save(transaction, transactionId);
     }
@@ -71,6 +76,7 @@ public class TransactionService implements TransactionPort {
         transactionEntity.setCreationDate(LocalDateTime.now());
         transactionEntity.setReferenceNumber(orderId);
         transactionEntity.setPrice(finalPrice);
+        transactionEntity.setSend(false);
         transactionEntity.setCurrency("USD");
         transactionEntity.setUserId(transaction.getUserId());
         saveTransaction.save(transactionEntity, transactionId);
@@ -114,6 +120,11 @@ public class TransactionService implements TransactionPort {
         data.setSize(obtainTransaction.findByUserId(userId, transactionId));
 
         return data;
+    }
+
+    @Override
+    public List<TransactionEntity> findByStatusIsPaidAndSendIsFalse(String transactionId) {
+        return obtainTransaction.findByStatusIsPaidAndSendIsFalse(transactionId);
     }
 
 }

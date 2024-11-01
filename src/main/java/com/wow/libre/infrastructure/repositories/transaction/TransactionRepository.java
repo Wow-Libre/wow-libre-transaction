@@ -14,7 +14,11 @@ public interface TransactionRepository extends CrudRepository<TransactionEntity,
     Optional<TransactionEntity> findByPaymentId(String paymentId);
 
     Page<TransactionEntity> findByUserId(Long userId, Pageable pageable);
+
     @Query("SELECT COUNT(a) FROM TransactionEntity a WHERE a.userId = :userId")
     long countByUserId(@Param("userId") Long userId);
+
+    List<TransactionEntity> findByStatusAndSendIsFalse(String status);
+
 
 }

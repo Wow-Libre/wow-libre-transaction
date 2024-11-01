@@ -3,11 +3,13 @@ spring:
     name: wow-libre-transaction
   jackson:
     property-naming-strategy: SNAKE_CASE
-  main:
-    allow-circular-references: true
   jpa:
     hibernate:
       ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
   datasource:
     url: jdbc:mysql://localhost:3306/transactions
     username: root
@@ -17,6 +19,11 @@ server:
   address: 0.0.0.0
   port: 8091
 application:
+  urls:
+    wow-libre: http://localhost:8090
+  account:
+    username: play4chitiva@gmail.com
+    password: 'sebas'
   dlocalgo:
     host: https://api-sbx.dlocalgo.com
     api-key: 'lrruACSgYsuGvehAnbRKhwGJtwXFQoiZ'

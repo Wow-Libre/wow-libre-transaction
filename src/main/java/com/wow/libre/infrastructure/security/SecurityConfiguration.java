@@ -64,6 +64,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(
                                         //INTERNAL API
+                                "/test",
                                         "/api/products",
                                         "/api/products/{reference}",
                                         "/api/payment/notification",
