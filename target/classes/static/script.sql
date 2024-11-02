@@ -169,8 +169,37 @@ CREATE TABLE transactions.client
     expiration_date date        NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT client_username_uq UNIQUE (username)
-)
+);
 
 
-ALTER TABLE transactions.transaction
-    ADD COLUMN send boolean NOT NULL;
+INSERT INTO transactions.product
+(name, product_category_id, disclaimer, price, discount, gambling_money, gold_price, description, image_url, partner_id,
+ reference_number, status)
+VALUES ('Riendas del tigre espectral presto', 1,
+        '¡Domina el Éter con las Riendas del Tigre Espectral!', 0, 0, 1, 10000000,
+        'Embárcate en una aventura como ninguna otra montando al magnífico Tigre Espectral, una montura que es tan feroz como encantadora. Con su pelaje etéreo y ojos brillantes como estrellas, este tigre no solo es un espectáculo visual, sino que también es el compañero perfecto para los guerreros que buscan distinguirse en el campo de batalla.',
+        'https://wowdevils.com/wp-content/uploads/2024/03/Riendas-del-tigre-espectral-presto-49284.png',
+        1, 'SYOTGT8I6P1V9WNRNT9Xd2', 1);
+
+
+INSERT INTO transactions.packages
+    (id, code_core, product_id)
+VALUES (1, '50818', 1);
+
+INSERT INTO transactions.product_details
+    (id, product_id, title, description, img_url)
+VALUES (1, 2, 'Forjadas por los más hábiles artesanos',
+        'Con cada uso, las Riendas de Invencible brindan un sentido de invulnerabilidad, como si el usuario estuviera destinado a superar cualquier desafío. Aquellos que las poseen son reconocidos no solo como grandes guerreros, sino como leyendas en sus respectivos mundos.',
+        'https://totemz.files.wordpress.com/2010/02/invinc-2.jpg?w=600&h=450');
+INSERT INTO transactions.product_details
+    (id, product_id, title, description, img_url)
+VALUES (2, 2, 'La Herencia de los Héroes',
+        ' Las Riendas de Invencible han sido transmitidas a través de generaciones de héroes, y su legado está tejido en las historias de batallas épicas. Con cada uso, desatan una corriente de energía mágica que mejora la agilidad y resistencia de tu montura. Imagina galopar a través de los campos de batalla, con la certeza de que no hay enemigo que pueda detener tu avance. Eres más que un guerrero; eres una leyenda en ascenso.',
+        'https://wow.zamimg.com/uploads/screenshots/normal/171750.jpg');
+INSERT INTO transactions.product_details
+    (id, product_id, title, description, img_url)
+VALUES (3, 2, 'El Lazo de la Invulnerabilidad',
+        'Portar las Riendas de Invencible es aceptar un destino glorioso. Estas riendas, creadas por la unión de elementos de la naturaleza y magia arcana, te otorgan un aura de invulnerabilidad. Cada vez que tiras de ellas, te sentirás invencible, listo para desafiar a los más feroces adversarios. Con cada paso que das, el mundo se inclina ante tu valentía, convirtiéndote en un faro de esperanza para tus aliados y un terror para tus enemigos.',
+        'https://evelongames.com/wp-content/uploads/2022/12/riendas-del-invencible.jpg');
+
+

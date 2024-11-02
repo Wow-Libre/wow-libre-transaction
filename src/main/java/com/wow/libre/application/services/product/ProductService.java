@@ -49,12 +49,17 @@ public class ProductService implements ProductPort {
     }
 
     private ProductsDto mapToModel(ProductEntity product) {
+        Integer discount = product.getDiscount();
+        Double price = product.getPrice();
+
         return ProductsDto.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .disclaimer(product.getDisclaimer())
-                .price(product.getPrice())
-                .discount(product.getDiscount())
+                .discountedPrice(calculateFinalPrice(price, discount))
+                .discountedGoldPrice(calculateGoldPrice(product.getGoldPrice(), discount))
+                .price(price)
+                .discount(discount)
                 .gamblingMoney(product.isGamblingMoney())
                 .goldPrice(product.getGoldPrice())
                 .description(product.getDescription())
@@ -63,6 +68,16 @@ public class ProductService implements ProductPort {
                 .referenceNumber(product.getReferenceNumber())
                 .category(product.getProductCategoryId().getName())
                 .build();
+    }
+
+    public Double calculateFinalPrice(Double price, Integer discount) {
+        Double discountAmount = price * (discount / 100.0);
+        return price - discountAmount;
+    }
+
+    public Double calculateGoldPrice(Long price, Integer discount) {
+        Double discountAmount = price * (discount / 100.0);
+        return price - discountAmount;
     }
 
     @Override
