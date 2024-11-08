@@ -41,4 +41,30 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(product, transactionId).created().build());
     }
+
+
+    @GetMapping("/discount")
+    public ResponseEntity<GenericResponse<List<ProductDiscountsDto>>> productDiscounts(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+
+        List<ProductDiscountsDto> accounts = productPort.productDiscounts(transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
+    }
+
+    @GetMapping("/offer")
+    public ResponseEntity<GenericResponse<ProductDiscountsDto>> offer(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+
+        Optional<ProductDiscountsDto> product =
+                productPort.productDiscounts(transactionId).stream().reduce((p1, p2) ->
+                        p1.getDiscount() > p2.getDiscount() ? p1 : p2
+                ).stream().findFirst();
+
+        return product.map(productDiscountsDto -> ResponseEntity.status(HttpStatus.OK)
+                        .body(new GenericResponseBuilder<>(productDiscountsDto, transactionId).created().build()))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new GenericResponseBuilder<ProductDiscountsDto>(transactionId).created().build()));
+    }
 }

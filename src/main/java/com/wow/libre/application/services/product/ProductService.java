@@ -114,4 +114,27 @@ public class ProductService implements ProductPort {
         return product.get();
     }
 
+    @Override
+    public List<ProductDiscountsDto> productDiscounts(String transactionId) {
+
+
+        return products.findByStatusIsTrueAndDiscount(transactionId).stream()
+                .map(productModel -> ProductDiscountsDto.builder().id(productModel.getId())
+                        .name(productModel.getName())
+                        .disclaimer(productModel.getDisclaimer())
+                        .price(productModel.getPrice()).discountedPrice(calculateFinalPrice(productModel.getPrice(),
+                                productModel.getDiscount()))
+                        .discountedGoldPrice(calculateGoldPrice(productModel.getGoldPrice(),
+                                productModel.getDiscount()))
+                        .discount(productModel.getDiscount())
+                        .gamblingMoney(productModel.isGamblingMoney())
+                        .goldPrice(productModel.getGoldPrice())
+                        .description(productModel.getDescription())
+                        .imgUrl(productModel.getImageUrl())
+                        .partner(productModel.getPartnerId().getName())
+                        .referenceNumber(productModel.getReferenceNumber())
+                        .serverId(productModel.getPartnerId().getServerId())
+                        .category(productModel.getProductCategoryId().getName()).build()).toList();
+    }
+
 }

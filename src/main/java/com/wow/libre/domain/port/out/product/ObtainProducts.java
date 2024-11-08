@@ -7,5 +7,7 @@ import java.util.*;
 public interface ObtainProducts {
     List<ProductEntity> findByStatusIsTrue(String transactionId);
 
+    List<ProductEntity> findByStatusIsTrueAndDiscount(String transactionId);
+
     Optional<ProductEntity> findByReferenceNumber(String referenceCode, String transactionId);
 }

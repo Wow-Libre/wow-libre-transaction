@@ -11,4 +11,6 @@ public interface ProductPort {
     ProductDto product(String referenceCode, String transactionId);
 
     ProductEntity getProduct(String referenceCode, String transactionId);
+
+    List<ProductDiscountsDto> productDiscounts(String transactionId);
 }

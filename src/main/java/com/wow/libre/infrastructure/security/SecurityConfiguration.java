@@ -66,6 +66,8 @@ public class SecurityConfiguration {
                                         //INTERNAL API
                                 "/test",
                                         "/api/products",
+                                        "/api/products/discount",
+                                        "/api/products/offer",
                                         "/api/products/{reference}",
                                         "/api/payment/notification",
                                         //SWAGGER

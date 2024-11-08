@@ -20,6 +20,11 @@ public class JpaProductAdapter implements ObtainProducts {
     }
 
     @Override
+    public List<ProductEntity> findByStatusIsTrueAndDiscount(String transactionId) {
+        return productRepository.findByStatusIsTrueAndDiscount();
+    }
+
+    @Override
     public Optional<ProductEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
         return productRepository.findByReferenceNumberAndStatusIsTrue(referenceNumber);
     }
