@@ -27,5 +27,5 @@ public class SubscriptionEntity {
     private LocalDateTime creationDate;
     @Column(name = "next_invoice_date")
     private LocalDateTime nextInvoiceDate;
-    private Boolean status;
+    private String status;
 }

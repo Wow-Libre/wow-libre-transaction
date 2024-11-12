@@ -19,7 +19,7 @@ CREATE TABLE transactions.subscription
     creation_date     date        NOT NULL,
     next_invoice_date date        NOT NULL,
     reference_number  varchar(80) NOT NULL,
-    status            boolean     NOT NULL,
+    status            varchar(50)     NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT subscription_reference_number_uq UNIQUE (reference_number)
 );

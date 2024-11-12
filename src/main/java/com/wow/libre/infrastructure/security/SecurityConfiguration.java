@@ -1,12 +1,9 @@
 package com.wow.libre.infrastructure.security;
 
 
-import com.wow.libre.domain.model.security.*;
 import com.wow.libre.infrastructure.filter.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.*;
-import org.springframework.security.authentication.*;
-import org.springframework.security.authentication.dao.*;
 import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.config.annotation.web.configuration.*;
 import org.springframework.security.config.annotation.web.configurers.*;
@@ -18,7 +15,7 @@ import org.springframework.web.cors.*;
 
 import java.util.*;
 
-import static com.wow.libre.domain.constant.Constants.HEADER_TRANSACTION_ID;
+import static com.wow.libre.domain.constant.Constants.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.*;
 
 @EnableWebSecurity
@@ -36,7 +33,8 @@ public class SecurityConfiguration {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
                 "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "http://15.204.134" +
-                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74","https://d1b1-181-51-34-17.ngrok-free.app"));
+                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74", "https://d1b1-181-51-34-17" +
+                        ".ngrok-free.app"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
@@ -64,7 +62,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(
                                         //INTERNAL API
-                                "/test",
+                                        "/api/subscription/pill-home",
+                                        "/api/plan",
                                         "/api/products",
                                         "/api/products/discount",
                                         "/api/products/offer",
