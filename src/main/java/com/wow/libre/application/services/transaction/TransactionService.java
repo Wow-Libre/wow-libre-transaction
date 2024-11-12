@@ -1,6 +1,7 @@
 package com.wow.libre.application.services.transaction;
 
 import com.wow.libre.domain.dto.*;
+import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.product.*;
@@ -61,15 +62,16 @@ public class TransactionService implements TransactionPort {
         boolean isPayment = !productDto.isGamblingMoney();
         final String orderId = randomString.nextString();
         final String description = String.format("Donation %s", productDto.getName());
-        Double price = productDto.getPrice();
+        double price = isPayment ? productDto.getPrice() : productDto.getGoldPrice();
         Integer discountPercentage = productDto.getDiscount();
-        Double discountAmount = (discountPercentage / 100) * price;
+        double discountAmount = ((double) discountPercentage / 100) * price;
         Double finalPrice = price - discountAmount;
-
+        final String currency = isPayment ? "USD" : "GOLD";
 
         TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setAccountId(transaction.getAccountId());
-        transactionEntity.setStatus(isPayment ? "CREATED" : "PENDING");
+        transactionEntity.setStatus(isPayment ? TransactionStatus.CREATED.getType() :
+                TransactionStatus.PENDING.getType());
         transactionEntity.setGold(!isPayment);
         transactionEntity.setProductId(productDto);
         transactionEntity.setServerId(productDto.getPartnerId().getId());
@@ -77,11 +79,11 @@ public class TransactionService implements TransactionPort {
         transactionEntity.setReferenceNumber(orderId);
         transactionEntity.setPrice(finalPrice);
         transactionEntity.setSend(false);
-        transactionEntity.setCurrency("USD");
+        transactionEntity.setCurrency(currency);
         transactionEntity.setUserId(transaction.getUserId());
         saveTransaction.save(transactionEntity, transactionId);
 
-        return new PaymentApplicableModel(isPayment, finalPrice, "USD", orderId, description);
+        return new PaymentApplicableModel(isPayment, finalPrice, currency, orderId, description);
     }
 
     @Override
@@ -110,12 +112,14 @@ public class TransactionService implements TransactionPort {
     @Override
     public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
         TransactionsDto data = new TransactionsDto();
-
-        List<Transaction> transactions = obtainTransaction.findByUserId(userId, page, size, transactionId).stream()
-                .map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
-                        transaction.getCurrency(), transaction.getStatus(), 100, transaction.getCreationDate(),
-                        transaction.getReferenceNumber(), transaction.getProductId().getName(),
-                        transaction.getProductId().getImageUrl())).toList();
+        List<Transaction> transactions =
+                obtainTransaction.findByUserId(userId, page, size, transactionId).stream()
+                        .map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
+                                transaction.getCurrency(), transaction.getStatus(),
+                                TransactionStatus.getType(transaction.getStatus()).getStatus(),
+                                transaction.getCreationDate(),
+                                transaction.getReferenceNumber(), transaction.getProductId().getName(),
+                                transaction.getProductId().getImageUrl())).toList();
         data.setTransactions(transactions);
         data.setSize(obtainTransaction.findByUserId(userId, transactionId));
 

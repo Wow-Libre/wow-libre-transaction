@@ -52,9 +52,8 @@ public class WowLibreService implements WowLibrePort {
     }
 
     @Override
-    public void sendPurchases(String jwt, Long serverId, Long userId, Long accountId, List<ItemQuantityModel> items,
-                              String reference,
-                              String transactionId) {
-        wowLibreClient.sendPurchases(jwt, serverId, userId, accountId, items, reference, transactionId);
+    public void sendPurchases(String jwt, Long serverId, Long userId, Long accountId, Double gold,
+                              List<ItemQuantityModel> items, String reference, String transactionId) {
+        wowLibreClient.sendPurchases(jwt, serverId, userId, accountId, gold, items, reference, transactionId);
     }
 }

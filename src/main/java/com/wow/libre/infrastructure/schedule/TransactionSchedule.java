@@ -1,5 +1,6 @@
 package com.wow.libre.infrastructure.schedule;
 
+import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.packages.*;
 import com.wow.libre.domain.port.in.transaction.*;
@@ -31,7 +32,7 @@ public class TransactionSchedule {
     }
 
     @Transactional
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/40 * * * * *")
     public void sendPurchases() {
         final String transactionId = "";
         final String jwt = wowLibrePort.getJwt(transactionId);
@@ -39,9 +40,13 @@ public class TransactionSchedule {
 
         for (TransactionEntity transaction : transactionEntities) {
             List<ItemQuantityModel> items = packagesPort.findByProductId(transaction.getProductId(), transactionId);
+            Double amount = transaction.isGold() ? transaction.getPrice() : 0d;
             wowLibrePort.sendPurchases(jwt, transaction.getServerId(), transaction.getUserId(),
-                    transaction.getAccountId(), items, transaction.getReferenceNumber(), transactionId);
+                    transaction.getAccountId(), amount, items, transaction.getReferenceNumber(), transactionId);
             transaction.setSend(true);
+            if (transaction.isGold()) {
+                transaction.setStatus(TransactionStatus.DELIVERED.getType());
+            }
             saveTransaction.save(transaction, transactionId);
         }
 

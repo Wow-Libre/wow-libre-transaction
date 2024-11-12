@@ -56,7 +56,7 @@ public class PaymentService implements PaymentPort {
                     createPaymentResponse.getSuccessUrl(), createPaymentResponse.getBackUrl());
         }
 
-        return new CreatePaymentRedirectDto("", "", "");
+        return new CreatePaymentRedirectDto("http://localhost:3000/profile/purchases", "", "");
     }
 
     @Override
