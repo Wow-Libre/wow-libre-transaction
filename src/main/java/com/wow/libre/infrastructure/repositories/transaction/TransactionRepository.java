@@ -13,13 +13,15 @@ public interface TransactionRepository extends CrudRepository<TransactionEntity,
 
     Optional<TransactionEntity> findByPaymentId(String paymentId);
 
-    Page<TransactionEntity> findByUserId(Long userId, Pageable pageable);
+    Page<TransactionEntity> findByUserIdOrderByCreationDateDesc(Long userId, Pageable pageable);
 
     @Query("SELECT COUNT(a) FROM TransactionEntity a WHERE a.userId = :userId")
     long countByUserId(@Param("userId") Long userId);
-    @Query("SELECT a FROM TransactionEntity a WHERE (a.status = :status OR a.status = :secondStatus) AND a.send = false")
-    List<TransactionEntity> findByStatusAndSendIsFalse(@Param("status") String status, @Param("secondStatus") String secondStatus);
 
+    @Query("SELECT a FROM TransactionEntity a WHERE (a.status = :status OR a.status = :secondStatus) AND a.send = " +
+            "false")
+    List<TransactionEntity> findByStatusAndSendIsFalse(@Param("status") String status,
+                                                       @Param("secondStatus") String secondStatus);
 
 
 }

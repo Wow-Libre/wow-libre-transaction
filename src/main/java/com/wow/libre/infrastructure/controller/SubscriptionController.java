@@ -3,6 +3,7 @@ package com.wow.libre.infrastructure.controller;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.port.in.subscription.*;
 import com.wow.libre.domain.shared.*;
+import jakarta.validation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,4 +42,44 @@ public class SubscriptionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
     }
+
+    @GetMapping
+    public ResponseEntity<GenericResponse<Boolean>> activeSubscription(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
+
+        Boolean subscriptionActive = subscriptionPort.isActiveSubscription(userId, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(subscriptionActive, transactionId).created().build());
+    }
+
+    @GetMapping("/benefits")
+    public ResponseEntity<GenericResponse<SubscriptionBenefitsDto>> benefitsSubscription(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
+
+        SubscriptionBenefitsDto subscriptionActive = subscriptionPort.benefits(userId, locale.getLanguage(),
+                transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(subscriptionActive, transactionId).created().build());
+    }
+
+    @PostMapping("/claim-benefits")
+    public ResponseEntity<GenericResponse<Void>> claimBenefitsSubscription(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
+            @RequestBody @Valid ClaimSubscriptionBenefitsDto req) {
+
+        subscriptionPort.claimBenefits(req.getServerId(), userId, req.getAccountId(), req.getCharacterId(),
+                locale.getLanguage(), req.getBenefitId(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).created().build());
+    }
+
+
 }

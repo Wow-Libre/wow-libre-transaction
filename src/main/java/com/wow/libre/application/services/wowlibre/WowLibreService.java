@@ -1,16 +1,13 @@
 package com.wow.libre.application.services.wowlibre;
 
-import ch.qos.logback.core.net.server.*;
 import com.wow.libre.domain.dto.client.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.wowlibre.*;
 import com.wow.libre.domain.port.out.client.*;
 import com.wow.libre.infrastructure.client.*;
 import com.wow.libre.infrastructure.entities.*;
-import org.springframework.cglib.core.*;
 import org.springframework.stereotype.*;
 
-import java.time.*;
 import java.util.*;
 
 @Service
@@ -30,6 +27,7 @@ public class WowLibreService implements WowLibrePort {
 
     @Override
     public String getJwt(String transactionId) {
+
         Optional<ClientEntity> client = obtainClient.findByUsername(WOWLIBRE, transactionId);
         ClientEntity tokens = new ClientEntity();
 
@@ -55,5 +53,15 @@ public class WowLibreService implements WowLibrePort {
     public void sendPurchases(String jwt, Long serverId, Long userId, Long accountId, Double gold,
                               List<ItemQuantityModel> items, String reference, String transactionId) {
         wowLibreClient.sendPurchases(jwt, serverId, userId, accountId, gold, items, reference, transactionId);
+    }
+
+    @Override
+    public void sendBenefitsPremium(String jwt, Long serverId, Long userId, Long accountId,
+                                    Long characterId,
+                                    List<ItemQuantityModel> items, String benefitType, Double amount,
+                                    String transactionId) {
+        wowLibreClient.sendBenefitsPremium(jwt, new SubscriptionBenefitsRequest(serverId, userId, accountId,
+                        characterId, items, benefitType, amount),
+                transactionId);
     }
 }

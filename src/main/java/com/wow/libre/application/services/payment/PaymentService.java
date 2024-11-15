@@ -1,6 +1,5 @@
 package com.wow.libre.application.services.payment;
 
-import com.wow.libre.application.services.transaction.*;
 import com.wow.libre.domain.*;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.dto.client.*;
@@ -36,27 +35,32 @@ public class PaymentService implements PaymentPort {
                         .isSubscription(createPaymentDto.getIsSubscription())
                         .userId(userId).build(), transactionId);
 
-        if (paymentApplicableModel.isPayment()) {
+        if (paymentApplicableModel.isPayment && createPaymentDto.getIsSubscription()) {
+
+            final String subscriptionUrl = String.format("%s?external_id=%s", paymentApplicableModel.subscriptionUrl,
+                    paymentApplicableModel.orderId);
+
+            return new CreatePaymentRedirectDto(subscriptionUrl);
+        } else if (paymentApplicableModel.isPayment) {
             CreatePaymentRequest request = CreatePaymentRequest.
-                    builder().amount(paymentApplicableModel.amount())
-                    .currency(paymentApplicableModel.currency())
-                    .description(paymentApplicableModel.description())
-                    .orderId(paymentApplicableModel.orderId())
-                    .notificationUrl("https://883e-181-51-34-114.ngrok-free.app/api/payment/notification")
+                    builder().amount(paymentApplicableModel.amount)
+                    .currency(paymentApplicableModel.currency)
+                    .description(paymentApplicableModel.description)
+                    .orderId(paymentApplicableModel.orderId)
+                    .notificationUrl("https://c1e0-181-51-34-195.ngrok-free.app/transaction/api/payment/notification")
                     .successUrl("http://localhost:3000/profile/purchases")
                     .backUrl("http://localhost:3000/store")
                     .build();
 
             CreatePaymentResponse createPaymentResponse = client.createPayment(request, transactionId);
 
-            transactionPort.assignmentPaymentId(paymentApplicableModel.orderId(), createPaymentResponse.getId(),
+            transactionPort.assignmentPaymentId(paymentApplicableModel.orderId, createPaymentResponse.getId(),
                     transactionId);
 
-            return new CreatePaymentRedirectDto(createPaymentResponse.getRedirectUrl(),
-                    createPaymentResponse.getSuccessUrl(), createPaymentResponse.getBackUrl());
+            return new CreatePaymentRedirectDto(createPaymentResponse.getRedirectUrl());
         }
 
-        return new CreatePaymentRedirectDto("http://localhost:3000/profile/purchases", "", "");
+        return new CreatePaymentRedirectDto("http://localhost:3000/profile/purchases");
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.product.*;
 import com.wow.libre.domain.port.in.transaction.*;
+import com.wow.libre.domain.port.out.plan.*;
 import com.wow.libre.domain.port.out.transaction.*;
 import com.wow.libre.infrastructure.entities.*;
 import com.wow.libre.infrastructure.util.*;
@@ -18,19 +19,22 @@ import java.util.*;
 
 @Service
 public class TransactionService implements TransactionPort {
+    public static final String AZEROTH_PASS = "Azeroth Pass";
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
     private final ObtainTransaction obtainTransaction;
     private final SaveTransaction saveTransaction;
     private final ProductPort productPort;
     private final RandomString randomString;
+    private final ObtainPlan obtainPlan;
 
     public TransactionService(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
                               ProductPort productPort,
-                              @Qualifier("random-string") RandomString randomString) {
+                              @Qualifier("random-string") RandomString randomString, ObtainPlan obtainPlan) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
         this.productPort = productPort;
         this.randomString = randomString;
+        this.obtainPlan = obtainPlan;
     }
 
     @Override
@@ -46,21 +50,46 @@ public class TransactionService implements TransactionPort {
     @Override
     public PaymentApplicableModel isRealPaymentApplicable(TransactionModel transaction, String transactionId) {
 
-        final String referenceNumber = transaction.getReferenceNumber();
+        final String productReferenceNumber = transaction.getReferenceNumber();
+        final String orderId = randomString.nextString();
 
         if (transaction.isSubscription()) {
-            return null;
+            Optional<PlanEntity> planDetailDto = obtainPlan.findByStatusIsTrue(transactionId);
+
+            if (planDetailDto.isEmpty()) {
+                LOGGER.error("There is no active plan.  transactionId: {}", transaction);
+                throw new InternalException("There is no active plan.", transactionId);
+            }
+            PlanEntity plan = planDetailDto.get();
+            double discountPercentage = plan.getDiscount() / 100.0;
+            double discountedPrice = plan.getPrice() * (1 - discountPercentage);
+            final String currency = plan.getCurrency();
+            final String description = String.format("Subscription %s", AZEROTH_PASS);
+
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.setStatus(TransactionStatus.CREATED.getType());
+            transactionEntity.setGold(false);
+            transactionEntity.setReferenceNumber(orderId);
+            transactionEntity.setPrice(discountedPrice);
+            transactionEntity.setSend(false);
+            transactionEntity.setCreationDate(LocalDateTime.now());
+            transactionEntity.setCurrency(currency);
+            transactionEntity.setUserId(transaction.getUserId());
+            saveTransaction.save(transactionEntity, transactionId);
+
+            return new PaymentApplicableModel(true, discountedPrice, currency, orderId, description,
+                    plan.getSubscribeUrl());
         }
 
-        ProductEntity productDto = productPort.getProduct(referenceNumber, transactionId);
+        ProductEntity productDto = productPort.getProduct(productReferenceNumber, transactionId);
 
         if (productDto == null) {
-            LOGGER.error("Product not found reference: {} transactionId: {}", referenceNumber, transaction);
+            LOGGER.error("Product not found productReferenceNumber: {} transactionId: {}", productReferenceNumber,
+                    transaction);
             throw new InternalException("The product is not available for donation", transactionId);
         }
 
         boolean isPayment = !productDto.isGamblingMoney();
-        final String orderId = randomString.nextString();
         final String description = String.format("Donation %s", productDto.getName());
         double price = isPayment ? productDto.getPrice() : productDto.getGoldPrice();
         Integer discountPercentage = productDto.getDiscount();
@@ -118,8 +147,9 @@ public class TransactionService implements TransactionPort {
                                 transaction.getCurrency(), transaction.getStatus(),
                                 TransactionStatus.getType(transaction.getStatus()).getStatus(),
                                 transaction.getCreationDate(),
-                                transaction.getReferenceNumber(), transaction.getProductId().getName(),
-                                transaction.getProductId().getImageUrl())).toList();
+                                transaction.getReferenceNumber(),
+                                Optional.ofNullable(transaction.getProductId()).map(ProductEntity::getName).orElse(""),
+                                Optional.ofNullable(transaction.getProductId()).map(ProductEntity::getImageUrl).orElse(""))).toList();
         data.setTransactions(transactions);
         data.setSize(obtainTransaction.findByUserId(userId, transactionId));
 

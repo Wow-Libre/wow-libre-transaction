@@ -5,4 +5,14 @@ import com.wow.libre.domain.dto.*;
 public interface SubscriptionPort {
 
     PillWidgetHomeDto getPillHome(Long userId, String language, String transactionId);
+
+    SubscriptionCreateDto createSubscription(Long userId, String transactionId);
+
+    boolean isActiveSubscription(Long userId, String transactionId);
+
+    SubscriptionBenefitsDto benefits(Long userId, String language, String transactionId);
+
+    void claimBenefits(Long serverId, Long userId, Long accountId, Long characterId, String language, Long benefitId,
+                       String transactionId);
+
 }

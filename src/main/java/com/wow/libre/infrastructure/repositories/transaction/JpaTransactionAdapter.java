@@ -4,8 +4,6 @@ package com.wow.libre.infrastructure.repositories.transaction;
 import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.port.out.transaction.*;
 import com.wow.libre.infrastructure.entities.*;
-import jakarta.persistence.*;
-import org.slf4j.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -36,7 +34,7 @@ public class JpaTransactionAdapter implements SaveTransaction, ObtainTransaction
 
     @Override
     public List<TransactionEntity> findByUserId(Long userId, int page, int size, String transactionId) {
-        return transactionRepository.findByUserId(userId, PageRequest.of(page, size)).stream().toList();
+        return transactionRepository.findByUserIdOrderByCreationDateDesc(userId, PageRequest.of(page, size)).stream().toList();
     }
 
     @Override

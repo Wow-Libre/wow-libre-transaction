@@ -11,4 +11,8 @@ public interface WowLibrePort {
                        List<ItemQuantityModel> items,
                        String reference,
                        String transactionId);
+
+    void sendBenefitsPremium(String jwt, Long serverId, Long userId, Long accountId,
+                             Long characterId, List<ItemQuantityModel> items,
+                             String benefitType, Double amount, String transactionId);
 }
