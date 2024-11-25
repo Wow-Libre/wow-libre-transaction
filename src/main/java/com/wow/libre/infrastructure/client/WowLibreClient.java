@@ -121,7 +121,7 @@ public class WowLibreClient {
 
         HttpEntity<SubscriptionBenefitsRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/subscription-benefits",
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/subscription-benefits",
                         configurations.getPathLoginWowLibre()))
                 .toUriString();
 

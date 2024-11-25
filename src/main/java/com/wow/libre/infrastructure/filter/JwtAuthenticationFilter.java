@@ -10,7 +10,10 @@ import com.wow.libre.infrastructure.filter.dto.*;
 import io.jsonwebtoken.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import org.apache.commons.lang3.*;
 import org.apache.logging.log4j.*;
+import org.slf4j.Logger;
+import org.slf4j.*;
 import org.springframework.http.*;
 import org.springframework.lang.*;
 import org.springframework.security.authentication.*;
@@ -22,13 +25,14 @@ import org.springframework.web.filter.*;
 
 import java.io.*;
 import java.util.*;
-import org.apache.commons.lang3.StringUtils;
 
-import static com.wow.libre.domain.constant.Constants.HEADER_USER_ID;
+import static com.wow.libre.domain.constant.Constants.*;
 
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
     private final JwtPort jwtPort;
 
     public JwtAuthenticationFilter(JwtPort jwtPort) {
@@ -39,12 +43,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
-
         GenericResponse<Void> responseBody = new GenericResponse<>();
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String transactionId = request.getHeader(Constants.HEADER_TRANSACTION_ID);
         ThreadContext.put(Constants.CONSTANT_UNIQUE_ID, transactionId);
+
+        LOGGER.info("{} Transaction {}", request.getRequestURI(), transactionId);
 
         try {
 

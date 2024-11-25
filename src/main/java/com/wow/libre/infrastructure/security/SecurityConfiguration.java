@@ -33,8 +33,8 @@ public class SecurityConfiguration {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
                 "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "http://15.204.134" +
-                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74", "https://d1b1-181-51-34-17" +
-                        ".ngrok-free.app"));
+                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74", "https://9jqcw0f0-3000.use2" +
+                        ".devtunnels.ms"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),

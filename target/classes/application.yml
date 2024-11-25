@@ -1,8 +1,15 @@
 spring:
+  profiles:
+    active: local
   application:
     name: wow-libre-transaction
   jackson:
     property-naming-strategy: SNAKE_CASE
+---
+spring:
+  config:
+    activate:
+      on-profile: local
   jpa:
     hibernate:
       ddl-auto: none
@@ -19,10 +26,10 @@ server:
   servlet:
     context-path: /transaction
   address: 0.0.0.0
-  port: 8091
+  port: 8092
 application:
   urls:
-    wow-libre: http://localhost:8090
+    wow-libre: http://localhost:8090/core
   account:
     username: play4chitiva@gmail.com
     password: 'sebas'
@@ -32,7 +39,45 @@ application:
     api-login: 'w6wWS4jJjS8ujDVzCTWkA4GIb2mnKQ9jvSRO5iQM'
   security:
     jwt:
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      secret-key: 6E4D574873506B4A72434B6A614B39786F736B7855666B4D456A6E466F785572
+      expiration: 604800000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_USERNAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  servlet:
+    context-path: /transaction
+  address: 0.0.0.0
+  port: 8092
+application:
+  urls:
+    wow-libre: ${WOW_LIBRE_HOST}/core
+  account:
+    username: ${WOW_LIBRE_USERNAME}
+    password: ${WOW_LIBRE_PASSWORD}
+  dlocalgo:
+    host: ${PASARELA-HOST}
+    api-key:  ${PASARELA-API-KEY}
+    api-login:  ${PASARELA-API-LOGIN}
+  security:
+    jwt:
+      secret-key: 587A4D3551466238445467424A526B526A336D5753585A4C6B7033724C557142
       expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days

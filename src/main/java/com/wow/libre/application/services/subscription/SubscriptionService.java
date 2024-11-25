@@ -81,10 +81,11 @@ public class SubscriptionService implements SubscriptionPort {
         if (!isActiveSubscription(userId, transactionId)) {
             return new SubscriptionBenefitsDto(new ArrayList<>(), 0);
         }
+
         List<SubscriptionBenefitDto> benefits =
                 obtainJsonLoader.getBenefitsPremium(language, transactionId).stream()
-                        .filter(benefit -> benefit.reactivable
-                                || obtainSubscriptionBenefit.findByUserIdAndBenefitId(userId, benefit.id).isEmpty()).toList();
+                        .filter(benefit -> benefit.getReactivable()
+                                || obtainSubscriptionBenefit.findByUserIdAndBenefitId(userId, benefit.getId()).isEmpty()).toList();
 
         return new SubscriptionBenefitsDto(benefits, benefits.size());
     }
@@ -102,26 +103,34 @@ public class SubscriptionService implements SubscriptionPort {
 
         Optional<SubscriptionBenefitDto> benefits =
                 obtainJsonLoader.getBenefitsPremium(language, transactionId).stream()
-                        .filter(benefit -> Objects.equals(benefit.id, benefitId)).findAny();
+                        .filter(benefit -> Objects.equals(benefit.getId(), benefitId)).findAny();
 
         if (benefits.isEmpty()) {
             throw new InternalException("", transactionId);
         }
+
         SubscriptionBenefitDto benefitModel = benefits.get();
-        if (!benefitModel.reactivable) {
-            if (obtainSubscriptionBenefit.findByUserIdAndBenefitId(userId, benefitModel.id).isPresent()) {
+
+        if (!benefitModel.getReactivable()) {
+            if (obtainSubscriptionBenefit.findByUserIdAndBenefitId(userId, benefitModel.getId()).isPresent()) {
                 throw new InternalException("", transactionId);
             }
             SubscriptionBenefitEntity subscriptionBenefit = new SubscriptionBenefitEntity();
-            subscriptionBenefit.setBenefitId(benefitModel.id);
+            subscriptionBenefit.setBenefitId(benefitModel.getId());
             subscriptionBenefit.setCreatedAt(new Date());
             subscriptionBenefit.setUserId(userId);
             saveSubscriptionBenefit.save(subscriptionBenefit);
         }
 
+        List<ItemQuantityModel> items = new ArrayList<>();
+        if (benefitModel.getSendItem() && !benefitModel.getItems().isEmpty()) {
+            items = benefitModel.getItems().stream().map(benefit -> new ItemQuantityModel(benefit.code,
+                    benefit.quantity)).toList();
+        }
 
-        wowLibrePort.sendBenefitsPremium(jwt, serverId, userId, accountId, characterId, null, benefitModel.type,
-                benefitModel.amount,
+
+        wowLibrePort.sendBenefitsPremium(jwt, serverId, userId, accountId, characterId, items, benefitModel.getType(),
+                benefitModel.getAmount(),
                 transactionId);
 
     }
