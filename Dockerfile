@@ -28,8 +28,9 @@ WORKDIR /app
 # Copy the JAR file from the build stage
 COPY --from=builder /app/target/wow-libre-transaction-0.0.1-SNAPSHOT.jar .
 
+ENV SPRING_PROFILES_ACTIVE=prod
 # Expose the application port
-EXPOSE 8090
+EXPOSE 8092
 
 # Start the application
 ENTRYPOINT ["java", "-jar", "wow-libre-transaction-0.0.1-SNAPSHOT.jar"]
