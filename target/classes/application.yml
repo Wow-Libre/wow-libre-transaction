@@ -5,6 +5,11 @@ spring:
     name: wow-libre-transaction
   jackson:
     property-naming-strategy: SNAKE_CASE
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 ---
 spring:
   config:
@@ -18,9 +23,9 @@ spring:
       hibernate:
         format_sql: false
   datasource:
-    url: jdbc:mysql://database-wowlibre-account.cr08gos2sn3x.us-east-2.rds.amazonaws.com:3306/transactions
-    username: wowlibreweb
-    password: rF74oiCgRpbYM3Hrfaun
+    url: jdbc:mysql://localhost:3306/transactions
+    username: root
+    password: Loquendo96@
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   servlet:

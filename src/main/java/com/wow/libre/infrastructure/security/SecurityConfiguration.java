@@ -61,6 +61,8 @@ public class SecurityConfiguration {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(
+                                        //  CHECK
+                                        "/actuator/health",
                                         //INTERNAL API
                                         "/api/subscription/pill-home",
                                         "/api/plan",

@@ -5,6 +5,11 @@ spring:
     name: wow-libre-transaction
   jackson:
     property-naming-strategy: SNAKE_CASE
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 ---
 spring:
   config:
