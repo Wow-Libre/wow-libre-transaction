@@ -82,7 +82,7 @@ application:
     api-login:  ${PASARELA-API-LOGIN}
   security:
     jwt:
-      secret-key: 587A4D3551466238445467424A526B526A336D5753585A4C6B7033724C557142
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
