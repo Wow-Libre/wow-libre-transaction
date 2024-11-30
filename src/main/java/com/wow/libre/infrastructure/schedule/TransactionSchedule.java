@@ -30,7 +30,7 @@ public class TransactionSchedule {
     }
 
     @Transactional
-    @Scheduled(cron = "* */40 * * * *")
+    @Scheduled(cron = "1/50 * * * * *")
     public void sendPurchases() {
         final String transactionId = "";
         List<TransactionEntity> transactionEntities = obtainTransaction.findByStatusIsPaidAndSendIsFalse(transactionId);
