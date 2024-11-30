@@ -66,7 +66,7 @@ public class TelegramService implements TelegramPort {
     @Override
     public String dynamicRealmlist(String name) {
         if (name.equalsIgnoreCase("wowlibre")) {
-            return "set realmlist localhost";
+            return "set realmlist 147.93.137.175";
         }
         return "No se encuentra";
     }
