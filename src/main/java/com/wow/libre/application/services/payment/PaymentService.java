@@ -47,9 +47,9 @@ public class PaymentService implements PaymentPort {
                     .currency(paymentApplicableModel.currency)
                     .description(paymentApplicableModel.description)
                     .orderId(paymentApplicableModel.orderId)
-                    .notificationUrl("https://c1e0-181-51-34-195.ngrok-free.app/transaction/api/payment/notification")
-                    .successUrl("http://localhost:3000/profile/purchases")
-                    .backUrl("http://localhost:3000/store")
+                    .notificationUrl("https://api.wowlibre.com/transaction/api/payment/notification")
+                    .successUrl("https://www.wowlibre.com/profile/purchases")
+                    .backUrl("https://www.wowlibre.com/store")
                     .build();
 
             CreatePaymentResponse createPaymentResponse = client.createPayment(request, transactionId);
@@ -60,7 +60,7 @@ public class PaymentService implements PaymentPort {
             return new CreatePaymentRedirectDto(createPaymentResponse.getRedirectUrl());
         }
 
-        return new CreatePaymentRedirectDto("http://localhost:3000/profile/purchases");
+        return new CreatePaymentRedirectDto("https://www.wowlibre.com/profile/purchases");
     }
 
     @Override
