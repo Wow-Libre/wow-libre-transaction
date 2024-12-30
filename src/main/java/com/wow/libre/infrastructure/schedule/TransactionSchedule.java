@@ -37,8 +37,9 @@ public class TransactionSchedule {
         final String transactionId = "";
         List<TransactionEntity> transactionEntities = obtainTransaction.findByStatusIsPaidAndSendIsFalse(transactionId);
 
-        try {
-            for (TransactionEntity transaction : transactionEntities) {
+
+        for (TransactionEntity transaction : transactionEntities) {
+            try {
                 final String jwt = wowLibrePort.getJwt(transactionId);
 
                 List<ItemQuantityModel> items = packagesPort.findByProductId(transaction.getProductId(), transactionId);
@@ -50,10 +51,11 @@ public class TransactionSchedule {
                     transaction.setStatus(TransactionStatus.DELIVERED.getType());
                 }
                 saveTransaction.save(transaction, transactionId);
+            } catch (Exception e) {
+                LOGGER.error("Error Transaction Sends {}", e.getLocalizedMessage());
             }
-        } catch (Exception e) {
-            LOGGER.error("Error Transaction Sends {}", e.getLocalizedMessage());
         }
+
 
     }
 }
