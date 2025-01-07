@@ -34,7 +34,7 @@ server:
   port: 8092
 application:
   urls:
-    wow-libre: http://localhost:8090/core
+    wow-libre: http://localhost:8091/core
   account:
     username: play4chitiva@gmail.com
     password: 'sebas'
@@ -82,7 +82,7 @@ application:
     api-login:  ${PASARELA-API-LOGIN}
   security:
     jwt:
-      secret-key: 587A4D3551466238445467424A526B526A336D5753585A4C6B7033724C557142
+      secret-key: ${SECRET-KEY}
       expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days

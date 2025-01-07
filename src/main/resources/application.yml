@@ -34,7 +34,7 @@ server:
   port: 8092
 application:
   urls:
-    wow-libre: http://localhost:8090/core
+    wow-libre: http://localhost:8091/core
   account:
     username: play4chitiva@gmail.com
     password: 'sebas'

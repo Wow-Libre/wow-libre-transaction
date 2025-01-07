@@ -2,154 +2,153 @@
   "es": [
     {
       "id": 1,
-      "img": "https://cdn.altertime.es/6b142fcd-3b32-4e9f-9b00-e4bd09442305.jpeg",
-      "name": "Cambio de faccion",
-      "description": "Cambia de faccion",
+      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
+      "name": "Cambio de Facción: Renueva tu Camino",
+      "description": "Explora nuevos horizontes al cambiar de facción. Redefine tus lealtades y descubre un mundo lleno de nuevas oportunidades y desafíos.",
       "command": ".character changefaction",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Cambiar Ahora",
       "type": "CHANGE_FACTION"
     },
     {
       "id": 2,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKw-kRN1YCmINOWJdn2G6PU7yOC7rfirQTlA&s",
-      "name": "Cambio de raza",
-      "description": "Cambia de raza",
+      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
+      "name": "Transformación de Raza",
+      "description": "Reinicia tu viaje al cambiar tu raza. Explora nuevas habilidades, características y oportunidades en tu evolución.",
       "command": ".character changerace",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Cambiar Ahora",
       "type": "CHANGE_RACE"
     },
     {
       "id": 3,
-      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/bltf1dc2fd01c1e3549/6717e051205e837a8cd9517b/WOW_VASRaceChangeUpdate_shop_1x_1920x1080.png",
-      "name": "Customiza tu personaje",
-      "description": "Permitete adaptar el personaje",
+      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
+      "name": "Personaliza Tu Héroe",
+      "description": "Libera tu creatividad y transforma a tu personaje según tu estilo. Ajusta cada detalle para crear el héroe que siempre has imaginado.",
       "command": ".character customize",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Cambiar Ahora",
       "type": "CUSTOMIZE"
     },
     {
       "id": 4,
-      "img": "https://cdn.altertime.es/6b142fcd-3b32-4e9f-9b00-e4bd09442305.jpeg",
-      "name": "Item",
-      "description": "Obsequio",
+      "img": "https://static.wixstatic.com/media/5dd8a0_3fe21b1eb86847fda436ea04ded6eae5~mv2.webp",
+      "name": "Corcel celestial",
+      "description": "Montura - Premium",
       "send_item": true,
       "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
-      {
-        "code": "43952",
-        "quantity": 1
-      },
-      {
-        "code": "44151",
-        "quantity": 1
-      }
-    ],
+        {
+          "code": "54811",
+          "quantity": 1
+        }
+      ],
       "type": "ITEM"
     }
   ],
   "en": [
     {
       "id": 1,
-      "img": "https://cdn.altertime.es/6b142fcd-3b32-4e9f-9b00-e4bd09442305.jpeg",
-      "name": "Cambio de faccion",
-      "description": "Cambia de faccion",
+      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
+      "name": "Faction Change: Renew Your Path",
+      "description": "Explore new horizons by changing factions. Redefine your allegiances and discover a world full of new opportunities and challenges.",
+      "command": ".character changefaction",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Change Now",
       "type": "CHANGE_FACTION"
     },
     {
       "id": 2,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKw-kRN1YCmINOWJdn2G6PU7yOC7rfirQTlA&s",
-      "name": "Cambio de raza",
-      "description": "Cambia de raza",
+      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
+      "name": "Race Transformation",
+      "description": "Restart your journey by changing your race. Discover new skills, traits, and opportunities in your evolution.",
+      "command": ".character changerace",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Change Now",
       "type": "CHANGE_RACE"
     },
     {
       "id": 3,
-      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/bltf1dc2fd01c1e3549/6717e051205e837a8cd9517b/WOW_VASRaceChangeUpdate_shop_1x_1920x1080.png",
-      "name": "Customiza tu personaje",
-      "description": "Permitete adaptar el personaje",
+      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
+      "name": "Customize Your Hero",
+      "description": "Unleash your creativity and transform your character to your style. Adjust every detail to create the hero you've always imagined.",
+      "command": ".character customize",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Customize Now",
       "type": "CUSTOMIZE"
     },
     {
       "id": 4,
-      "img": "https://cdn.altertime.es/6b142fcd-3b32-4e9f-9b00-e4bd09442305.jpeg",
-      "name": "Item",
-      "description": "Obsequio",
+      "img": "https://static.wixstatic.com/media/5dd8a0_3fe21b1eb86847fda436ea04ded6eae5~mv2.webp",
+      "name": "Celestial Steed",
+      "description": "Mount - Premium",
       "send_item": true,
       "reactivable": false,
-      "btn_txt": "Obtener",
+      "btn_txt": "Get It",
       "items": [
         {
-          "code": "43952",
-          "quantity": 1
-        },
-        {
-          "code": "44151",
+          "code": "54811",
           "quantity": 1
         }
       ],
-      "type": "ITEM",
-      "amount": 0
+      "type": "ITEM"
     }
   ],
   "pt": [
     {
       "id": 1,
-      "img": "https://cdn.altertime.es/6b142fcd-3b32-4e9f-9b00-e4bd09442305.jpeg",
-      "name": "Cambio de faccion",
-      "description": "Cambia de faccion",
+      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
+      "name": "Mudança de Facção: Renove Seu Caminho",
+      "description": "Explore novos horizontes ao mudar de facção. Redefina suas lealdades e descubra um mundo cheio de novas oportunidades e desafios.",
       "command": ".character changefaction",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Mudar Agora",
       "type": "CHANGE_FACTION"
     },
     {
       "id": 2,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKw-kRN1YCmINOWJdn2G6PU7yOC7rfirQTlA&s",
-      "name": "Cambio de raza",
-      "description": "Cambia de raza",
+      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
+      "name": "Transformação de Raça",
+      "description": "Reinicie sua jornada ao mudar de raça. Descubra novas habilidades, características e oportunidades na sua evolução.",
       "command": ".character changerace",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Mudar Agora",
       "type": "CHANGE_RACE"
     },
     {
       "id": 3,
-      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/bltf1dc2fd01c1e3549/6717e051205e837a8cd9517b/WOW_VASRaceChangeUpdate_shop_1x_1920x1080.png",
-      "name": "Customiza tu personaje",
-      "description": "Permitete adaptar el personaje",
+      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
+      "name": "Personalize Seu Herói",
+      "description": "Liberte sua criatividade e transforme seu personagem ao seu estilo. Ajuste cada detalhe para criar o herói que você sempre imaginou.",
       "command": ".character customize",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Aplicar",
+      "btn_txt": "Personalizar Agora",
       "type": "CUSTOMIZE"
     },
     {
       "id": 4,
-      "img": "https://cdn.altertime.es/6b142fcd-3b32-4e9f-9b00-e4bd09442305.jpeg",
-      "name": "Item",
-      "description": "Obsequio",
-      "command": ".character customize",
+      "img": "https://static.wixstatic.com/media/5dd8a0_3fe21b1eb86847fda436ea04ded6eae5~mv2.webp",
+      "name": "Celestial Steed",
+      "description": "Montaria - Premium",
       "send_item": true,
       "reactivable": false,
-      "btn_txt": "Obtener",
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "54811",
+          "quantity": 1
+        }
+      ],
       "type": "ITEM"
     }
   ]

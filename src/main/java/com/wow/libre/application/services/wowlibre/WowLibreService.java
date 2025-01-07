@@ -1,19 +1,21 @@
 package com.wow.libre.application.services.wowlibre;
 
 import com.wow.libre.domain.dto.client.*;
+import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.wowlibre.*;
 import com.wow.libre.domain.port.out.client.*;
 import com.wow.libre.infrastructure.client.*;
 import com.wow.libre.infrastructure.entities.*;
+import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Service
 public class WowLibreService implements WowLibrePort {
-
-    public static final String WOWLIBRE = "WOWLIBRE";
+    public static final String CLIENT_DEFAULT_AUTH = "WOWLIBRE";
+    private static final Logger LOGGER = LoggerFactory.getLogger(WowLibreService.class);
     private final WowLibreClient wowLibreClient;
     private final ObtainClient obtainClient;
     private final SaveClient saveClient;
@@ -28,25 +30,28 @@ public class WowLibreService implements WowLibrePort {
     @Override
     public String getJwt(String transactionId) {
 
-        Optional<ClientEntity> client = obtainClient.findByUsername(WOWLIBRE, transactionId);
-        ClientEntity tokens = new ClientEntity();
+        Optional<ClientEntity> client = obtainClient.findByUsername(CLIENT_DEFAULT_AUTH, transactionId);
 
-        if (client.isPresent()) {
-            tokens = client.get();
+        ClientEntity tokens = client.orElse(new ClientEntity());
 
-            if (tokens.getExpirationDate().after(new Date())) {
-                return tokens.getJwt();
-            }
-
+        if (tokens.getExpirationDate().after(new Date())) {
+            return tokens.getJwt();
         }
-        LoginResponse login = wowLibreClient.login(transactionId);
-        tokens.setJwt(login.jwt);
-        tokens.setExpirationDate(login.expirationDate);
-        tokens.setRefreshToken(login.refreshToken);
-        tokens.setUsername(WOWLIBRE);
-        saveClient.save(tokens, transactionId);
 
-        return login.jwt;
+
+        try {
+            LoginResponse login = wowLibreClient.login(transactionId);
+            tokens.setJwt(login.jwt);
+            tokens.setExpirationDate(login.expirationDate);
+            tokens.setRefreshToken(login.refreshToken);
+            tokens.setUsername(CLIENT_DEFAULT_AUTH);
+            saveClient.save(tokens, transactionId);
+        } catch (Exception e) {
+            LOGGER.error("Invalid login WowLibre Platform {}", e.getLocalizedMessage());
+            throw new InternalException("Invalid login WowLibre Platform", transactionId);
+        }
+
+        return tokens.getJwt();
     }
 
     @Override
