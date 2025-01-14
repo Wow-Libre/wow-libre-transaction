@@ -48,6 +48,38 @@
         }
       ],
       "type": "ITEM"
+    },
+    {
+      "id": 5,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
+      "name": "Pandaren Monk",
+      "description": "Compañero Vip",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "49665",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
+    },
+    {
+      "id": 6,
+      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
+      "name": "Traje de múrloc",
+      "description": "Disfraz",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "33079",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
     }
   ],
   "en": [
@@ -99,6 +131,38 @@
         }
       ],
       "type": "ITEM"
+    },
+    {
+      "id": 5,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
+      "name": "Pandaren Monk",
+      "description": "VIP Companion",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "49665",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
+    },
+    {
+      "id": 6,
+      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
+      "name": "Murloc Suit",
+      "description": "costume",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "33079",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
     }
   ],
   "pt": [
@@ -146,6 +210,38 @@
       "items": [
         {
           "code": "54811",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
+    },
+    {
+      "id": 5,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
+      "name": "Monge Pandaren",
+      "description": "Companheiro VIP",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "49665",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
+    },
+    {
+      "id": 6,
+      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
+      "name": "Traje de Murloc",
+      "description": "Compañero Vip",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "33079",
           "quantity": 1
         }
       ],
