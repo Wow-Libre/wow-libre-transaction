@@ -80,6 +80,22 @@
         }
       ],
       "type": "ITEM"
+    },
+    {
+      "id": 7,
+      "img": "https://static.wixstatic.com/media/5dd8a0_5f40b9d8fe8d44f89da2a59effff062b~mv2.jpg",
+      "name": "Riendas del tigre espectral",
+      "description": "Montura Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "33224",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
     }
   ],
   "en": [
@@ -163,6 +179,22 @@
         }
       ],
       "type": "ITEM"
+    },
+    {
+      "id": 7,
+      "img": "https://static.wixstatic.com/media/5dd8a0_5f40b9d8fe8d44f89da2a59effff062b~mv2.jpg",
+      "name": "Reins of the Spectral Tiger",
+      "description": "Mount - Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "33224",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
     }
   ],
   "pt": [
@@ -242,6 +274,22 @@
       "items": [
         {
           "code": "33079",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
+    },
+    {
+      "id": 7,
+      "img": "https://static.wixstatic.com/media/5dd8a0_5f40b9d8fe8d44f89da2a59effff062b~mv2.jpg",
+      "name": "Rédeas do Tigre Espectral",
+      "description": "Montaria - Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "33224",
           "quantity": 1
         }
       ],
