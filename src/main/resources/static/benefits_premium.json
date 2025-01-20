@@ -96,6 +96,22 @@
         }
       ],
       "type": "ITEM"
+    },
+    {
+      "id": 8,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
+      "name": "Montura Especial",
+      "description": "Montura Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "860000",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
     }
   ],
   "en": [
@@ -195,6 +211,22 @@
         }
       ],
       "type": "ITEM"
+    },
+    {
+      "id": 8,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
+      "name": "Mount",
+      "description": "Mount - Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "860000",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
     }
   ],
   "pt": [
@@ -290,6 +322,22 @@
       "items": [
         {
           "code": "33224",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM"
+    },
+    {
+      "id": 8,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
+      "name": "Montaria",
+      "description": "Montaria - Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "860000",
           "quantity": 1
         }
       ],
