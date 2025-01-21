@@ -19,5 +19,7 @@ public class SubscriptionBenefitEntity {
     private Long benefitId;
     @Column(name = "created_at")
     private Date createdAt;
+    @Column(name = "server_id")
+    private Long serverId;
 
 }

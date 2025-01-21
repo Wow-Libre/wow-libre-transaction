@@ -5,5 +5,5 @@ import com.wow.libre.infrastructure.entities.*;
 import java.util.*;
 
 public interface ObtainSubscriptionBenefit {
-    Optional<SubscriptionBenefitEntity> findByUserIdAndBenefitId(Long userId, Long benefitId);
+    Optional<SubscriptionBenefitEntity> findByUserIdAndBenefitIdAndServerId(Long userId, Long benefitId, Long serverId);
 }

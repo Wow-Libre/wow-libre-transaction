@@ -252,3 +252,7 @@ CREATE TABLE transactions.subscription_benefit
     PRIMARY KEY (id),
     CONSTRAINT subscription_benefit_uq UNIQUE (user_id, benefit_id)
 );
+
+
+ALTER TABLE subscription_benefit
+    ADD server_id bigint;

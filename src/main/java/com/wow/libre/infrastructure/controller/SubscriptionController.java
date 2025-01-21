@@ -58,9 +58,10 @@ public class SubscriptionController {
     public ResponseEntity<GenericResponse<SubscriptionBenefitsDto>> benefitsSubscription(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
+            @RequestParam(name = "server_id") final Long serverId) {
 
-        SubscriptionBenefitsDto subscriptionActive = subscriptionPort.benefits(userId, locale.getLanguage(),
+        SubscriptionBenefitsDto subscriptionActive = subscriptionPort.benefits(userId, serverId, locale.getLanguage(),
                 transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)

@@ -18,18 +18,16 @@ import java.util.*;
 public class SubscriptionService implements SubscriptionPort {
     private final ObtainSubscription obtainSubscription;
     private final ObtainJsonLoader obtainJsonLoader;
-    private final SaveSubscription saveSubscription;
     private final ObtainSubscriptionBenefit obtainSubscriptionBenefit;
     private final SaveSubscriptionBenefit saveSubscriptionBenefit;
     private final WowLibrePort wowLibrePort;
 
     public SubscriptionService(ObtainSubscription obtainSubscription, ObtainJsonLoader obtainJsonLoader,
-                               SaveSubscription saveSubscription, ObtainSubscriptionBenefit obtainSubscriptionBenefit
+                               ObtainSubscriptionBenefit obtainSubscriptionBenefit
             , SaveSubscriptionBenefit saveSubscriptionBenefit
             , WowLibrePort wowLibrePort) {
         this.obtainSubscription = obtainSubscription;
         this.obtainJsonLoader = obtainJsonLoader;
-        this.saveSubscription = saveSubscription;
         this.obtainSubscriptionBenefit = obtainSubscriptionBenefit;
         this.saveSubscriptionBenefit = saveSubscriptionBenefit;
         this.wowLibrePort = wowLibrePort;
@@ -76,7 +74,7 @@ public class SubscriptionService implements SubscriptionPort {
     }
 
     @Override
-    public SubscriptionBenefitsDto benefits(Long userId, String language, String transactionId) {
+    public SubscriptionBenefitsDto benefits(Long userId, Long serverId, String language, String transactionId) {
 
         if (!isActiveSubscription(userId, transactionId)) {
             return new SubscriptionBenefitsDto(new ArrayList<>(), 0);
@@ -84,8 +82,9 @@ public class SubscriptionService implements SubscriptionPort {
 
         List<SubscriptionBenefitDto> benefits =
                 obtainJsonLoader.getBenefitsPremium(language, transactionId).stream()
-                        .filter(benefit -> benefit.getReactivable()
-                                || obtainSubscriptionBenefit.findByUserIdAndBenefitId(userId, benefit.getId()).isEmpty()).toList();
+                        .filter(benefit -> serverId.equals(benefit.getServerId()) && (benefit.getReactivable()
+                                || obtainSubscriptionBenefit.findByUserIdAndBenefitIdAndServerId(userId,
+                                benefit.getId(), serverId).isEmpty())).toList();
 
         return new SubscriptionBenefitsDto(benefits, benefits.size());
     }
@@ -103,7 +102,8 @@ public class SubscriptionService implements SubscriptionPort {
 
         Optional<SubscriptionBenefitDto> benefits =
                 obtainJsonLoader.getBenefitsPremium(language, transactionId).stream()
-                        .filter(benefit -> Objects.equals(benefit.getId(), benefitId)).findAny();
+                        .filter(benefit -> Objects.equals(benefit.getId(), benefitId)
+                                && benefit.getServerId().equals(serverId)).findAny();
 
         if (benefits.isEmpty()) {
             throw new InternalException("", transactionId);
@@ -112,8 +112,8 @@ public class SubscriptionService implements SubscriptionPort {
         SubscriptionBenefitDto benefitModel = benefits.get();
 
         if (!benefitModel.getReactivable()) {
-            if (obtainSubscriptionBenefit.findByUserIdAndBenefitId(userId, benefitModel.getId()).isPresent()) {
-                throw new InternalException("", transactionId);
+            if (obtainSubscriptionBenefit.findByUserIdAndBenefitIdAndServerId(userId, benefitModel.getId(), serverId).isPresent()) {
+                throw new InternalException("benefit has been claimed", transactionId);
             }
             SubscriptionBenefitEntity subscriptionBenefit = new SubscriptionBenefitEntity();
             subscriptionBenefit.setBenefitId(benefitModel.getId());

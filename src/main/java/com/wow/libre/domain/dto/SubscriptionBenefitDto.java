@@ -20,6 +20,8 @@ public class SubscriptionBenefitDto {
     private String type;
     private Double amount;
     private List<Items> items;
+    @JsonProperty("server_id")
+    private Long serverId;
 
     @Data
     public static class Items {

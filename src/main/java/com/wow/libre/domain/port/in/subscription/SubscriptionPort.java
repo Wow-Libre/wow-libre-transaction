@@ -10,7 +10,7 @@ public interface SubscriptionPort {
 
     boolean isActiveSubscription(Long userId, String transactionId);
 
-    SubscriptionBenefitsDto benefits(Long userId, String language, String transactionId);
+    SubscriptionBenefitsDto benefits(Long userId, Long serverId, String language, String transactionId);
 
     void claimBenefits(Long serverId, Long userId, Long accountId, Long characterId, String language, Long benefitId,
                        String transactionId);
