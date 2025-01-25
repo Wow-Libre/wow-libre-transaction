@@ -42,7 +42,7 @@
       "name": "Corcel celestial",
       "description": "Montura - Premium",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -127,7 +127,7 @@
       "name": "Huevo de gallo mágico",
       "description": "Bienvenida Wow Frozen",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -171,6 +171,76 @@
       ],
       "type": "ITEM",
       "server_id": 2
+    },
+    {
+      "id": 12,
+      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
+      "name": "Cambio de Facción: Renueva tu Camino",
+      "description": "Explora nuevos horizontes al cambiar de facción. Redefine tus lealtades y descubre un mundo lleno de nuevas oportunidades y desafíos.",
+      "command": ".character changefaction",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Cambiar Ahora",
+      "type": "CHANGE_FACTION",
+      "server_id": 3
+    },
+    {
+      "id": 13,
+      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
+      "name": "Transformación de Raza",
+      "description": "Reinicia tu viaje al cambiar tu raza. Explora nuevas habilidades, características y oportunidades en tu evolución.",
+      "command": ".character changerace",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Cambiar Ahora",
+      "type": "CHANGE_RACE",
+      "server_id": 3
+    },
+    {
+      "id": 14,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
+      "name": "Personaliza Tu Héroe",
+      "description": "Libera tu creatividad y transforma a tu personaje según tu estilo. Ajusta cada detalle para crear el héroe que siempre has imaginado.",
+      "command": ".character customize",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Cambiar Ahora",
+      "type": "CUSTOMIZE",
+      "server_id": 3
+    },
+    {
+      "id": 15,
+      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
+      "name": "Traje de múrloc",
+      "description": "Disfraz",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "33079",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 16,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
+      "name": "Montura Especial",
+      "description": "Montura Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "860000",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
     }
   ],
   "en": [
@@ -216,7 +286,7 @@
       "name": "Celestial Steed",
       "description": "Mount - Premium",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Get It",
       "items": [
         {
@@ -301,7 +371,7 @@
       "name": "magic rooster egg",
       "description": "Welcome Wow Frozen",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -345,6 +415,76 @@
       ],
       "type": "ITEM",
       "server_id": 2
+    },
+    {
+      "id": 12,
+      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
+      "name": "Faction Change: Renew Your Path",
+      "description": "Explore new horizons by changing factions. Redefine your allegiances and discover a world full of new opportunities and challenges.",
+      "command": ".character changefaction",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Change Now",
+      "type": "CHANGE_FACTION",
+      "server_id": 3
+    },
+    {
+      "id": 13,
+      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
+      "name": "Race Transformation",
+      "description": "Restart your journey by changing your race. Discover new skills, traits, and opportunities in your evolution.",
+      "command": ".character changerace",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Change Now",
+      "type": "CHANGE_RACE",
+      "server_id": 3
+    },
+    {
+      "id": 14,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
+      "name": "Customize Your Hero",
+      "description": "Unleash your creativity and transform your character to your style. Adjust every detail to create the hero you've always imagined.",
+      "command": ".character customize",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Customize Now",
+      "type": "CUSTOMIZE",
+      "server_id": 3
+    },
+    {
+      "id": 15,
+      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
+      "name": "murloc costume",
+      "description": "Costume",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "33079",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 16,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
+      "name": "Mount",
+      "description": "Mount - Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "860000",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
     }
   ],
   "pt": [
@@ -390,7 +530,7 @@
       "name": "Celestial Steed",
       "description": "Montaria - Premium",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obter",
       "items": [
         {
@@ -475,7 +615,7 @@
       "name": "ovo de galo mágico",
       "description": "Bem vindo Uau Frozen",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obter",
       "items": [
         {
@@ -519,6 +659,76 @@
       ],
       "type": "ITEM",
       "server_id": 2
+    },
+    {
+      "id": 12,
+      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
+      "name": "Mudança de Facção: Renove Seu Caminho",
+      "description": "Explore novos horizontes ao mudar de facção. Redefina suas lealdades e descubra um mundo cheio de novas oportunidades e desafios.",
+      "command": ".character changefaction",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Mudar Agora",
+      "type": "CHANGE_FACTION",
+      "server_id": 3
+    },
+    {
+      "id": 13,
+      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
+      "name": "Transformação de Raça",
+      "description": "Reinicie sua jornada ao mudar de raça. Descubra novas habilidades, características e oportunidades na sua evolução.",
+      "command": ".character changerace",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Mudar Agora",
+      "type": "CHANGE_RACE",
+      "server_id": 3
+    },
+    {
+      "id": 14,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
+      "name": "Personalize Seu Herói",
+      "description": "Liberte sua criatividade e transforme seu personagem ao seu estilo. Ajuste cada detalhe para criar o herói que você sempre imaginou.",
+      "command": ".character customize",
+      "send_item": false,
+      "reactivable": true,
+      "btn_txt": "Personalizar Agora",
+      "type": "CUSTOMIZE",
+      "server_id": 3
+    },
+    {
+      "id": 15,
+      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
+      "name": "Fantasia de Murloc",
+      "description": "fantasia",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "33079",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 16,
+      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
+      "name": "Montaria",
+      "description": "Montaria - Premium",
+      "send_item": true,
+      "reactivable": true,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "860000",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
     }
   ]
 }
