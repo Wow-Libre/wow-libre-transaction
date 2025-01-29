@@ -42,7 +42,7 @@
       "name": "Corcel celestial",
       "description": "Montura - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -59,7 +59,7 @@
       "name": "Pandaren Monk",
       "description": "Compañero Vip",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -76,7 +76,7 @@
       "name": "Traje de múrloc",
       "description": "Disfraz",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -93,7 +93,7 @@
       "name": "Riendas del tigre espectral",
       "description": "Montura Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -110,7 +110,7 @@
       "name": "Montura Especial",
       "description": "Montura Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -127,7 +127,7 @@
       "name": "Huevo de gallo mágico",
       "description": "Bienvenida Wow Frozen",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -144,7 +144,7 @@
       "name": "Traje de múrloc",
       "description": "Disfraz",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -161,7 +161,7 @@
       "name": "Pandaren Monk",
       "description": "Compañero Vip",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -214,7 +214,7 @@
       "name": "Traje de múrloc",
       "description": "Disfraz",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -231,7 +231,7 @@
       "name": "Montura Especial",
       "description": "Montura Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -286,7 +286,7 @@
       "name": "Celestial Steed",
       "description": "Mount - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Get It",
       "items": [
         {
@@ -303,7 +303,7 @@
       "name": "Pandaren Monk",
       "description": "VIP Companion",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -320,7 +320,7 @@
       "name": "Murloc Suit",
       "description": "costume",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -337,7 +337,7 @@
       "name": "Reins of the Spectral Tiger",
       "description": "Mount - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -354,7 +354,7 @@
       "name": "Mount",
       "description": "Mount - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -371,7 +371,7 @@
       "name": "magic rooster egg",
       "description": "Welcome Wow Frozen",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -388,7 +388,7 @@
       "name": "murloc costume",
       "description": "Costume",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -405,7 +405,7 @@
       "name": "Pandaren Monk",
       "description": "Compañero Vip",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -458,7 +458,7 @@
       "name": "murloc costume",
       "description": "Costume",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -475,7 +475,7 @@
       "name": "Mount",
       "description": "Mount - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -530,7 +530,7 @@
       "name": "Celestial Steed",
       "description": "Montaria - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -547,7 +547,7 @@
       "name": "Monge Pandaren",
       "description": "Companheiro VIP",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -564,7 +564,7 @@
       "name": "Fantasia de Murloc",
       "description": "fantasia",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -581,7 +581,7 @@
       "name": "Rédeas do Tigre Espectral",
       "description": "Montaria - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -598,7 +598,7 @@
       "name": "Montaria",
       "description": "Montaria - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -615,7 +615,7 @@
       "name": "ovo de galo mágico",
       "description": "Bem vindo Uau Frozen",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -632,7 +632,7 @@
       "name": "Fantasia de Murloc",
       "description": "fantasia",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -649,7 +649,7 @@
       "name": "Pandaren Monk",
       "description": "Companheiro VIP",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -702,7 +702,7 @@
       "name": "Fantasia de Murloc",
       "description": "fantasia",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
@@ -719,7 +719,7 @@
       "name": "Montaria",
       "description": "Montaria - Premium",
       "send_item": true,
-      "reactivable": true,
+      "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
