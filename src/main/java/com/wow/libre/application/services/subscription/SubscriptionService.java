@@ -82,7 +82,7 @@ public class SubscriptionService implements SubscriptionPort {
 
         List<SubscriptionBenefitDto> benefits =
                 obtainJsonLoader.getBenefitsPremium(language, transactionId).stream()
-                        .filter(benefit -> serverId.equals(benefit.getServerId()) && (benefit.getReactivable()
+                        .filter(benefit -> serverId.equals(benefit.getServerId()) && (benefit.getReactivable() && !benefit.getSendItem()
                                 || obtainSubscriptionBenefit.findByUserIdAndBenefitIdAndServerId(userId,
                                 benefit.getId(), serverId).isEmpty())).toList();
 
