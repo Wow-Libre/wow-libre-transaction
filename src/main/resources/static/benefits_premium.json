@@ -241,6 +241,74 @@
       ],
       "type": "ITEM",
       "server_id": 3
+    },
+    {
+      "id": 17,
+      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
+      "name": "Llamas de la Traición",
+      "description": "Aura Premium",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "1121933094",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 18,
+      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
+      "name": "Fuego del Infierno",
+      "description": "Aura Premium",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "1121933096",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 19,
+      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
+      "name": "Llamas de la Traición",
+      "description": "Aura Premium",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "1121933094",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
+    },
+    {
+      "id":  20,
+      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
+      "name": "Fuego del Infierno",
+      "description": "Aura Premium",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "1121933096",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
     }
   ],
   "en": [
@@ -485,6 +553,74 @@
       ],
       "type": "ITEM",
       "server_id": 3
+    },
+    {
+      "id": 17,
+      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
+      "name": "Flames of Betrayal",
+      "description": "Premium Aura",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "1121933094",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 18,
+      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
+      "name": "Hell Fire",
+      "description": "Aura Premium",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "1121933096",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 19,
+      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
+      "name": "Flames of Betrayal",
+      "description": "Premium Aura",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "1121933094",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
+    },
+    {
+      "id":  20,
+      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
+      "name": "Hell Fire",
+      "description": "Premium Aura",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "1121933096",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
     }
   ],
   "pt": [
@@ -729,6 +865,74 @@
       ],
       "type": "ITEM",
       "server_id": 3
+    },
+    {
+      "id": 17,
+      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
+      "name": "Chamas da Traição",
+      "description": "Premium Aura",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "1121933094",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 18,
+      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
+      "name": "Fogo do Inferno",
+      "description": "Aura Premium",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "1121933096",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 3
+    },
+    {
+      "id": 19,
+      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
+      "name": "Chamas da Traição",
+      "description": "Premium Aura",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "1121933094",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
+    },
+    {
+      "id":  20,
+      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
+      "name": "Fogo do Inferno",
+      "description": "Premium Aura",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "1121933096",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
     }
   ]
 }
