@@ -309,6 +309,40 @@
       ],
       "type": "ITEM",
       "server_id": 1
+    },
+    {
+      "id":  20,
+      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
+      "name": "Fuego del Infierno",
+      "description": "Aura Premium",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "1121933096",
+          "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
+    },
+    {
+      "id": 21,
+      "img": "https://static.wixstatic.com/media/5dd8a0_3d912ad7a2b74792bee3b0f414811483~mv2.webp",
+      "name": "Burro Sabanero",
+      "description": "Moneda",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtener",
+      "items": [
+        {
+          "code": "29735",
+          "quantity": 10
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
     }
   ],
   "en": [
@@ -621,6 +655,23 @@
       ],
       "type": "ITEM",
       "server_id": 1
+    },
+    {
+      "id": 21,
+      "img": "https://static.wixstatic.com/media/5dd8a0_3d912ad7a2b74792bee3b0f414811483~mv2.webp",
+      "name": "Sabanero Donkey",
+      "description": "Coin",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obtain",
+      "items": [
+        {
+          "code": "29735",
+          "quantity": 10
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
     }
   ],
   "pt": [
@@ -929,6 +980,23 @@
         {
           "code": "1121933096",
           "quantity": 1
+        }
+      ],
+      "type": "ITEM",
+      "server_id": 1
+    },
+    {
+      "id": 21,
+      "img": "https://static.wixstatic.com/media/5dd8a0_3d912ad7a2b74792bee3b0f414811483~mv2.webp",
+      "name": "Burrito Sabanero",
+      "description": "Moeda",
+      "send_item": true,
+      "reactivable": false,
+      "btn_txt": "Obter",
+      "items": [
+        {
+          "code": "29735",
+          "quantity": 10
         }
       ],
       "type": "ITEM",
