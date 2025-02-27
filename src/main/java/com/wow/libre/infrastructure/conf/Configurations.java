@@ -7,12 +7,19 @@ import org.springframework.context.annotation.*;
 @Configuration
 @Data
 public class Configurations {
-    @Value("${application.dlocalgo.host}")
-    private String dLocalGoHost;
-    @Value("${application.dlocalgo.api-key}")
-    private String apiKeyDLocalGoHost;
-    @Value("${application.dlocalgo.api-login}")
-    private String apiSecretDLocalGoHost;
+
+    @Value("${application.payu.host}")
+    private String payHost;
+    @Value("${application.payu.api-key}")
+    private String payUApiKey;
+    @Value("${application.payu.api-login}")
+    private String payUApiLogin;
+    @Value("${application.payu.key-public}")
+    private String payUApiPublic;
+    @Value("${application.payu.url-confirmation}")
+    private String payUConfirmUrl;
+
+
     @Value("${application.urls.wow-libre}")
     private String pathLoginWowLibre;
     @Value("${application.account.username}")

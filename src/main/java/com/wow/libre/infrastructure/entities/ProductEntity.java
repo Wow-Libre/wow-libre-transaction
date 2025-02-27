@@ -22,10 +22,10 @@ public class ProductEntity {
     private String disclaimer;
     private Double price;
     private Integer discount;
-    @Column(name = "gambling_money")
-    private boolean gamblingMoney;
-    @Column(name = "gold_price")
-    private Long goldPrice;
+    @Column(name = "use_credit_points")
+    private boolean useCreditPoints;
+    @Column(name = "credit_points_value")
+    private Long creditPointsValue;
     private String description;
     @Column(name = "image_url")
     private String imageUrl;

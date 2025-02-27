@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String email = jwtPort.extractUsername(jwt);
             final Long userId = jwtPort.extractUserId(jwt);
 
-            requestWrapper.setHeader(Constants.HEADER_EMAIL, email);
+            requestWrapper.setHeader(HEADER_EMAIL, email);
             requestWrapper.setHeader(HEADER_USER_ID, String.valueOf(userId));
 
             if (SecurityContextHolder.getContext().getAuthentication() == null) {

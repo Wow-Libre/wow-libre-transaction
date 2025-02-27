@@ -11,8 +11,6 @@ import java.util.*;
 public interface TransactionRepository extends CrudRepository<TransactionEntity, Long> {
     Optional<TransactionEntity> findByReferenceNumber(String referenceNumber);
 
-    Optional<TransactionEntity> findByPaymentId(String paymentId);
-
     Page<TransactionEntity> findByUserIdOrderByCreationDateDesc(Long userId, Pageable pageable);
 
     @Query("SELECT COUNT(a) FROM TransactionEntity a WHERE a.userId = :userId")

@@ -11,5 +11,10 @@ public class ConfigRandomSerial {
         return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
+    @Bean("product-reference")
+    public RandomString productRandomString() {
+        return new RandomString(30, "abcdefghijklmnopqrstuvwxyz0123456789");
+    }
+
 
 }

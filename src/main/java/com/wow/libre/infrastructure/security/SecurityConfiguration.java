@@ -31,8 +31,10 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
-                "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "https://www.wowlibre.com"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://4f1a-181-51-34-168" +
+                        ".ngrok-free.app",
+                "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "https://www.wowlibre.com"
+                , "/*"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),

@@ -2,78 +2,87 @@ package com.wow.libre.application.services.payment;
 
 import com.wow.libre.domain.*;
 import com.wow.libre.domain.dto.*;
-import com.wow.libre.domain.dto.client.*;
-import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.payment.*;
 import com.wow.libre.domain.port.in.transaction.*;
-import com.wow.libre.infrastructure.client.*;
-import com.wow.libre.infrastructure.entities.*;
+import com.wow.libre.infrastructure.conf.*;
 import org.slf4j.*;
 import org.springframework.stereotype.*;
+
+import java.nio.charset.*;
+import java.security.*;
 
 @Service
 public class PaymentService implements PaymentPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentService.class);
 
     private final TransactionPort transactionPort;
-    private final DLocalGoClient client;
+    private final Configurations configurations;
 
-    public PaymentService(TransactionPort transactionPort, DLocalGoClient client) {
+    public PaymentService(TransactionPort transactionPort, Configurations configurations) {
         this.transactionPort = transactionPort;
-        this.client = client;
+        this.configurations = configurations;
     }
 
     @Override
     public CreatePaymentRedirectDto createPayment(Long userId, CreatePaymentDto createPaymentDto,
                                                   String transactionId) {
 
-        PaymentApplicableModel paymentApplicableModel = transactionPort.isRealPaymentApplicable(
-                TransactionModel.builder()
-                        .referenceNumber(createPaymentDto.getReferenceNumber())
-                        .accountId(createPaymentDto.getAccountId())
-                        .isSubscription(createPaymentDto.getIsSubscription())
-                        .userId(userId).build(), transactionId);
 
-        if (paymentApplicableModel.isPayment && createPaymentDto.getIsSubscription()) {
-
-            final String subscriptionUrl = String.format("%s?external_id=%s", paymentApplicableModel.subscriptionUrl,
-                    paymentApplicableModel.orderId);
-
-            return new CreatePaymentRedirectDto(subscriptionUrl);
-        } else if (paymentApplicableModel.isPayment) {
-            CreatePaymentRequest request = CreatePaymentRequest.
-                    builder().amount(paymentApplicableModel.amount)
-                    .currency(paymentApplicableModel.currency)
-                    .description(paymentApplicableModel.description)
-                    .orderId(paymentApplicableModel.orderId)
-                    .notificationUrl("https://api.wowlibre.com/transaction/api/payment/notification")
-                    .successUrl("https://www.wowlibre.com/profile/purchases")
-                    .backUrl("https://www.wowlibre.com/store")
-                    .build();
-
-            CreatePaymentResponse createPaymentResponse = client.createPayment(request, transactionId);
-
-            transactionPort.assignmentPaymentId(paymentApplicableModel.orderId, createPaymentResponse.getId(),
-                    transactionId);
-
-            return new CreatePaymentRedirectDto(createPaymentResponse.getRedirectUrl());
-        }
-
-        return new CreatePaymentRedirectDto("https://www.wowlibre.com/profile/purchases");
+        return null;
     }
 
     @Override
     public void processPayment(String paymentId, String transactionId) {
-        PaymentDetailResponse response = client.paymentDetail(paymentId, transactionId);
 
-        if (response == null) {
-            LOGGER.error("[PaymentService] [processPayment] Error Order Not Found PaymentId {}", paymentId);
-            throw new InternalException("There is no transaction created", transactionId);
+
+    }
+
+    @Override
+    public CreatePaymentRedirectDto createSubscription(Long userId, String email, CreatePaymentDto createPaymentDto,
+                                                       String transactionId) {
+
+        PaymentApplicableModel paymentApplicableModel =
+                transactionPort.isRealPaymentApplicable(TransactionModel.builder()
+                        .isSubscription(createPaymentDto.getIsSubscription())
+                        .accountId(createPaymentDto.getAccountId())
+                        .serverId(createPaymentDto.getServerId())
+                        .userId(userId).build(), transactionId);
+
+        final String apiKey = configurations.getPayUApiKey();
+        final String merchantId = "508029";
+        final String accountId = "512321";
+        final String referenceCode = paymentApplicableModel.orderId;
+        final String taxValue = "0";
+        final String amount = String.valueOf(paymentApplicableModel.amount.intValue());
+        final String currency = paymentApplicableModel.currency;
+
+        final String concatenatedString =
+                apiKey + "~" + merchantId + "~" + referenceCode + "~" + amount + "~" + currency;
+
+        final String signature = generateHash(concatenatedString);
+
+        return new CreatePaymentRedirectDto(configurations.getPayHost(), configurations.getPayUConfirmUrl(), "www" +
+                ".wowlibre.com", email, signature, currency, "0", taxValue, amount, referenceCode,
+                paymentApplicableModel.description, accountId, merchantId, "1");
+    }
+
+    private String generateHash(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error al generar hash: " + e.getMessage());
         }
-
-        TransactionEntity transaction = transactionPort.transaction(response.getOrderId(), transactionId);
-        transaction.setStatus(response.getStatus());
-        transactionPort.save(transaction, transactionId);
     }
 }

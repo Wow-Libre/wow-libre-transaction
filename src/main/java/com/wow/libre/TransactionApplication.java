@@ -1,17 +1,16 @@
 package com.wow.libre;
 
 import com.wow.libre.infrastructure.client.*;
+import org.slf4j.*;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.context.*;
 import org.springframework.scheduling.annotation.*;
-import org.telegram.telegrambots.meta.*;
-import org.telegram.telegrambots.meta.exceptions.*;
-import org.telegram.telegrambots.updatesreceivers.*;
 
 @EnableScheduling
 @SpringBootApplication
 public class TransactionApplication {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionApplication.class);
 
     public static void main(String[] args) {
         // Ejecutar la aplicación Spring Boot y obtener el contexto
@@ -21,12 +20,8 @@ public class TransactionApplication {
         Telegram telegramBot = context.getBean(Telegram.class);
 
         // Registrar el bot con TelegramBotsApi
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(telegramBot);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+       
     }
+
 
 }

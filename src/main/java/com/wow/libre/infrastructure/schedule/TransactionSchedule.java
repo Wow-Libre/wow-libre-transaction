@@ -43,11 +43,11 @@ public class TransactionSchedule {
                 final String jwt = wowLibrePort.getJwt(transactionId);
 
                 List<ItemQuantityModel> items = packagesPort.findByProductId(transaction.getProductId(), transactionId);
-                Double amount = transaction.isGold() ? transaction.getPrice() : 0d;
+                Double amount = transaction.isCreditPoints() ? transaction.getPrice() : 0d;
                 wowLibrePort.sendPurchases(jwt, transaction.getServerId(), transaction.getUserId(),
                         transaction.getAccountId(), amount, items, transaction.getReferenceNumber(), transactionId);
                 transaction.setSend(true);
-                if (transaction.isGold()) {
+                if (transaction.isCreditPoints()) {
                     transaction.setStatus(TransactionStatus.DELIVERED.getType());
                 }
                 saveTransaction.save(transaction, transactionId);

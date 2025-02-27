@@ -22,8 +22,9 @@ public class PaymentController {
     }
 
     @PostMapping("/notification")
-    public ResponseEntity<GenericResponse<Void>> notificationPayment(@RequestHeader(name = HEADER_TRANSACTION_ID,
-            required = false) final String transactionId, @RequestBody @Valid String request) {
+    public ResponseEntity<GenericResponse<Void>> notificationPayment(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestBody String request) {
         LOGGER.error("message {}", request);
         paymentPort.processPayment(null, transactionId);
 
@@ -32,11 +33,14 @@ public class PaymentController {
 
 
     @PostMapping
-    public ResponseEntity<GenericResponse<CreatePaymentRedirectDto>> createPayment(@RequestHeader(name =
-            HEADER_TRANSACTION_ID, required = false) final String transactionId, @RequestHeader(name =
-            HEADER_USER_ID) final Long userId, @RequestBody @Valid CreatePaymentDto createPaymentDto) {
+    public ResponseEntity<GenericResponse<CreatePaymentRedirectDto>> createSubscription(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestHeader(name = HEADER_EMAIL) final String email,
+            @RequestBody @Valid CreatePaymentDto createPaymentDto) {
 
-        CreatePaymentRedirectDto payment = paymentPort.createPayment(userId, createPaymentDto, transactionId);
+        CreatePaymentRedirectDto payment = paymentPort.createSubscription(userId, email, createPaymentDto,
+                transactionId);
 
         return ResponseEntity.status(HttpStatus.OK).body(new GenericResponseBuilder<>(payment, transactionId).created().build());
     }

@@ -7,4 +7,8 @@ public interface PaymentPort {
     CreatePaymentRedirectDto createPayment(Long userId, CreatePaymentDto createPaymentDto, String transactionId);
 
     void processPayment(String paymentId, String transactionId);
+
+    CreatePaymentRedirectDto createSubscription(Long userId, String email, CreatePaymentDto createPaymentDto,
+                                                String transactionId);
+
 }
