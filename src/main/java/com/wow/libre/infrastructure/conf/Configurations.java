@@ -20,6 +20,8 @@ public class Configurations {
     private String payUConfirmUrl;
     @Value("${application.payu.merchant-id}")
     private String payUMerchantId;
+    @Value("${application.payu.is-test}")
+    private String payUIsTest;
     @Value("${application.payu.account-id}")
     private String payUAccountId;
     @Value("${application.urls.wow-libre}")
