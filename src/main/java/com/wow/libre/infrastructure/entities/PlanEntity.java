@@ -17,10 +17,6 @@ public class PlanEntity {
     private Double price;
     private Integer discount;
     private boolean status;
-    @Column(name = "reference_id")
-    private Integer referenceId;
-    @Column(name = "merchant_id")
-    private Integer merchantId;
     private String currency;
     @Column(name = "frequency_type")
     private String frequencyType;
@@ -28,10 +24,10 @@ public class PlanEntity {
     private Integer frequencyValue;
     @Column(name = "free_trial_days")
     private Integer freeTrialDays;
-    @Column(name = "plan_token")
-    private String planToken;
-    @Column(name = "subscribe_url")
-    private String subscribeUrl;
+    @Column(name = "tax")
+    private String tax;
+    @Column(name = "return_tax")
+    private String returnTax;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")

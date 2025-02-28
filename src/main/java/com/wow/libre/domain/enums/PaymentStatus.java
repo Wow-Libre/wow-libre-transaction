@@ -6,17 +6,13 @@ import java.util.*;
 
 @Getter
 @AllArgsConstructor
-public enum TransactionStatus {
-    PAID("PAID", 100),
-    CREATED("CREATED", 50),
-    DELIVERED("DELIVERED", 100),
-    REJECTED("REJECTED", 100),
-    PENDING("PENDING", 50);
+public enum PaymentStatus {
+    APPROVED("APPROVED"),
+    REJECTED("REJECTED");
 
     private final String type;
-    private final int status;
 
-    public static TransactionStatus getType(String type) {
+    public static PaymentStatus getType(String type) {
         return Arrays.stream(values())
                 .filter(transaction -> transaction.type.equalsIgnoreCase(type))
                 .findFirst()

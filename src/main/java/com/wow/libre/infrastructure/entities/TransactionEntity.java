@@ -25,24 +25,24 @@ public class TransactionEntity implements Serializable {
             name = "subscription_id",
             referencedColumnName = "id")
     @ManyToOne(
-            optional = false,
             fetch = FetchType.EAGER)
     private SubscriptionEntity subscriptionId;
     @JoinColumn(
             name = "product_id",
             referencedColumnName = "id")
     @ManyToOne(
-            optional = false,
             fetch = FetchType.EAGER)
     private ProductEntity productId;
     @Column(name = "reference_number")
     private String referenceNumber;
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
-    @Column(name = "payment_id")
-    private String paymentId;
-    @Column(name = "gold")
-    private boolean gold;
+    @Column(name = "payment_method")
+    private String paymentMethod;
+    @Column(name = "credit_points")
+    private boolean creditPoints;
     private String currency;
     private boolean send;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
+    @Column(name = "is_subscription")
+    private boolean isSubscription;
 }

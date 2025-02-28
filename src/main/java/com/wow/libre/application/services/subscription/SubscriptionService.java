@@ -6,31 +6,46 @@ import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.subscription.*;
 import com.wow.libre.domain.port.in.wowlibre.*;
+import com.wow.libre.domain.port.out.plan.*;
 import com.wow.libre.domain.port.out.resources.*;
 import com.wow.libre.domain.port.out.subscription.*;
 import com.wow.libre.domain.port.out.subscription_benefit.*;
 import com.wow.libre.infrastructure.entities.*;
+import com.wow.libre.infrastructure.util.*;
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 @Service
 public class SubscriptionService implements SubscriptionPort {
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SubscriptionService.class);
+
     private final ObtainSubscription obtainSubscription;
     private final ObtainJsonLoader obtainJsonLoader;
     private final ObtainSubscriptionBenefit obtainSubscriptionBenefit;
     private final SaveSubscriptionBenefit saveSubscriptionBenefit;
+    private final SaveSubscription saveSubscription;
+    private final ObtainPlan obtainPlan;
     private final WowLibrePort wowLibrePort;
+    private final RandomString randomString;
 
     public SubscriptionService(ObtainSubscription obtainSubscription, ObtainJsonLoader obtainJsonLoader,
                                ObtainSubscriptionBenefit obtainSubscriptionBenefit
             , SaveSubscriptionBenefit saveSubscriptionBenefit
-            , WowLibrePort wowLibrePort) {
+            , WowLibrePort wowLibrePort, SaveSubscription saveSubscription, ObtainPlan obtainPlan,
+                               @Qualifier("product-reference") RandomString randomString) {
         this.obtainSubscription = obtainSubscription;
         this.obtainJsonLoader = obtainJsonLoader;
         this.obtainSubscriptionBenefit = obtainSubscriptionBenefit;
         this.saveSubscriptionBenefit = saveSubscriptionBenefit;
         this.wowLibrePort = wowLibrePort;
+        this.saveSubscription = saveSubscription;
+        this.obtainPlan = obtainPlan;
+        this.randomString = randomString;
     }
 
     @Override
@@ -51,18 +66,36 @@ public class SubscriptionService implements SubscriptionPort {
     }
 
     @Override
-    public SubscriptionCreateDto createSubscription(Long userId, String transactionId) {
+    public void createSubscription(Long userId, String transactionId) {
 
         Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
                 SubscriptionStatus.ACTIVE.getType());
 
         if (subscriptionEntity.isPresent()) {
-            throw new InternalException("", transactionId);
+            throw new InternalException("You already have an active subscription", transactionId);
         }
 
-        SubscriptionEntity subscription = new SubscriptionEntity();
+        Optional<PlanEntity> planActive = obtainPlan.findByStatusIsTrue(transactionId);
 
-        return null;
+        if (planActive.isEmpty()) {
+            LOGGER.error("There is no active plan and the transaction could not be completed UserId {} " +
+                            "TransactionId {}", userId,
+                    transactionId);
+            throw new InternalException("There is no active plan", transactionId);
+        }
+
+        PlanEntity plan = planActive.get();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextInvoiceDate = now.plusDays(30);
+
+        SubscriptionEntity subscription = new SubscriptionEntity();
+        subscription.setUserId(userId);
+        subscription.setPlanId(plan);
+        subscription.setCreationDate(LocalDateTime.now());
+        subscription.setNextInvoiceDate(nextInvoiceDate);
+        subscription.setReferenceNumber(randomString.nextString());
+        subscription.setStatus(SubscriptionStatus.ACTIVE.getType());
+        saveSubscription.save(subscription, transactionId);
     }
 
     @Override
