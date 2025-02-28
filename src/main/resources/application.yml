@@ -46,6 +46,7 @@ application:
     url-confirmation: "https://d5ad-181-51-34-244.ngrok-free.app/transaction/api/payment/notification"
     merchant-id: '508029'
     account-id: '512321'
+    is-test: true
   security:
     jwt:
       secret-key: 6E4D574873506B4A72434B6A614B39786F736B7855666B4D456A6E466F785572
@@ -88,6 +89,7 @@ application:
     url-confirmation: https://api.wowlibre.com/transaction/api/payment/notification
     merchant-id: '1019523'
     account-id: '1028547'
+    is-test: false
   security:
     jwt:
       secret-key: ${SECRET-KEY}

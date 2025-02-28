@@ -101,7 +101,8 @@ public class PaymentService implements PaymentPort {
 
         return new CreatePaymentRedirectDto(configurations.getPayHost(), configurations.getPayUConfirmUrl(),
                 SUCCESS_REDIRECT_URL, email, signature, currency, returnTax, taxValue, amount,
-                referenceCode, paymentApplicableModel.description, accountId, merchantId, "1");
+                referenceCode, paymentApplicableModel.description, accountId, merchantId,
+                configurations.getPayUIsTest());
     }
 
     private String generateHash(String input) {
