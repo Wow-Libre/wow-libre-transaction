@@ -6,7 +6,7 @@ public interface SubscriptionPort {
 
     PillWidgetHomeDto getPillHome(Long userId, String language, String transactionId);
 
-    SubscriptionCreateDto createSubscription(Long userId, String transactionId);
+    void createSubscription(Long userId, String transactionId);
 
     boolean isActiveSubscription(Long userId, String transactionId);
 

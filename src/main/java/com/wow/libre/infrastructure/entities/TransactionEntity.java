@@ -43,4 +43,6 @@ public class TransactionEntity implements Serializable {
     private boolean send;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+    @Column(name = "is_subscription")
+    private boolean isSubscription;
 }

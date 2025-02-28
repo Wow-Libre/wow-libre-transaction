@@ -22,9 +22,9 @@ public class ProductEntity {
     private String disclaimer;
     private Double price;
     private Integer discount;
-    @Column(name = "use_credit_points")
+    @Column(name = "credit_points_enabled")
     private boolean useCreditPoints;
-    @Column(name = "credit_points_value")
+    @Column(name = "credit_points_amount")
     private Long creditPointsValue;
     private String description;
     @Column(name = "image_url")
@@ -39,4 +39,8 @@ public class ProductEntity {
     @Column(name = "reference_number")
     private String referenceNumber;
     private Boolean status;
+    @Column(name = "tax")
+    private String tax;
+    @Column(name = "return_tax")
+    private String returnTax;
 }

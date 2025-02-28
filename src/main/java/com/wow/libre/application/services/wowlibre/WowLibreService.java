@@ -34,7 +34,7 @@ public class WowLibreService implements WowLibrePort {
 
         ClientEntity tokens = client.orElse(new ClientEntity());
 
-        if (tokens.getExpirationDate().after(new Date())) {
+        if (tokens.getExpirationDate() != null && tokens.getExpirationDate().after(new Date())) {
             return tokens.getJwt();
         }
 

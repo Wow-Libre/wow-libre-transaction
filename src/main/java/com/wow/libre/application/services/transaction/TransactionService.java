@@ -27,7 +27,7 @@ public class TransactionService implements TransactionPort {
     private final ObtainPlan obtainPlan;
 
     public TransactionService(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
-                              ProductPort productPort, @Qualifier("product-reference") RandomString randomString,
+                              ProductPort productPort, @Qualifier("subscription-reference") RandomString randomString,
                               ObtainPlan obtainPlan) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
@@ -36,10 +36,6 @@ public class TransactionService implements TransactionPort {
         this.obtainPlan = obtainPlan;
     }
 
-    @Override
-    public Optional<TransactionEntity> findById(Long id) {
-        return obtainTransaction.findById(id);
-    }
 
     @Override
     public void save(TransactionEntity transaction, String transactionId) {
@@ -62,8 +58,8 @@ public class TransactionService implements TransactionPort {
 
             PlanEntity plan = planDetailDto.get();
             double discountPercentage = plan.getDiscount() / 100.0;
-            double discountedPrice = 20000 * (1 - discountPercentage);
-            final String currency = "COP";
+            double discountedPrice = plan.getPrice() * (1 - discountPercentage);
+            final String currency = plan.getCurrency();
             final String description = String.format("Subscription %s", plan.getName());
 
             TransactionEntity transactionEntity = new TransactionEntity();
@@ -75,14 +71,15 @@ public class TransactionService implements TransactionPort {
             transactionEntity.setProductId(null);
             transactionEntity.setSubscriptionId(null);
             transactionEntity.setReferenceNumber(orderId);
-            transactionEntity.setPaymentMethod("PAYU");
             transactionEntity.setCreditPoints(false);
             transactionEntity.setSend(false);
             transactionEntity.setCreationDate(LocalDateTime.now());
             transactionEntity.setCurrency(currency);
+            transactionEntity.setSubscription(true);
             saveTransaction.save(transactionEntity, transactionId);
 
-            return new PaymentApplicableModel(true, discountedPrice, currency, orderId, description);
+            return new PaymentApplicableModel(true, discountedPrice, currency, orderId, description, plan.getTax(),
+                    plan.getReturnTax());
         }
 
         String productReference = transaction.getProductReference();
@@ -118,14 +115,10 @@ public class TransactionService implements TransactionPort {
         transactionEntity.setUserId(transaction.getUserId());
         saveTransaction.save(transactionEntity, transactionId);
 
-        return new PaymentApplicableModel(isPayment, finalPrice, currency, orderId, description);
+        return new PaymentApplicableModel(isPayment, finalPrice, currency, orderId, description, productDto.getTax(),
+                productDto.getReturnTax());
     }
 
-    @Override
-    public void assignmentPaymentId(String reference, String paymentId, String transactionId) {
-        TransactionEntity transaction = getTransactionEntity(reference, transactionId);
-        saveTransaction.save(transaction, transactionId);
-    }
 
     private TransactionEntity getTransactionEntity(String reference, String transactionId) {
         Optional<TransactionEntity> transactionEntity = obtainTransaction.findByReferenceNumber(reference,
@@ -157,6 +150,11 @@ public class TransactionService implements TransactionPort {
     @Override
     public List<TransactionEntity> findByStatusIsPaidAndSendIsFalse(String transactionId) {
         return obtainTransaction.findByStatusIsPaidAndSendIsFalse(transactionId);
+    }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
+        return obtainTransaction.findByReferenceNumber(referenceNumber, transactionId);
     }
 
 }

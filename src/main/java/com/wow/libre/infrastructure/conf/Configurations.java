@@ -18,8 +18,10 @@ public class Configurations {
     private String payUApiPublic;
     @Value("${application.payu.url-confirmation}")
     private String payUConfirmUrl;
-
-
+    @Value("${application.payu.merchant-id}")
+    private String payUMerchantId;
+    @Value("${application.payu.account-id}")
+    private String payUAccountId;
     @Value("${application.urls.wow-libre}")
     private String pathLoginWowLibre;
     @Value("${application.account.username}")

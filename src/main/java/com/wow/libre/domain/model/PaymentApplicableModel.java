@@ -9,4 +9,6 @@ public class PaymentApplicableModel {
     public final String currency;
     public final String orderId;
     public final String description;
+    public final String tax;
+    public final String returnTax;
 }

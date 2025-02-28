@@ -59,8 +59,5 @@ public class TransactionSchedule {
 
     }
 
-    @Scheduled(cron = "0 0/30 * * * *")
-    public void refreshJwt() {
-        wowLibrePort.getJwt("Internal Refresh Token");
-    }
+ 
 }

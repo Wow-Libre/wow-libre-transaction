@@ -6,13 +6,10 @@ CREATE TABLE transactions.plan
     discount        INTEGER     NOT NULL,
     status          BOOLEAN     NOT NULL,
     reference_id    BIGINT      NOT NULL,
-    merchant_id     BIGINT,
     currency        VARCHAR(4)  NOT NULL,
     frequency_type  VARCHAR(30),
     frequency_value INTEGER,
     free_trial_days INTEGER,
-    plan_token      TEXT        NOT NULL,
-    subscribe_url   TEXT        NOT NULL,
     created_at      TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6),
     updated_at      TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP (6),
     PRIMARY KEY (id),
@@ -169,15 +166,25 @@ DROP COLUMN gambling_money,
     ADD COLUMN credit_points_enabled BOOLEAN NOT NULL,
     ADD COLUMN credit_points_amount BIGINT;
 
+ALTER TABLE transactions.plan
+    DROP COLUMN merchant_id,
+    DROP COLUMN plan_token,
+    DROP COLUMN subscribe_url;
 
 
+ALTER TABLE transactions.plan
+    ADD COLUMN tax varchar(50) NOT NULL,
+    ADD COLUMN return_tax varchar(50) NOT NULL;
 
+ALTER TABLE transactions.product
+    ADD COLUMN tax varchar(50) NOT NULL,
+    ADD COLUMN return_tax varchar(50) NOT NULL;
 
+ALTER TABLE transactions.plan
+    DROP COLUMN reference_id;
 
-
-
-
-
+ALTER TABLE transactions.transaction
+    ADD COLUMN is_subscription BOOLEAN NOT NULL;
 
 
 
