@@ -13,4 +13,6 @@ public class CreatePaymentDto {
     private Boolean isSubscription;
     @JsonProperty("server_id")
     private Long serverId;
+    @JsonProperty("product_reference")
+    private String productReference;
 }

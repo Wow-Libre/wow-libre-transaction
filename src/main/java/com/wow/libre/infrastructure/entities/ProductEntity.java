@@ -26,6 +26,7 @@ public class ProductEntity {
     private boolean useCreditPoints;
     @Column(name = "credit_points_amount")
     private Long creditPointsValue;
+
     private String description;
     @Column(name = "image_url")
     private String imageUrl;
@@ -39,8 +40,8 @@ public class ProductEntity {
     @Column(name = "reference_number")
     private String referenceNumber;
     private Boolean status;
-    @Column(name = "tax")
     private String tax;
     @Column(name = "return_tax")
     private String returnTax;
+    private String language;
 }

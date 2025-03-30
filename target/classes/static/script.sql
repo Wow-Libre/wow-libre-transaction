@@ -113,8 +113,8 @@ CREATE TABLE transactions.transaction
     subscription_id  bigint,
     reference_number varchar(80) NOT NULL,
     creation_date    date        NOT NULL,
-    payment_method       varchar(60),
-    credit_points             boolean,
+    payment_method   varchar(60),
+    credit_points    boolean,
     currency         varchar(20) NOT NULL,
     send             boolean     NOT NULL,
     PRIMARY KEY (id),
@@ -153,23 +153,29 @@ ALTER TABLE subscription_benefit
 
 
 
-
 ALTER TABLE transactions.transaction
-DROP COLUMN gold,
-    DROP COLUMN payment_id,
+DROP
+COLUMN gold,
+    DROP
+COLUMN payment_id,
     ADD COLUMN credit_points BOOLEAN NOT NULL,
     ADD COLUMN payment_method VARCHAR(60);
 
 ALTER TABLE transactions.product
-DROP COLUMN gambling_money,
-    DROP COLUMN gold_price,
+DROP
+COLUMN gambling_money,
+    DROP
+COLUMN gold_price,
     ADD COLUMN credit_points_enabled BOOLEAN NOT NULL,
     ADD COLUMN credit_points_amount BIGINT;
 
 ALTER TABLE transactions.plan
-    DROP COLUMN merchant_id,
-    DROP COLUMN plan_token,
-    DROP COLUMN subscribe_url;
+DROP
+COLUMN merchant_id,
+    DROP
+COLUMN plan_token,
+    DROP
+COLUMN subscribe_url;
 
 
 ALTER TABLE transactions.plan
@@ -181,10 +187,29 @@ ALTER TABLE transactions.product
     ADD COLUMN return_tax varchar(50) NOT NULL;
 
 ALTER TABLE transactions.plan
-    DROP COLUMN reference_id;
+DROP
+COLUMN reference_id;
 
 ALTER TABLE transactions.transaction
     ADD COLUMN is_subscription BOOLEAN NOT NULL;
 
 
+ALTER TABLE subscription_benefit
+    ADD server_id bigint;
 
+
+ALTER TABLE transactions.product
+    ADD language varchar(20) NOT NULL;
+
+
+
+CREATE TABLE transactions.wallet
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id    BIGINT NOT NULL,
+    email      VARCHAR(255),
+    points     BIGINT NOT NULL,
+    status     BOOLEAN,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    update_at  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

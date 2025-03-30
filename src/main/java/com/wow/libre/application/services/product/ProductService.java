@@ -23,9 +23,9 @@ public class ProductService implements ProductPort {
     }
 
     @Override
-    public Map<String, List<ProductCategoryDto>> products(String transactionId) {
+    public Map<String, List<ProductCategoryDto>> products(String language, String transactionId) {
 
-        List<ProductEntity> productsDb = products.findByStatusIsTrue(transactionId);
+        List<ProductEntity> productsDb = products.findByStatusIsTrueAndLanguage(language, transactionId);
 
         return productsDb.stream()
                 .collect(Collectors.groupingBy(
@@ -56,12 +56,10 @@ public class ProductService implements ProductPort {
                 .id(product.getId())
                 .name(product.getName())
                 .disclaimer(product.getDisclaimer())
-                .discountedPrice(calculateFinalPrice(price, discount))
-                .discountedGoldPrice(calculateGoldPrice(product.getCreditPointsValue(), discount))
+                .discountPrice(calculateFinalPrice(price, discount))
                 .price(price)
                 .discount(discount)
-                .gamblingMoney(product.isUseCreditPoints())
-                .goldPrice(product.getCreditPointsValue())
+                .usePoints(product.isUseCreditPoints())
                 .description(product.getDescription())
                 .imgUrl(product.getImageUrl())
                 .partner(product.getPartnerId().getName())
@@ -71,7 +69,7 @@ public class ProductService implements ProductPort {
     }
 
     public Double calculateFinalPrice(Double price, Integer discount) {
-        Double discountAmount = price * (discount / 100.0);
+        Double discountAmount = price * (Optional.of(discount).orElse(0) / 100.0);
         return price - discountAmount;
     }
 
@@ -91,8 +89,7 @@ public class ProductService implements ProductPort {
                 .disclaimer(productModel.getDisclaimer())
                 .price(productModel.getPrice())
                 .discount(productModel.getDiscount())
-                .gamblingMoney(productModel.isUseCreditPoints())
-                .goldPrice(productModel.getCreditPointsValue())
+                .usePoints(productModel.isUseCreditPoints())
                 .description(productModel.getDescription())
                 .imgUrl(productModel.getImageUrl())
                 .partner(productModel.getPartnerId().getName())
@@ -115,20 +112,18 @@ public class ProductService implements ProductPort {
     }
 
     @Override
-    public List<ProductDiscountsDto> productDiscounts(String transactionId) {
+    public List<ProductDiscountsDto> productDiscounts(String language, String transactionId) {
 
 
-        return products.findByStatusIsTrueAndDiscount(transactionId).stream()
+        return products.findByStatusIsTrueAndDiscount(language, transactionId).stream()
                 .map(productModel -> ProductDiscountsDto.builder().id(productModel.getId())
                         .name(productModel.getName())
                         .disclaimer(productModel.getDisclaimer())
-                        .price(productModel.getPrice()).discountedPrice(calculateFinalPrice(productModel.getPrice(),
-                                productModel.getDiscount()))
-                        .discountedGoldPrice(calculateGoldPrice(productModel.getCreditPointsValue(),
+                        .price(productModel.getPrice())
+                        .discountPrice(calculateFinalPrice(productModel.getPrice(),
                                 productModel.getDiscount()))
                         .discount(productModel.getDiscount())
-                        .gamblingMoney(productModel.isUseCreditPoints())
-                        .goldPrice(productModel.getCreditPointsValue())
+                        .usePoints(productModel.isUseCreditPoints())
                         .description(productModel.getDescription())
                         .imgUrl(productModel.getImageUrl())
                         .partner(productModel.getPartnerId().getName())

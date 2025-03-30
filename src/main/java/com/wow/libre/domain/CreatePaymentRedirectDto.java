@@ -3,19 +3,26 @@ package com.wow.libre.domain;
 import lombok.*;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreatePaymentRedirectDto {
-    public final String redirect;
-    public final String confirmationUrl;
-    public final String responseUrl;
-    public final String buyerEmail;
-    public final String signature;
-    public final String currency;
-    public final String taxReturnBase;
-    public final String tax;
-    public final String amount;
-    public final String referenceCode;
-    public final String description;
-    public final String accountId;
-    public final String merchantId;
-    public final String test;
+    public String redirect;
+    public String confirmationUrl;
+    public String responseUrl;
+    public String buyerEmail;
+    public String signature;
+    public String currency;
+    public String taxReturnBase;
+    public String tax;
+    public String amount;
+    public String referenceCode;
+    public String description;
+    public String accountId;
+    public String merchantId;
+    public String test;
+    public boolean isPayment;
+
+    public CreatePaymentRedirectDto(boolean isPayment, String redirect) {
+        this.isPayment = isPayment;
+        this.redirect = redirect;
+    }
 }

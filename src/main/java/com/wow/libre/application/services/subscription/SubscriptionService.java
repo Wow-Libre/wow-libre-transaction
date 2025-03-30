@@ -66,7 +66,7 @@ public class SubscriptionService implements SubscriptionPort {
     }
 
     @Override
-    public void createSubscription(Long userId, String transactionId) {
+    public SubscriptionEntity createSubscription(Long userId, String transactionId) {
 
         Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
                 SubscriptionStatus.ACTIVE.getType());
@@ -95,7 +95,7 @@ public class SubscriptionService implements SubscriptionPort {
         subscription.setNextInvoiceDate(nextInvoiceDate);
         subscription.setReferenceNumber(randomString.nextString());
         subscription.setStatus(SubscriptionStatus.ACTIVE.getType());
-        saveSubscription.save(subscription, transactionId);
+        return saveSubscription.save(subscription, transactionId);
     }
 
     @Override

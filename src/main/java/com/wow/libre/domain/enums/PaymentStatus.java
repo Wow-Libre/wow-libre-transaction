@@ -8,7 +8,8 @@ import java.util.*;
 @AllArgsConstructor
 public enum PaymentStatus {
     APPROVED("APPROVED"),
-    REJECTED("REJECTED");
+    REJECTED("REJECTED"),
+    ERROR("ERROR");
 
     private final String type;
 
@@ -16,6 +17,6 @@ public enum PaymentStatus {
         return Arrays.stream(values())
                 .filter(transaction -> transaction.type.equalsIgnoreCase(type))
                 .findFirst()
-                .orElse(null);
+                .orElse(ERROR);
     }
 }

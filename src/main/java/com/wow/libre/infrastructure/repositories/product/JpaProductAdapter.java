@@ -15,13 +15,13 @@ public class JpaProductAdapter implements ObtainProducts {
     }
 
     @Override
-    public List<ProductEntity> findByStatusIsTrue(String transactionId) {
-        return productRepository.findByStatusIsTrue();
+    public List<ProductEntity> findByStatusIsTrueAndLanguage(String language, String transactionId) {
+        return productRepository.findByStatusIsTrueAndLanguage(language);
     }
 
     @Override
-    public List<ProductEntity> findByStatusIsTrueAndDiscount(String transactionId) {
-        return productRepository.findByStatusIsTrueAndDiscount();
+    public List<ProductEntity> findByStatusIsTrueAndDiscount(String language, String transactionId) {
+        return productRepository.findByStatusIsTrueAndDiscount(language);
     }
 
     @Override

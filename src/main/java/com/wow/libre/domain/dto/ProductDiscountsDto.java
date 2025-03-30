@@ -10,11 +10,9 @@ public class ProductDiscountsDto {
     private String disclaimer;
     private String category;
     private Double price;
-    private Double discountedPrice;
-    private Double discountedGoldPrice;
+    private Double discountPrice;
     private Integer discount;
-    private boolean gamblingMoney;
-    private Long goldPrice;
+    private boolean usePoints;
     private Long serverId;
     private String description;
     private String imgUrl;

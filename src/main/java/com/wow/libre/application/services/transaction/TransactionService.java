@@ -92,14 +92,14 @@ public class TransactionService implements TransactionPort {
             throw new InternalException("The product is not available for donation", transactionId);
         }
 
-        boolean isPayment = !productDto.isUseCreditPoints();
-
-        final String description = String.format("Donation %s", productDto.getName());
-        double price = isPayment ? productDto.getPrice() : productDto.getCreditPointsValue();
+        final String description = productDto.getName();
+        final boolean creditPoints = productDto.isUseCreditPoints();
+        Double price = productDto.getPrice();
         Integer discountPercentage = productDto.getDiscount();
         double discountAmount = ((double) discountPercentage / 100) * price;
-        Double finalPrice = price - discountAmount;
-        final String currency = isPayment ? "USD" : "POINTS";
+        final Double finalPrice = price - discountAmount;
+        final String currency = creditPoints ? "POINTS" : "USD";
+        final boolean isPaymentRedirectToCheckout = !creditPoints;
 
         TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setAccountId(transaction.getAccountId());
@@ -115,7 +115,8 @@ public class TransactionService implements TransactionPort {
         transactionEntity.setUserId(transaction.getUserId());
         saveTransaction.save(transactionEntity, transactionId);
 
-        return new PaymentApplicableModel(isPayment, finalPrice, currency, orderId, description, productDto.getTax(),
+        return new PaymentApplicableModel(isPaymentRedirectToCheckout, finalPrice, currency, orderId, description,
+                productDto.getTax(),
                 productDto.getReturnTax());
     }
 
@@ -140,7 +141,16 @@ public class TransactionService implements TransactionPort {
     public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
         TransactionsDto data = new TransactionsDto();
         List<Transaction> transactions =
-                obtainTransaction.findByUserId(userId, page, size, transactionId).stream().map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(), transaction.getCurrency(), transaction.getStatus(), TransactionStatus.getType(transaction.getStatus()).getStatus(), transaction.getCreationDate(), transaction.getReferenceNumber(), Optional.ofNullable(transaction.getProductId()).map(ProductEntity::getName).orElse(""), Optional.ofNullable(transaction.getProductId()).map(ProductEntity::getImageUrl).orElse(""))).toList();
+                obtainTransaction.findByUserId(userId, page, size, transactionId)
+                        .stream().map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
+                                transaction.getCurrency(), transaction.getStatus(),
+                                TransactionStatus.getType(transaction.getStatus()).getStatus(),
+                                transaction.getCreationDate(), transaction.getReferenceNumber(),
+                                Optional.ofNullable(transaction.getProductId())
+                                        .map(ProductEntity::getName).orElse("VIP"),
+                                Optional.ofNullable(transaction.getProductId())
+                                        .map(ProductEntity::getImageUrl).orElse("https://static.wixstatic" +
+                                                ".com/media/5dd8a0_cbcd4683525e448c8502b031dfce2527~mv2.webp"))).toList();
         data.setTransactions(transactions);
         data.setSize(obtainTransaction.findByUserId(userId, transactionId));
 

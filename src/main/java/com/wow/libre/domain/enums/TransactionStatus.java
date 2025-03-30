@@ -11,6 +11,8 @@ public enum TransactionStatus {
     CREATED("CREATED", 50),
     DELIVERED("DELIVERED", 100),
     REJECTED("REJECTED", 100),
+    ERROR("ERROR", 100),
+    INSUFFICIENT_MONEY("INSUFFICIENT_MONEY", 0),
     PENDING("PENDING", 50);
 
     private final String type;

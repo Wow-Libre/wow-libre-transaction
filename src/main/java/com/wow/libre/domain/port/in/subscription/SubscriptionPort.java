@@ -1,12 +1,13 @@
 package com.wow.libre.domain.port.in.subscription;
 
 import com.wow.libre.domain.dto.*;
+import com.wow.libre.infrastructure.entities.*;
 
 public interface SubscriptionPort {
 
     PillWidgetHomeDto getPillHome(Long userId, String language, String transactionId);
 
-    void createSubscription(Long userId, String transactionId);
+    SubscriptionEntity createSubscription(Long userId, String transactionId);
 
     boolean isActiveSubscription(Long userId, String transactionId);
 

@@ -3,6 +3,7 @@ package com.wow.libre.domain.dto;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
+@Builder
 @Data
 public class PaymentTransaction {
     @JsonProperty("date")
