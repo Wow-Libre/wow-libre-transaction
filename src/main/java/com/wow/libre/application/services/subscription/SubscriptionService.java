@@ -152,6 +152,7 @@ public class SubscriptionService implements SubscriptionPort {
             subscriptionBenefit.setBenefitId(benefitModel.getId());
             subscriptionBenefit.setCreatedAt(new Date());
             subscriptionBenefit.setUserId(userId);
+            subscriptionBenefit.setServerId(benefitModel.getServerId());
             saveSubscriptionBenefit.save(subscriptionBenefit);
         }
 
