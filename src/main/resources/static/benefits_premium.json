@@ -1,7 +1,7 @@
 {
   "es": [
     {
-      "id": 1,
+      "id": 601,
       "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
       "name": "Cambio de Facción: Renueva tu Camino",
       "description": "Explora nuevos horizontes al cambiar de facción. Redefine tus lealtades y descubre un mundo lleno de nuevas oportunidades y desafíos.",
@@ -10,10 +10,10 @@
       "reactivable": true,
       "btn_txt": "Cambiar Ahora",
       "type": "CHANGE_FACTION",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 2,
+      "id": 602,
       "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
       "name": "Transformación de Raza",
       "description": "Reinicia tu viaje al cambiar tu raza. Explora nuevas habilidades, características y oportunidades en tu evolución.",
@@ -22,10 +22,10 @@
       "reactivable": true,
       "btn_txt": "Cambiar Ahora",
       "type": "CHANGE_RACE",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 3,
+      "id": 603,
       "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
       "name": "Personaliza Tu Héroe",
       "description": "Libera tu creatividad y transforma a tu personaje según tu estilo. Ajusta cada detalle para crear el héroe que siempre has imaginado.",
@@ -34,32 +34,15 @@
       "reactivable": true,
       "btn_txt": "Cambiar Ahora",
       "type": "CUSTOMIZE",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 4,
-      "img": "https://static.wixstatic.com/media/5dd8a0_3fe21b1eb86847fda436ea04ded6eae5~mv2.webp",
-      "name": "Corcel celestial",
-      "description": "Montura - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "54811",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 5,
+      "id": 604,
       "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
       "name": "Pandaren Monk",
       "description": "Compañero Vip",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -68,15 +51,15 @@
         }
       ],
       "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 6,
+      "id": 605,
       "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
       "name": "Traje de múrloc",
       "description": "Disfraz",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -85,327 +68,70 @@
         }
       ],
       "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 7,
-      "img": "https://static.wixstatic.com/media/5dd8a0_5f40b9d8fe8d44f89da2a59effff062b~mv2.jpg",
-      "name": "Riendas del tigre espectral",
-      "description": "Montura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "33224",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 8,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
-      "name": "Montura Especial",
-      "description": "Montura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "860000",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 9,
-      "img": "https://static.wixstatic.com/media/5dd8a0_8b7aaa1909204971960a7a0b21788492~mv2.webp",
-      "name": "Huevo de gallo mágico",
-      "description": "Bienvenida Wow Frozen",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "49290",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 10,
+      "id": 605,
       "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "Traje de múrloc",
-      "description": "Disfraz",
+      "name": "Asistente VIP - No reactivable",
+      "description": "Este beneficio solo se puede obtener una vez por cuenta. Si lo has reclamado, no podrás volver a reclamarlo.",
       "send_item": true,
       "reactivable": false,
       "btn_txt": "Obtener",
       "items": [
         {
-          "code": "33079",
+          "code": "9017",
           "quantity": 1
         }
       ],
       "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 11,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
-      "name": "Pandaren Monk",
-      "description": "Compañero Vip",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "49665",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 12,
-      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
-      "name": "Cambio de Facción: Renueva tu Camino",
-      "description": "Explora nuevos horizontes al cambiar de facción. Redefine tus lealtades y descubre un mundo lleno de nuevas oportunidades y desafíos.",
-      "command": ".character changefaction",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Cambiar Ahora",
-      "type": "CHANGE_FACTION",
-      "server_id": 4
-    },
-    {
-      "id": 13,
-      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
-      "name": "Transformación de Raza",
-      "description": "Reinicia tu viaje al cambiar tu raza. Explora nuevas habilidades, características y oportunidades en tu evolución.",
-      "command": ".character changerace",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Cambiar Ahora",
-      "type": "CHANGE_RACE",
-      "server_id": 4
-    },
-    {
-      "id": 14,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
-      "name": "Personaliza Tu Héroe",
-      "description": "Libera tu creatividad y transforma a tu personaje según tu estilo. Ajusta cada detalle para crear el héroe que siempre has imaginado.",
-      "command": ".character customize",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Cambiar Ahora",
-      "type": "CUSTOMIZE",
-      "server_id": 4
-    },
-    {
-      "id": 15,
-      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "Traje de múrloc",
-      "description": "Disfraz",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "33079",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 16,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
-      "name": "Montura Especial",
-      "description": "Montura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "11219300",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 17,
-      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
-      "name": "Llamas de la Traición",
-      "description": "Aura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "1121933094",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 18,
-      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
-      "name": "Fuego del Infierno",
-      "description": "Aura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "1121933096",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 19,
-      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
-      "name": "Llamas de la Traición",
-      "description": "Aura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "1121933094",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id":  20,
-      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
-      "name": "Fuego del Infierno",
-      "description": "Aura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "1121933096",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id":  20,
-      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
-      "name": "Fuego del Infierno",
-      "description": "Aura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "1121933096",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 21,
-      "img": "https://static.wixstatic.com/media/5dd8a0_3d912ad7a2b74792bee3b0f414811483~mv2.webp",
-      "name": "Burro Sabanero",
-      "description": "Moneda",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtener",
-      "items": [
-        {
-          "code": "29735",
-          "quantity": 10
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     }
   ],
   "en": [
     {
-      "id": 1,
+      "id": 601,
       "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
       "name": "Faction Change: Renew Your Path",
-      "description": "Explore new horizons by changing factions. Redefine your allegiances and discover a world full of new opportunities and challenges.",
+      "description": "Explore new horizons by changing your faction. Redefine your allegiances and discover a world full of new opportunities and challenges.",
       "command": ".character changefaction",
       "send_item": false,
       "reactivable": true,
       "btn_txt": "Change Now",
       "type": "CHANGE_FACTION",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 2,
+      "id": 602,
       "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
       "name": "Race Transformation",
-      "description": "Restart your journey by changing your race. Discover new skills, traits, and opportunities in your evolution.",
+      "description": "Restart your journey by changing your race. Explore new abilities, traits, and opportunities in your evolution.",
       "command": ".character changerace",
       "send_item": false,
       "reactivable": true,
       "btn_txt": "Change Now",
       "type": "CHANGE_RACE",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 3,
+      "id": 603,
       "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
       "name": "Customize Your Hero",
-      "description": "Unleash your creativity and transform your character to your style. Adjust every detail to create the hero you've always imagined.",
+      "description": "Unleash your creativity and transform your character to fit your style. Adjust every detail to create the hero you've always imagined.",
       "command": ".character customize",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Customize Now",
+      "btn_txt": "Change Now",
       "type": "CUSTOMIZE",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 4,
-      "img": "https://static.wixstatic.com/media/5dd8a0_3fe21b1eb86847fda436ea04ded6eae5~mv2.webp",
-      "name": "Celestial Steed",
-      "description": "Mount - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Get It",
-      "items": [
-        {
-          "code": "54811",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 5,
+      "id": 604,
       "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
       "name": "Pandaren Monk",
       "description": "VIP Companion",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -414,83 +140,15 @@
         }
       ],
       "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 6,
+      "id": 605,
       "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "Murloc Suit",
-      "description": "costume",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "33079",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 7,
-      "img": "https://static.wixstatic.com/media/5dd8a0_5f40b9d8fe8d44f89da2a59effff062b~mv2.jpg",
-      "name": "Reins of the Spectral Tiger",
-      "description": "Mount - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "33224",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 8,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
-      "name": "Mount",
-      "description": "Mount - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "860000",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 9,
-      "img": "https://static.wixstatic.com/media/5dd8a0_8b7aaa1909204971960a7a0b21788492~mv2.webp",
-      "name": "magic rooster egg",
-      "description": "Welcome Wow Frozen",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "49290",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 10,
-      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "murloc costume",
+      "name": "Murloc Costume",
       "description": "Costume",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -499,184 +157,29 @@
         }
       ],
       "type": "ITEM",
-      "server_id": 2
+      "server_id": 7
     },
     {
-      "id": 11,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
-      "name": "Pandaren Monk",
-      "description": "Compañero Vip",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "49665",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 12,
-      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
-      "name": "Faction Change: Renew Your Path",
-      "description": "Explore new horizons by changing factions. Redefine your allegiances and discover a world full of new opportunities and challenges.",
-      "command": ".character changefaction",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Change Now",
-      "type": "CHANGE_FACTION",
-      "server_id": 4
-    },
-    {
-      "id": 13,
-      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
-      "name": "Race Transformation",
-      "description": "Restart your journey by changing your race. Discover new skills, traits, and opportunities in your evolution.",
-      "command": ".character changerace",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Change Now",
-      "type": "CHANGE_RACE",
-      "server_id": 4
-    },
-    {
-      "id": 14,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
-      "name": "Customize Your Hero",
-      "description": "Unleash your creativity and transform your character to your style. Adjust every detail to create the hero you've always imagined.",
-      "command": ".character customize",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Customize Now",
-      "type": "CUSTOMIZE",
-      "server_id": 4
-    },
-    {
-      "id": 15,
+      "id": 605,
       "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "murloc costume",
-      "description": "Costume",
+      "name": "VIP Assistant - Non-reactivatable",
+      "description": "This benefit can only be obtained once per account. If you've claimed it, you cannot claim it again.",
       "send_item": true,
       "reactivable": false,
       "btn_txt": "Obtain",
       "items": [
         {
-          "code": "33079",
+          "code": "9017",
           "quantity": 1
         }
       ],
       "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 16,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
-      "name": "Mount",
-      "description": "Mount - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "11219300",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 17,
-      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
-      "name": "Flames of Betrayal",
-      "description": "Premium Aura",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "1121933094",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 18,
-      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
-      "name": "Hell Fire",
-      "description": "Aura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "1121933096",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 19,
-      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
-      "name": "Flames of Betrayal",
-      "description": "Premium Aura",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "1121933094",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id":  20,
-      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
-      "name": "Hell Fire",
-      "description": "Premium Aura",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "1121933096",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 21,
-      "img": "https://static.wixstatic.com/media/5dd8a0_3d912ad7a2b74792bee3b0f414811483~mv2.webp",
-      "name": "Sabanero Donkey",
-      "description": "Coin",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obtain",
-      "items": [
-        {
-          "code": "29735",
-          "quantity": 10
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     }
   ],
   "pt": [
     {
-      "id": 1,
+      "id": 601,
       "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
       "name": "Mudança de Facção: Renove Seu Caminho",
       "description": "Explore novos horizontes ao mudar de facção. Redefina suas lealdades e descubra um mundo cheio de novas oportunidades e desafios.",
@@ -685,56 +188,39 @@
       "reactivable": true,
       "btn_txt": "Mudar Agora",
       "type": "CHANGE_FACTION",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 2,
+      "id": 602,
       "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
       "name": "Transformação de Raça",
-      "description": "Reinicie sua jornada ao mudar de raça. Descubra novas habilidades, características e oportunidades na sua evolução.",
+      "description": "Reinicie sua jornada mudando sua raça. Explore novas habilidades, características e oportunidades na sua evolução.",
       "command": ".character changerace",
       "send_item": false,
       "reactivable": true,
       "btn_txt": "Mudar Agora",
       "type": "CHANGE_RACE",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 3,
+      "id": 603,
       "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
       "name": "Personalize Seu Herói",
-      "description": "Liberte sua criatividade e transforme seu personagem ao seu estilo. Ajuste cada detalhe para criar o herói que você sempre imaginou.",
+      "description": "Libere sua criatividade e transforme seu personagem de acordo com seu estilo. Ajuste cada detalhe para criar o herói que você sempre imaginou.",
       "command": ".character customize",
       "send_item": false,
       "reactivable": true,
-      "btn_txt": "Personalizar Agora",
+      "btn_txt": "Mudar Agora",
       "type": "CUSTOMIZE",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 4,
-      "img": "https://static.wixstatic.com/media/5dd8a0_3fe21b1eb86847fda436ea04ded6eae5~mv2.webp",
-      "name": "Celestial Steed",
-      "description": "Montaria - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "54811",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 5,
+      "id": 604,
       "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
       "name": "Monge Pandaren",
       "description": "Companheiro VIP",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obter",
       "items": [
         {
@@ -743,15 +229,15 @@
         }
       ],
       "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 6,
+      "id": 605,
       "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "Fantasia de Murloc",
-      "description": "fantasia",
+      "name": "Traje de Murloc",
+      "description": "Fantasia",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obter",
       "items": [
         {
@@ -760,247 +246,24 @@
         }
       ],
       "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     },
     {
-      "id": 7,
-      "img": "https://static.wixstatic.com/media/5dd8a0_5f40b9d8fe8d44f89da2a59effff062b~mv2.jpg",
-      "name": "Rédeas do Tigre Espectral",
-      "description": "Montaria - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "33224",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 8,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
-      "name": "Montaria",
-      "description": "Montaria - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "860000",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 9,
-      "img": "https://static.wixstatic.com/media/5dd8a0_8b7aaa1909204971960a7a0b21788492~mv2.webp",
-      "name": "ovo de galo mágico",
-      "description": "Bem vindo Uau Frozen",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "49290",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 10,
+      "id": 605,
       "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "Fantasia de Murloc",
-      "description": "fantasia",
+      "name": "Assistente VIP - Não Reativável",
+      "description": "Este benefício pode ser obtido apenas uma vez por conta. Se você já o reclamou, não poderá reclamá-lo novamente.",
       "send_item": true,
       "reactivable": false,
       "btn_txt": "Obter",
       "items": [
         {
-          "code": "33079",
+          "code": "9017",
           "quantity": 1
         }
       ],
       "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 11,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c95e3cda4ac64c9fa37bd027fbdcd115~mv2.webp",
-      "name": "Pandaren Monk",
-      "description": "Companheiro VIP",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "49665",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 2
-    },
-    {
-      "id": 12,
-      "img": "https://static.wixstatic.com/media/5dd8a0_098f031cf3a14996a962484552274834~mv2.webp",
-      "name": "Mudança de Facção: Renove Seu Caminho",
-      "description": "Explore novos horizontes ao mudar de facção. Redefina suas lealdades e descubra um mundo cheio de novas oportunidades e desafios.",
-      "command": ".character changefaction",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Mudar Agora",
-      "type": "CHANGE_FACTION",
-      "server_id": 4
-    },
-    {
-      "id": 13,
-      "img": "https://static.wixstatic.com/media/5dd8a0_374ab4f45c9d49a5b3ec3cacb148fd9f~mv2.webp",
-      "name": "Transformação de Raça",
-      "description": "Reinicie sua jornada ao mudar de raça. Descubra novas habilidades, características e oportunidades na sua evolução.",
-      "command": ".character changerace",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Mudar Agora",
-      "type": "CHANGE_RACE",
-      "server_id": 4
-    },
-    {
-      "id": 14,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c9e9f8365f1d4d969995ca1200025166~mv2.webp",
-      "name": "Personalize Seu Herói",
-      "description": "Liberte sua criatividade e transforme seu personagem ao seu estilo. Ajuste cada detalhe para criar o herói que você sempre imaginou.",
-      "command": ".character customize",
-      "send_item": false,
-      "reactivable": true,
-      "btn_txt": "Personalizar Agora",
-      "type": "CUSTOMIZE",
-      "server_id": 4
-    },
-    {
-      "id": 15,
-      "img": "https://static.wixstatic.com/media/5dd8a0_73c04db5355d4dd18d589eea42a40f92~mv2.jpg",
-      "name": "Fantasia de Murloc",
-      "description": "fantasia",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "33079",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 16,
-      "img": "https://static.wixstatic.com/media/5dd8a0_c984be6994dd4687842fb66153ddb8d5~mv2.jpg",
-      "name": "Montaria",
-      "description": "Montaria - Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "11219300",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 17,
-      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
-      "name": "Chamas da Traição",
-      "description": "Premium Aura",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "1121933094",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 18,
-      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
-      "name": "Fogo do Inferno",
-      "description": "Aura Premium",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "1121933096",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id": 19,
-      "img": "https://static.wixstatic.com/media/5dd8a0_90d75c12cbde4c2faef7a8c5a9366283~mv2.jpg",
-      "name": "Chamas da Traição",
-      "description": "Premium Aura",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "1121933094",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 4
-    },
-    {
-      "id":  20,
-      "img": "https://static.wixstatic.com/media/5dd8a0_63fe176c8bd7487895849edf14b4c52a~mv2.jpg",
-      "name": "Fogo do Inferno",
-      "description": "Premium Aura",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "1121933096",
-          "quantity": 1
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
-    },
-    {
-      "id": 21,
-      "img": "https://static.wixstatic.com/media/5dd8a0_3d912ad7a2b74792bee3b0f414811483~mv2.webp",
-      "name": "Burrito Sabanero",
-      "description": "Moeda",
-      "send_item": true,
-      "reactivable": false,
-      "btn_txt": "Obter",
-      "items": [
-        {
-          "code": "29735",
-          "quantity": 10
-        }
-      ],
-      "type": "ITEM",
-      "server_id": 1
+      "server_id": 7
     }
   ]
 }
