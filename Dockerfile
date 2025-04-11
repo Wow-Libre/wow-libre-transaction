@@ -37,4 +37,4 @@ ENV NEW_RELIC_LOG_LEVEL=info
 
 EXPOSE 8091
 
-ENTRYPOINT ["java", "-jar", "wow-libre-transaction-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-javaagent:newrelic.jar", "-jar", "wowlibre-0.0.1-SNAPSHOT.jar"]
