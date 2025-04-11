@@ -76,7 +76,7 @@
       "name": "Asistente VIP - No reactivable",
       "description": "Este beneficio solo se puede obtener una vez por cuenta. Si lo has reclamado, no podrás volver a reclamarlo.",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtener",
       "items": [
         {
@@ -165,7 +165,7 @@
       "name": "VIP Assistant - Non-reactivatable",
       "description": "This benefit can only be obtained once per account. If you've claimed it, you cannot claim it again.",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obtain",
       "items": [
         {
@@ -254,7 +254,7 @@
       "name": "Assistente VIP - Não Reativável",
       "description": "Este benefício pode ser obtido apenas uma vez por conta. Se você já o reclamou, não poderá reclamá-lo novamente.",
       "send_item": true,
-      "reactivable": false,
+      "reactivable": true,
       "btn_txt": "Obter",
       "items": [
         {
