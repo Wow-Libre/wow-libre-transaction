@@ -27,6 +27,8 @@ WORKDIR /app
 
 # Copiar el archivo JAR desde la etapa de construcción (builder)
 COPY --from=builder /app/target/wow-libre-transaction-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/target/newrelic/newrelic.jar .
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
