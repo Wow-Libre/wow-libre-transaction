@@ -7,6 +7,7 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\application\services\subscription\SubscriptionService.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\application\services\telegram\TelegramService.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\application\services\transaction\TransactionService.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\application\services\wallet\WalletService.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\application\services\wowlibre\WowLibreService.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\constant\Constants.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\constant\DateHelper.java
@@ -21,6 +22,7 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\client\SubscriptionBenefitsRequest.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\CreatePaymentDto.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\NotificationPaymentDto.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\PaymentTransaction.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\PillWidgetHomeDto.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\PlanDetailDto.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\ProductCategoryDto.java
@@ -31,6 +33,7 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\SubscriptionBenefitsDto.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\SubscriptionCreateDto.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\dto\TransactionsDto.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\enums\PaymentStatus.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\enums\SubscriptionStatus.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\enums\TransactionStatus.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\exception\BadRequestException.java
@@ -58,6 +61,7 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\in\subscription\SubscriptionPort.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\in\TelegramPort.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\in\transaction\TransactionPort.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\in\wallet\WalletPort.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\in\wowlibre\WowLibrePort.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\out\client\ObtainClient.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\out\client\SaveClient.java
@@ -72,10 +76,11 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\out\subscription_benefit\SaveSubscriptionBenefit.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\out\transaction\ObtainTransaction.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\out\transaction\SaveTransaction.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\out\wallet\ObtainWallet.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\port\out\wallet\SaveWallet.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\shared\GenericResponse.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\shared\GenericResponseBuilder.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\domain\shared\NotNullValuesDto.java
-C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\client\DLocalGoClient.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\client\Telegram.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\client\WowLibreClient.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\conf\ConfigRandomSerial.java
@@ -87,6 +92,7 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\controller\ProductController.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\controller\SubscriptionController.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\controller\TransactionController.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\controller\WalletController.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\entities\ClientEntity.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\entities\PackagesEntity.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\entities\PartnerEntity.java
@@ -97,12 +103,14 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\entities\SubscriptionBenefitEntity.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\entities\SubscriptionEntity.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\entities\TransactionEntity.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\entities\WalletEntity.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\filter\dto\ByteArrayPrintWriter.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\filter\dto\ByteArrayServletStream.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\filter\dto\RequestWrapper.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\filter\dto\ResponseWrapper.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\filter\JwtAuthenticationFilter.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\filter\RestTemplateHeaderModifierInterceptor.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\handler\ManagerExceptionHandler.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\client\ClientRepository.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\client\JpaClientAdapter.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\jsonLoader\JsonLoader.java
@@ -121,6 +129,8 @@ C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\subscription_benefit\SubscriptionBenefitRepository.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\transaction\JpaTransactionAdapter.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\transaction\TransactionRepository.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\wallet\JpaWalletAdapter.java
+C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\repositories\wallet\WalletRepository.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\schedule\TransactionSchedule.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\security\SecurityConfiguration.java
 C:\Users\usuario\Documents\worskpace\wow-libre-transaction\src\main\java\com\wow\libre\infrastructure\util\RandomString.java
