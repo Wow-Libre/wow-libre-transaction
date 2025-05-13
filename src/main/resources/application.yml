@@ -66,9 +66,9 @@ spring:
       hibernate:
         format_sql: false
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_TRANSACTION_URL}
+    username: ${DB_TRANSACTION_USERNAME}
+    password: ${DB_TRANSACTION_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   servlet:
