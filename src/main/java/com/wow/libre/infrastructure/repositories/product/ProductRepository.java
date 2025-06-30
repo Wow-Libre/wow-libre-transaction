@@ -15,4 +15,6 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
 
     @Query("select p FROM ProductEntity p WHERE p.status=true AND p.discount>0 AND p.language =:language")
     List<ProductEntity> findByStatusIsTrueAndDiscount(@Param("language") String language);
+
+    Optional<ProductEntity> findByNameAndLanguage(String name, String language);
 }

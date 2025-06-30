@@ -31,10 +31,8 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://4f1a-181-51-34-168" +
-                        ".ngrok-free.app",
-                "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "https://www.wowlibre.com"
-                , "/*"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
+                "http://127.0.0.1:3000"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
@@ -71,6 +69,7 @@ public class SecurityConfiguration {
                                         "/api/products/offer",
                                         "/api/products/{reference}",
                                         "/api/payment/notification",
+                                        "/api/partner/exist/{realmId}",
                                         //SWAGGER
                                         "/v2/api-docs",
                                         "/swagger-resources",
@@ -82,6 +81,7 @@ public class SecurityConfiguration {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**")
                                 .permitAll()
+                                .requestMatchers("/api/partner","/api/product-category").hasAuthority("ADMIN")
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

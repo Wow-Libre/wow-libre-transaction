@@ -37,7 +37,6 @@ public class TransactionSchedule {
         final String transactionId = "";
         List<TransactionEntity> transactionEntities = obtainTransaction.findByStatusIsPaidAndSendIsFalse(transactionId);
 
-
         for (TransactionEntity transaction : transactionEntities) {
             try {
                 final String jwt = wowLibrePort.getJwt(transactionId);
@@ -55,7 +54,6 @@ public class TransactionSchedule {
                 LOGGER.error("Error Transaction Sends {}", e.getLocalizedMessage());
             }
         }
-
 
     }
 

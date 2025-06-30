@@ -1,12 +1,14 @@
 package com.wow.libre.domain.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
-public class ProductCategoryDto {
-    private Long id;
+public class CreateProductCategoryDto {
+    @NotNull
     private String name;
+    @NotNull
     private String description;
+    @NotNull
     private String disclaimer;
 }

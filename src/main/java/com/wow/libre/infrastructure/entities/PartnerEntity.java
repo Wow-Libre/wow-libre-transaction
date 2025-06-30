@@ -12,7 +12,7 @@ public class PartnerEntity {
     @Column(name = "id")
     private Long id;
     private String name;
-    @Column(name = "server_id")
-    private Long serverId;
+    @Column(name = "realm_id")
+    private Long realmId;
     private boolean status;
 }
