@@ -17,4 +17,7 @@ public interface ProductRepository extends CrudRepository<ProductEntity, Long> {
     List<ProductEntity> findByStatusIsTrueAndDiscount(@Param("language") String language);
 
     Optional<ProductEntity> findByNameAndLanguage(String name, String language);
+
+    List<ProductEntity> findByStatusIsTrue();
+
 }

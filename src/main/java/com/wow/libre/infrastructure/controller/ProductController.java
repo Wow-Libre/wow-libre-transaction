@@ -3,6 +3,7 @@ package com.wow.libre.infrastructure.controller;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.port.in.product.*;
 import com.wow.libre.domain.shared.*;
+import jakarta.validation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,5 +69,28 @@ public class ProductController {
                         .body(new GenericResponseBuilder<>(productDiscountsDto, transactionId).created().build()))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT)
                         .body(new GenericResponseBuilder<ProductDiscountsDto>(transactionId).created().build()));
+    }
+
+
+    @PostMapping
+    public ResponseEntity<GenericResponse<Void>> createProduct(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestBody @Valid CreateProductDto createProductDto) {
+
+        productPort.createProduct(createProductDto, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
+
+    @GetMapping("/all")
+    public ResponseEntity<GenericResponse<ProductsDetailsDto>> allProducts(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+
+        ProductsDetailsDto products = productPort.allProducts(transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(products, transactionId).ok().build());
     }
 }

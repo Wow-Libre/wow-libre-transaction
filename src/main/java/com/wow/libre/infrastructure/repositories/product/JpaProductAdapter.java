@@ -35,6 +35,11 @@ public class JpaProductAdapter implements ObtainProducts, SaveProducts {
     }
 
     @Override
+    public List<ProductEntity> findAllByStatusIsTrue(String transactionId) {
+        return productRepository.findByStatusIsTrue();
+    }
+
+    @Override
     public void save(ProductEntity product, String transactionId) {
         productRepository.save(product);
     }

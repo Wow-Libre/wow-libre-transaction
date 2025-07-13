@@ -166,15 +166,44 @@ public class ProductService implements ProductPort {
         productEntity.setDiscount(product.getDiscount());
         productEntity.setTax(product.getTax());
         productEntity.setReturnTax(product.getReturnTax());
-        productEntity.setUseCreditPoints(product.isCreditPointsEnabled());
+        productEntity.setUseCreditPoints(product.getCreditPointsEnabled());
         productEntity.setImageUrl(product.getImageUrl());
         productEntity.setCreditPointsValue(product.getCreditPointsValue());
         productEntity.setLanguage(language);
+        productEntity.setStatus(true);
         productEntity.setReferenceNumber(randomString.nextString());
         productEntity.setPartnerId(partner);
         productEntity.setProductCategoryId(productCategory);
         saveProducts.save(productEntity, transactionId);
 
+    }
+
+    @Override
+    public ProductsDetailsDto allProducts(String transactionId) {
+        List<ProductEntity> productsDb = products.findAllByStatusIsTrue(transactionId);
+
+        return ProductsDetailsDto.builder().products(productsDb.stream().map(product -> ProductModel.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .disclaimer(product.getDisclaimer())
+                .category(product.getProductCategoryId().getName())
+                .price(product.getPrice())
+                .status(product.getStatus())
+                .pointsAmount(product.getCreditPointsValue())
+                .discount(product.getDiscount())
+                .discountPrice(calculateFinalPrice(product.getPrice(), product.getDiscount()))
+                .usePoints(product.isUseCreditPoints())
+                .categoryId(product.getProductCategoryId().getId())
+                .categoryName(product.getProductCategoryId().getName())
+                .description(product.getDescription())
+                .imgUrl(product.getImageUrl())
+                .language(product.getLanguage())
+                .partner(product.getPartnerId().getName())
+                .partnerId(product.getPartnerId().getId())
+                .tax(product.getTax())
+                .returnTax(product.getReturnTax())
+                .referenceNumber(product.getReferenceNumber())
+                .build()).toList()).totalProducts(productsDb.size()).build();
     }
 
 }

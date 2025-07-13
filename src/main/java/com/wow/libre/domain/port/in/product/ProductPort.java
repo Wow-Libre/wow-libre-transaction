@@ -15,4 +15,6 @@ public interface ProductPort {
     List<ProductDiscountsDto> productDiscounts(String language, String transactionId);
 
     void createProduct(CreateProductDto product, String transactionId);
+
+    ProductsDetailsDto allProducts(String transactionId);
 }
