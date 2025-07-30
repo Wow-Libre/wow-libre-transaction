@@ -33,7 +33,6 @@ public class CreateProductDto {
     private Long creditPointsValue;
     @NotNull
     private Boolean creditPointsEnabled;
-
     private List<ProductDetailsDto> details;
     @NotNull
     private List<String> packages;
