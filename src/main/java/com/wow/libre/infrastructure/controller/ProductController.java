@@ -3,6 +3,7 @@ package com.wow.libre.infrastructure.controller;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.port.in.product.*;
 import com.wow.libre.domain.shared.*;
+import jakarta.validation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +22,11 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<GenericResponse<Map<String, List<ProductCategoryDto>>>> products(
+    public ResponseEntity<GenericResponse<Map<String, List<ProductCategoryModel>>>> products(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
 
-        Map<String, List<ProductCategoryDto>> accounts = productPort.products(locale.getLanguage(), transactionId);
+        Map<String, List<ProductCategoryModel>> accounts = productPort.products(locale.getLanguage(), transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
@@ -69,4 +70,29 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NO_CONTENT)
                         .body(new GenericResponseBuilder<ProductDiscountsDto>(transactionId).created().build()));
     }
+
+
+    @PostMapping
+    public ResponseEntity<GenericResponse<Void>> createProduct(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestBody @Valid CreateProductDto createProductDto) {
+
+        productPort.createProduct(createProductDto, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
+
+    @GetMapping("/all")
+    public ResponseEntity<GenericResponse<ProductsDetailsDto>> allProducts(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+
+        ProductsDetailsDto products = productPort.allProducts(transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(products, transactionId).ok().build());
+    }
+
+
 }

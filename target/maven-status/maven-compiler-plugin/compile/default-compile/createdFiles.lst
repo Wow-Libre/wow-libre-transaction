@@ -15,7 +15,6 @@ com\wow\libre\application\services\payment\PaymentService.class
 com\wow\libre\domain\shared\NotNullValuesDto.class
 com\wow\libre\application\services\jwt\JwtPortService.class
 com\wow\libre\domain\dto\client\LoginResponse.class
-com\wow\libre\domain\port\in\TelegramPort.class
 com\wow\libre\infrastructure\filter\RestTemplateHeaderModifierInterceptor.class
 com\wow\libre\domain\model\ItemQuantityModel.class
 com\wow\libre\infrastructure\controller\WalletController.class
@@ -63,7 +62,6 @@ com\wow\libre\domain\dto\ProductDto$ProductDtoBuilder.class
 com\wow\libre\domain\model\UserModel.class
 com\wow\libre\infrastructure\entities\PlanEntity.class
 com\wow\libre\infrastructure\repositories\jsonLoader\JsonLoader.class
-com\wow\libre\infrastructure\client\Telegram.class
 com\wow\libre\domain\dto\ProductCategoryDto.class
 com\wow\libre\infrastructure\filter\JwtAuthenticationFilter.class
 com\wow\libre\domain\port\in\plan\PlanPort.class
@@ -125,7 +123,6 @@ com\wow\libre\domain\port\in\packages\PackagesPort.class
 com\wow\libre\TransactionApplication.class
 com\wow\libre\application\services\payment\PaymentService$1.class
 com\wow\libre\application\services\wowlibre\WowLibreService.class
-com\wow\libre\application\services\telegram\TelegramService.class
 com\wow\libre\domain\dto\ClaimSubscriptionBenefitsDto.class
 com\wow\libre\domain\dto\client\CreatePaymentRequest.class
 com\wow\libre\domain\exception\FoundException.class

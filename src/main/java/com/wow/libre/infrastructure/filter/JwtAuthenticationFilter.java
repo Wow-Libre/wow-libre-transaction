@@ -12,8 +12,8 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.apache.commons.lang3.*;
 import org.apache.logging.log4j.*;
-import org.slf4j.Logger;
 import org.slf4j.*;
+import org.slf4j.Logger;
 import org.springframework.http.*;
 import org.springframework.lang.*;
 import org.springframework.security.authentication.*;
@@ -49,7 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String transactionId = request.getHeader(Constants.HEADER_TRANSACTION_ID);
         ThreadContext.put(Constants.CONSTANT_UNIQUE_ID, transactionId);
 
-        LOGGER.info("{} Transaction {}", request.getRequestURI(), transactionId);
+        LOGGER.info("Request URL: [{}], Transaction ID: [{}], JWT Provided: [{}]", request.getRequestURI(),
+                transactionId, authHeader != null);
 
         try {
 
@@ -95,6 +96,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             responseBody.setMessage("Invalid JWT, has expired");
             responseBody.setCode(401);
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseBody));
+        } catch (MalformedJwtException e) {
+            responseBody.setMessage("El token JWT es inválido o está mal formado");
+            responseBody.setCode(400);
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseBody));
         }

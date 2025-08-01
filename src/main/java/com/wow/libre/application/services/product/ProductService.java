@@ -3,10 +3,14 @@ package com.wow.libre.application.services.product;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
+import com.wow.libre.domain.port.in.partner.*;
 import com.wow.libre.domain.port.in.product.*;
+import com.wow.libre.domain.port.in.product_category.*;
 import com.wow.libre.domain.port.in.product_details.*;
 import com.wow.libre.domain.port.out.product.*;
 import com.wow.libre.infrastructure.entities.*;
+import com.wow.libre.infrastructure.util.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -15,15 +19,25 @@ import java.util.stream.*;
 @Service
 public class ProductService implements ProductPort {
     private final ObtainProducts products;
+    private final SaveProducts saveProducts;
     private final ProductDetailsPort productDetailsPort;
+    private final PartnerPort partnerPort;
+    private final RandomString randomString;
+    private final ProductCategoryPort productCategoryPort;
 
-    public ProductService(ObtainProducts products, ProductDetailsPort productDetailsPort) {
+    public ProductService(ObtainProducts products, SaveProducts saveProducts, ProductDetailsPort productDetailsPort,
+                          PartnerPort partnerPort, @Qualifier("product-reference") RandomString randomString,
+                          ProductCategoryPort productCategoryPort) {
         this.products = products;
+        this.saveProducts = saveProducts;
         this.productDetailsPort = productDetailsPort;
+        this.partnerPort = partnerPort;
+        this.randomString = randomString;
+        this.productCategoryPort = productCategoryPort;
     }
 
     @Override
-    public Map<String, List<ProductCategoryDto>> products(String language, String transactionId) {
+    public Map<String, List<ProductCategoryModel>> products(String language, String transactionId) {
 
         List<ProductEntity> productsDb = products.findByStatusIsTrueAndLanguage(language, transactionId);
 
@@ -34,7 +48,7 @@ public class ProductService implements ProductPort {
                                 Collectors.toList(),
                                 productList -> {
                                     ProductEntity firstProduct = productList.get(0);
-                                    return List.of(new ProductCategoryDto(
+                                    return List.of(new ProductCategoryModel(
                                             firstProduct.getProductCategoryId().getId(),
                                             firstProduct.getProductCategoryId().getName(),
                                             firstProduct.getProductCategoryId().getDescription(),
@@ -73,10 +87,6 @@ public class ProductService implements ProductPort {
         return price - discountAmount;
     }
 
-    public Double calculateGoldPrice(Long price, Integer discount) {
-        Double discountAmount = price * (discount / 100.0);
-        return price - discountAmount;
-    }
 
     @Override
     public ProductDto product(String referenceCode, String transactionId) {
@@ -95,7 +105,7 @@ public class ProductService implements ProductPort {
                 .partner(productModel.getPartnerId().getName())
                 .referenceNumber(productModel.getReferenceNumber())
                 .details(productDetails)
-                .serverId(productModel.getPartnerId().getServerId())
+                .serverId(productModel.getPartnerId().getRealmId())
                 .category(productModel.getProductCategoryId().getName()).build();
 
     }
@@ -128,8 +138,72 @@ public class ProductService implements ProductPort {
                         .imgUrl(productModel.getImageUrl())
                         .partner(productModel.getPartnerId().getName())
                         .referenceNumber(productModel.getReferenceNumber())
-                        .serverId(productModel.getPartnerId().getServerId())
+                        .serverId(productModel.getPartnerId().getRealmId())
                         .category(productModel.getProductCategoryId().getName()).build()).toList();
+    }
+
+    @Override
+    public void createProduct(CreateProductDto product, String transactionId) {
+        final String name = product.getName();
+        final String language = product.getLanguage();
+        final Long realmId = product.getRealmId();
+        final Long productCategoryId = product.getProductCategoryId();
+
+        products.findByNameAndLanguage(name, language, transactionId)
+                .ifPresent(existingProduct -> {
+                    throw new InternalException("Product with name '" + name
+                            + "' already exists in language '" + language + "'", transactionId);
+                });
+
+        PartnerEntity partner = partnerPort.getByRealmId(realmId, transactionId);
+        ProductCategoryEntity productCategory = productCategoryPort.findById(productCategoryId, transactionId);
+
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setName(name);
+        productEntity.setDisclaimer(product.getDisclaimer());
+        productEntity.setDescription(product.getDescription());
+        productEntity.setPrice(product.getPrice());
+        productEntity.setDiscount(product.getDiscount());
+        productEntity.setTax(product.getTax());
+        productEntity.setReturnTax(product.getReturnTax());
+        productEntity.setUseCreditPoints(product.getCreditPointsEnabled());
+        productEntity.setImageUrl(product.getImageUrl());
+        productEntity.setCreditPointsValue(product.getCreditPointsValue());
+        productEntity.setLanguage(language);
+        productEntity.setStatus(true);
+        productEntity.setReferenceNumber(randomString.nextString());
+        productEntity.setPartnerId(partner);
+        productEntity.setProductCategoryId(productCategory);
+        saveProducts.save(productEntity, transactionId);
+
+    }
+
+    @Override
+    public ProductsDetailsDto allProducts(String transactionId) {
+        List<ProductEntity> productsDb = products.findAllByStatusIsTrue(transactionId);
+
+        return ProductsDetailsDto.builder().products(productsDb.stream().map(product -> ProductModel.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .disclaimer(product.getDisclaimer())
+                .category(product.getProductCategoryId().getName())
+                .price(product.getPrice())
+                .status(product.getStatus())
+                .pointsAmount(product.getCreditPointsValue())
+                .discount(product.getDiscount())
+                .discountPrice(calculateFinalPrice(product.getPrice(), product.getDiscount()))
+                .usePoints(product.isUseCreditPoints())
+                .categoryId(product.getProductCategoryId().getId())
+                .categoryName(product.getProductCategoryId().getName())
+                .description(product.getDescription())
+                .imgUrl(product.getImageUrl())
+                .language(product.getLanguage())
+                .partner(product.getPartnerId().getName())
+                .partnerId(product.getPartnerId().getId())
+                .tax(product.getTax())
+                .returnTax(product.getReturnTax())
+                .referenceNumber(product.getReferenceNumber())
+                .build()).toList()).totalProducts(productsDb.size()).build();
     }
 
 }
