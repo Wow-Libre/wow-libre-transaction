@@ -25,7 +25,7 @@ public class ProductCategoryController {
     public ResponseEntity<GenericResponse<List<ProductCategoryDto>>> all(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
 
-        List<ProductCategoryDto> productCategories = productCategoryPort.findAllProductCategories();
+        List<ProductCategoryDto> productCategories = productCategoryPort.findAllProductCategories(transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(productCategories, transactionId).created().build());

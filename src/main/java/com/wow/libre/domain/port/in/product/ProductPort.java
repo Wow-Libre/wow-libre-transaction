@@ -17,4 +17,5 @@ public interface ProductPort {
     void createProduct(CreateProductDto product, String transactionId);
 
     ProductsDetailsDto allProducts(String transactionId);
+
 }

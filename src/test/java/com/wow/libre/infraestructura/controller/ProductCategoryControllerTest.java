@@ -32,14 +32,15 @@ public class ProductCategoryControllerTest {
         String transactionId = "tx-1";
         List<ProductCategoryDto> categories = List.of(new ProductCategoryDto(1L, "Category 1", "Description 1",
                 "Disclaimer 1"));
-        when(productCategoryPort.findAllProductCategories()).thenReturn(categories);
+        when(productCategoryPort.findAllProductCategories(transactionId)).thenReturn(categories);
 
         ResponseEntity<GenericResponse<List<ProductCategoryDto>>> response = controller.all(transactionId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
         assertEquals(categories, response.getBody().getData());
         assertEquals(transactionId, response.getBody().getTransactionId());
-        verify(productCategoryPort).findAllProductCategories();
+        verify(productCategoryPort).findAllProductCategories(transactionId);
     }
 
     @Test

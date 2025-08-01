@@ -21,7 +21,7 @@ public class ProductCategoryService implements ProductCategoryPort {
     }
 
     @Override
-    public List<ProductCategoryDto> findAllProductCategories() {
+    public List<ProductCategoryDto> findAllProductCategories(String transactionId) {
         return obtainProductCategory.findAll().stream().map(this::mapToDto).toList();
     }
 
