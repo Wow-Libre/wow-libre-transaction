@@ -119,9 +119,7 @@ public class PaymentGatewayService implements PaymentGatewayPort {
         PaymentMethod paymentMethodFactory = PaymentMethodFactory.paymentMethod(paymentGatewayDelete.get().getType(),
                 obtainPayuCredentials, obtainStripeCredentials, savePayUCredentials, saveStripeCredentials,
                 transactionId);
-
         paymentMethodFactory.delete(paymentGatewayDelete.get(), transactionId);
-
         savePaymentGateway.delete(paymentGatewayDelete.get(), transactionId);
     }
 }
