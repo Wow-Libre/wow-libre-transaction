@@ -3,7 +3,6 @@ package com.wow.libre.application.services.product;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
-import com.wow.libre.domain.port.in.partner.*;
 import com.wow.libre.domain.port.in.product.*;
 import com.wow.libre.domain.port.in.product_category.*;
 import com.wow.libre.domain.port.in.product_details.*;
@@ -21,17 +20,15 @@ public class ProductService implements ProductPort {
     private final ObtainProducts products;
     private final SaveProducts saveProducts;
     private final ProductDetailsPort productDetailsPort;
-    private final PartnerPort partnerPort;
     private final RandomString randomString;
     private final ProductCategoryPort productCategoryPort;
 
     public ProductService(ObtainProducts products, SaveProducts saveProducts, ProductDetailsPort productDetailsPort,
-                          PartnerPort partnerPort, @Qualifier("product-reference") RandomString randomString,
+                          @Qualifier("product-reference") RandomString randomString,
                           ProductCategoryPort productCategoryPort) {
         this.products = products;
         this.saveProducts = saveProducts;
         this.productDetailsPort = productDetailsPort;
-        this.partnerPort = partnerPort;
         this.randomString = randomString;
         this.productCategoryPort = productCategoryPort;
     }
@@ -76,7 +73,7 @@ public class ProductService implements ProductPort {
                 .usePoints(product.isUseCreditPoints())
                 .description(product.getDescription())
                 .imgUrl(product.getImageUrl())
-                .partner(product.getPartnerId().getName())
+                .partner(product.getRealmName())
                 .referenceNumber(product.getReferenceNumber())
                 .category(product.getProductCategoryId().getName())
                 .build();
@@ -102,10 +99,10 @@ public class ProductService implements ProductPort {
                 .usePoints(productModel.isUseCreditPoints())
                 .description(productModel.getDescription())
                 .imgUrl(productModel.getImageUrl())
-                .partner(productModel.getPartnerId().getName())
+                .partner(productModel.getRealmName())
                 .referenceNumber(productModel.getReferenceNumber())
                 .details(productDetails)
-                .serverId(productModel.getPartnerId().getRealmId())
+                .serverId(productModel.getRealmId())
                 .category(productModel.getProductCategoryId().getName()).build();
 
     }
@@ -136,9 +133,9 @@ public class ProductService implements ProductPort {
                         .usePoints(productModel.isUseCreditPoints())
                         .description(productModel.getDescription())
                         .imgUrl(productModel.getImageUrl())
-                        .partner(productModel.getPartnerId().getName())
+                        .partner(productModel.getRealmName())
                         .referenceNumber(productModel.getReferenceNumber())
-                        .serverId(productModel.getPartnerId().getRealmId())
+                        .serverId(productModel.getRealmId())
                         .category(productModel.getProductCategoryId().getName()).build()).toList();
     }
 
@@ -146,7 +143,6 @@ public class ProductService implements ProductPort {
     public void createProduct(CreateProductDto product, String transactionId) {
         final String name = product.getName();
         final String language = product.getLanguage();
-        final Long realmId = product.getRealmId();
         final Long productCategoryId = product.getProductCategoryId();
 
         products.findByNameAndLanguage(name, language, transactionId)
@@ -155,7 +151,6 @@ public class ProductService implements ProductPort {
                             + "' already exists in language '" + language + "'", transactionId);
                 });
 
-        PartnerEntity partner = partnerPort.getByRealmId(realmId, transactionId);
         ProductCategoryEntity productCategory = productCategoryPort.findById(productCategoryId, transactionId);
 
         ProductEntity productEntity = new ProductEntity();
@@ -172,7 +167,7 @@ public class ProductService implements ProductPort {
         productEntity.setLanguage(language);
         productEntity.setStatus(true);
         productEntity.setReferenceNumber(randomString.nextString());
-        productEntity.setPartnerId(partner);
+        productEntity.setRealmId(product.getRealmId());
         productEntity.setProductCategoryId(productCategory);
         saveProducts.save(productEntity, transactionId);
 
@@ -198,8 +193,8 @@ public class ProductService implements ProductPort {
                 .description(product.getDescription())
                 .imgUrl(product.getImageUrl())
                 .language(product.getLanguage())
-                .partner(product.getPartnerId().getName())
-                .partnerId(product.getPartnerId().getId())
+                .partner(product.getRealmName())
+                .partnerId(product.getRealmId())
                 .tax(product.getTax())
                 .returnTax(product.getReturnTax())
                 .referenceNumber(product.getReferenceNumber())

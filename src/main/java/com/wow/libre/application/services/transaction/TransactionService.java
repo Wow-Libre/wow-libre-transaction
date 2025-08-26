@@ -65,7 +65,7 @@ public class TransactionService implements TransactionPort {
             TransactionEntity transactionEntity = new TransactionEntity();
             transactionEntity.setUserId(transaction.getUserId());
             transactionEntity.setAccountId(transaction.getAccountId());
-            transactionEntity.setServerId(transaction.getServerId());
+            transactionEntity.setRealmId(transaction.getServerId());
             transactionEntity.setPrice(discountedPrice);
             transactionEntity.setStatus(TransactionStatus.CREATED.getType());
             transactionEntity.setProductId(null);
@@ -103,7 +103,7 @@ public class TransactionService implements TransactionPort {
 
         TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setAccountId(transaction.getAccountId());
-        transactionEntity.setServerId(productDto.getPartnerId().getRealmId());
+        transactionEntity.setRealmId(productDto.getRealmId());
         transactionEntity.setAccountId(transaction.getAccountId());
         transactionEntity.setStatus(TransactionStatus.CREATED.getType());
         transactionEntity.setProductId(productDto);

@@ -17,8 +17,8 @@ public class TransactionEntity implements Serializable {
     private Long userId;
     @Column(name = "account_id")
     private Long accountId;
-    @Column(name = "server_id")
-    private Long serverId;
+    @Column(name = "realm_id")
+    private Long realmId;
     private Double price;
     private String status;
     @JoinColumn(

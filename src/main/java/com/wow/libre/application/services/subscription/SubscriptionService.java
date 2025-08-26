@@ -131,8 +131,6 @@ public class SubscriptionService implements SubscriptionPort {
             throw new InternalException("", transactionId);
         }
 
-        final String jwt = wowLibrePort.getJwt(transactionId);
-
         Optional<SubscriptionBenefitDto> benefits =
                 obtainJsonLoader.getBenefitsPremium(language, transactionId).stream()
                         .filter(benefit -> Objects.equals(benefit.getId(), benefitId)
@@ -152,7 +150,7 @@ public class SubscriptionService implements SubscriptionPort {
             subscriptionBenefit.setBenefitId(benefitModel.getId());
             subscriptionBenefit.setCreatedAt(new Date());
             subscriptionBenefit.setUserId(userId);
-            subscriptionBenefit.setServerId(benefitModel.getServerId());
+            subscriptionBenefit.setRealmId(benefitModel.getServerId());
             saveSubscriptionBenefit.save(subscriptionBenefit);
         }
 
@@ -163,7 +161,7 @@ public class SubscriptionService implements SubscriptionPort {
         }
 
 
-        wowLibrePort.sendBenefitsPremium(jwt, serverId, userId, accountId, characterId, items, benefitModel.getType(),
+        wowLibrePort.sendBenefitsPremium("", serverId, userId, accountId, characterId, items, benefitModel.getType(),
                 benefitModel.getAmount(),
                 transactionId);
 
