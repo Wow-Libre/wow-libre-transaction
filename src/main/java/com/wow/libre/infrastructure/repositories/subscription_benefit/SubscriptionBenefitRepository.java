@@ -6,5 +6,5 @@ import org.springframework.data.repository.*;
 import java.util.*;
 
 public interface SubscriptionBenefitRepository extends CrudRepository<SubscriptionBenefitEntity, Long> {
-    Optional<SubscriptionBenefitEntity> findByUserIdAndBenefitIdAndServerId(Long userId, Long benefitId, Long serverId);
+    Optional<SubscriptionBenefitEntity> findByUserIdAndBenefitIdAndRealmId(Long userId, Long benefitId, Long realmId);
 }

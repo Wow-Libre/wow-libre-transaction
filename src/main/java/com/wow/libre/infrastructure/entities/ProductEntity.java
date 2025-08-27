@@ -26,17 +26,13 @@ public class ProductEntity {
     private boolean useCreditPoints;
     @Column(name = "credit_points_amount")
     private Long creditPointsValue;
-
     private String description;
     @Column(name = "image_url")
     private String imageUrl;
-    @JoinColumn(
-            name = "partner_id",
-            referencedColumnName = "id")
-    @ManyToOne(
-            optional = false,
-            fetch = FetchType.EAGER)
-    private PartnerEntity partnerId;
+    @Column(name = "realm_id")
+    private Long realmId;
+    @Column(name = "realm_name")
+    private String realmName;
     @Column(name = "reference_number")
     private String referenceNumber;
     private Boolean status;

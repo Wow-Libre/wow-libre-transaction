@@ -39,11 +39,10 @@ public class TransactionSchedule {
 
         for (TransactionEntity transaction : transactionEntities) {
             try {
-                final String jwt = wowLibrePort.getJwt(transactionId);
 
                 List<ItemQuantityModel> items = packagesPort.findByProductId(transaction.getProductId(), transactionId);
                 Double amount = transaction.isCreditPoints() ? transaction.getPrice() : 0d;
-                wowLibrePort.sendPurchases(jwt, transaction.getServerId(), transaction.getUserId(),
+                wowLibrePort.sendPurchases("", transaction.getRealmId(), transaction.getUserId(),
                         transaction.getAccountId(), amount, items, transaction.getReferenceNumber(), transactionId);
                 transaction.setSend(true);
                 if (transaction.isCreditPoints()) {
@@ -57,5 +56,5 @@ public class TransactionSchedule {
 
     }
 
- 
+
 }

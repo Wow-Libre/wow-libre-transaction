@@ -17,7 +17,7 @@ public class JpaSubscriptionBenefitAdapter implements ObtainSubscriptionBenefit,
     @Override
     public Optional<SubscriptionBenefitEntity> findByUserIdAndBenefitIdAndServerId(Long userId, Long benefitId,
                                                                                    Long serverId) {
-        return subscriptionBenefitRepository.findByUserIdAndBenefitIdAndServerId(userId, benefitId, serverId);
+        return subscriptionBenefitRepository.findByUserIdAndBenefitIdAndRealmId(userId, benefitId, serverId);
     }
 
     @Override

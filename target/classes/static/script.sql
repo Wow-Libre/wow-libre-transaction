@@ -31,15 +31,6 @@ CREATE TABLE transactions.subscription
     CONSTRAINT subscription_reference_number_uq UNIQUE (reference_number)
 );
 
-CREATE TABLE transactions.partner
-(
-    id        BIGINT AUTO_INCREMENT NOT NULL,
-    name      VARCHAR(50) NOT NULL,
-    realm_id BIGINT      NOT NULL,
-    status    BOOLEAN     NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT partner_realm_id UNIQUE (realm_id)
-);
 
 CREATE TABLE transactions.product_category
 (
@@ -61,7 +52,8 @@ CREATE TABLE transactions.product
     discount                INTEGER,
     description             TEXT,
     image_url               TEXT        NOT NULL,
-    partner_id              BIGINT      NOT NULL,
+    realm_id                BIGINT      NOT NULL,
+    realm_name              varchar(80) NOT NULL,
     reference_number        VARCHAR(80) NOT NULL,
     status                  BOOLEAN     NOT NULL,
     credit_points_enabled   BOOLEAN     NOT NULL,
@@ -71,9 +63,8 @@ CREATE TABLE transactions.product
     language                VARCHAR(20) NOT NULL,
 
     PRIMARY KEY (id),
-    CONSTRAINT product_name_language_uq UNIQUE (name,language),
-    CONSTRAINT product_reference_uq UNIQUE (reference_number),
-    CONSTRAINT product_partner_id_fk FOREIGN KEY (partner_id) REFERENCES transactions.partner (id),
+    CONSTRAINT product_name_and_realm_id_and_language_uq UNIQUE (name,realm_id,language),
+    CONSTRAINT product_reference_number_uq UNIQUE (reference_number),
     CONSTRAINT product_product_category_id_fk FOREIGN KEY (product_category_id) REFERENCES transactions.product_category (id)
 );
 
@@ -102,7 +93,7 @@ CREATE TABLE transactions.transaction
     id                BIGINT AUTO_INCREMENT NOT NULL,
     user_id           BIGINT      NOT NULL,
     account_id        BIGINT,
-    server_id         BIGINT,
+    realm_id         BIGINT,
     price             DOUBLE NOT NULL,
     status            VARCHAR(50) NOT NULL,
     product_id        BIGINT,
@@ -119,16 +110,6 @@ CREATE TABLE transactions.transaction
     CONSTRAINT transaction_product_id FOREIGN KEY (product_id) REFERENCES transactions.product (id)
 );
 
-CREATE TABLE transactions.client
-(
-    id              BIGINT AUTO_INCREMENT NOT NULL,
-    username        VARCHAR(50) NOT NULL,
-    jwt             TEXT        NOT NULL,
-    refresh_token   TEXT        NOT NULL,
-    expiration_date DATE        NOT NULL,
-    PRIMARY KEY (id),
-    CONSTRAINT client_username_uq UNIQUE (username)
-);
 
 CREATE TABLE transactions.subscription_benefit
 (
@@ -136,7 +117,7 @@ CREATE TABLE transactions.subscription_benefit
     user_id    BIGINT NOT NULL,
     benefit_id BIGINT NOT NULL,
     created_at DATE   NOT NULL,
-    server_id  BIGINT,
+    realm_id   BIGINT NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT subscription_benefit_uq UNIQUE (user_id, benefit_id)
 );
@@ -153,3 +134,25 @@ CREATE TABLE transactions.wallet
 );
 
 
+CREATE TABLE payment_gateways (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    type ENUM('STRIPE', 'PAYU') NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_type UNIQUE (type)
+);
+
+CREATE TABLE payu_credentials (
+    gateway_id INT PRIMARY KEY,
+    host VARCHAR(255) NOT NULL,
+    api_key VARCHAR(255) NOT NULL,
+    api_login VARCHAR(255) NOT NULL,
+    key_public VARCHAR(255) NOT NULL,
+    success_url VARCHAR(255) NOT NULL,
+    cancel_url VARCHAR(255),
+    webhook_url VARCHAR(255) NOT NULL,
+    merchant_id VARCHAR(255) NOT NULL,
+    account_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (gateway_id) REFERENCES payment_gateways(id) ON DELETE CASCADE
+);
