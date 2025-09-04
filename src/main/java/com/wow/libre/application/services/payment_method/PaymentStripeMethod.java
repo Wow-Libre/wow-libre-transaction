@@ -4,12 +4,14 @@ import com.stripe.*;
 import com.stripe.exception.*;
 import com.stripe.model.checkout.*;
 import com.stripe.param.checkout.*;
+import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.out.stripe_credentials.*;
 import com.wow.libre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
 
+import java.math.*;
 import java.util.*;
 
 @Component
@@ -24,7 +26,7 @@ public class PaymentStripeMethod extends PaymentMethod {
     }
 
     @Override
-    public PaymentGatewayModel payment(Long idMethodGateway, String currency, Double amount, Integer quantity,
+    public PaymentGatewayModel payment(Long idMethodGateway, String currency, BigDecimal amount, Integer quantity,
                                        String productName, String referenceCode, String transactionId) {
 
         Optional<StripeCredentialsEntity> stripeCredential =
@@ -90,6 +92,12 @@ public class PaymentStripeMethod extends PaymentMethod {
         }
 
         saveStripeCredentials.delete(stripeCredentials.get(), transactionId);
+    }
+
+    @Override
+    public boolean validateCredentials(PaymentGatewaysEntity paymentGateway,
+                                       PaymentTransaction paymentTransaction, String transactionId) {
+        return false;
     }
 
 }

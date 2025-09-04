@@ -13,6 +13,7 @@ import org.slf4j.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
+import java.math.*;
 import java.time.*;
 import java.util.*;
 
@@ -43,7 +44,7 @@ public class PaymentGatewayService implements PaymentGatewayPort {
     }
 
     @Override
-    public PaymentGatewayModel generateUrlPayment(PaymentType paymentType, String currency, Double amount,
+    public PaymentGatewayModel generateUrlPayment(PaymentType paymentType, String currency, BigDecimal amount,
                                                   Integer quantity, String productName, String referenceCode,
                                                   String transactionId) {
 
@@ -121,5 +122,23 @@ public class PaymentGatewayService implements PaymentGatewayPort {
                 transactionId);
         paymentMethodFactory.delete(paymentGatewayDelete.get(), transactionId);
         savePaymentGateway.delete(paymentGatewayDelete.get(), transactionId);
+    }
+
+    @Override
+    public boolean isValidPaymentSignature(PaymentTransaction paymentTransaction, PaymentType paymentType,
+                                           String transactionId) {
+        Optional<PaymentGatewaysEntity> paymentAvailable = obtainPaymentGateway.findByPaymentType(paymentType,
+                transactionId);
+
+        if (paymentAvailable.isEmpty()) {
+            LOGGER.error("[isValidPaymentSignature] Payment method {} not available", paymentType);
+            throw new InternalException("Method payment is disable", transactionId);
+        }
+
+        PaymentMethod paymentMethodFactory = PaymentMethodFactory.paymentMethod(paymentType,
+                obtainPayuCredentials, obtainStripeCredentials, savePayUCredentials, saveStripeCredentials,
+                transactionId);
+
+        return paymentMethodFactory.validateCredentials(paymentAvailable.get(), paymentTransaction, transactionId);
     }
 }

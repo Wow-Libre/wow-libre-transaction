@@ -13,6 +13,7 @@ import com.wow.libre.domain.port.in.wallet.*;
 import com.wow.libre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
 
+import java.math.*;
 import java.util.*;
 
 import static com.wow.libre.domain.enums.PaymentType.*;
@@ -35,7 +36,11 @@ public class PaymentService implements PaymentPort {
 
 
     @Override
-    public void processPayment(PaymentTransaction paymentTransaction, String transactionId) {
+    public void processPayment(PaymentTransaction paymentTransaction, PaymentType paymentType, String transactionId) {
+
+        if (!paymentGatewayPort.isValidPaymentSignature(paymentTransaction, paymentType, transactionId)) {
+            throw new InternalException("Invalid payment signature", transactionId);
+        }
 
         Optional<TransactionEntity> transaction =
                 transactionPort.findByReferenceNumber(paymentTransaction.getReferenceSale(), transactionId);
@@ -90,6 +95,7 @@ public class PaymentService implements PaymentPort {
         }
     }
 
+
     @Override
     public CreatePaymentRedirectDto createPayment(Long userId, String email, CreatePaymentDto createPaymentDto,
                                                   String transactionId) {
@@ -112,11 +118,12 @@ public class PaymentService implements PaymentPort {
             final String referenceCode = paymentApplicableModel.orderId();
             final String taxValue = paymentApplicableModel.tax();
             final Double amount = paymentApplicableModel.amount();
+            BigDecimal amountBD = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
             final String currency = paymentApplicableModel.currency();
             final String returnTax = paymentApplicableModel.returnTax();
 
             PaymentGatewayModel paymentMethod = paymentGatewayPort.generateUrlPayment(paymentType, currency,
-                    amount, 1, paymentApplicableModel.productName(), referenceCode,
+                    amountBD, 1, paymentApplicableModel.productName(), referenceCode,
                     transactionId);
             String accountId = paymentMethod.payu != null ? paymentMethod.payu.accountId() : null;
             String merchantId = paymentMethod.payu != null ? paymentMethod.payu.merchantId() : null;
@@ -130,7 +137,7 @@ public class PaymentService implements PaymentPort {
                     .currency(currency)
                     .taxReturnBase(returnTax)
                     .tax(taxValue)
-                    .amount(amount)
+                    .amount(amountBD)
                     .referenceCode(referenceCode)
                     .description(paymentApplicableModel.description())
                     .payu(new PayUCredentialsModel(accountId, merchantId, paymentMethod.signature, "0"))

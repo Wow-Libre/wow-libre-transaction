@@ -28,45 +28,6 @@ public class WowLibreClient {
         this.configurations = configurations;
     }
 
-    public LoginResponse login(String transactionId) {
-        HttpHeaders headers = new HttpHeaders();
-
-        LoginRequest request = new LoginRequest(configurations.getLoginUsername(), configurations.getLoginPassword());
-
-
-        headers.set(HEADER_TRANSACTION_ID, transactionId);
-        HttpEntity<LoginRequest> entity = new HttpEntity<>(request, headers);
-
-        try {
-            ResponseEntity<GenericResponse<LoginResponse>> response = restTemplate.exchange(String.format("%s/api" +
-                                    "/auth" +
-                                    "/login",
-                            configurations.getPathLoginWowLibre()),
-                    HttpMethod.POST, entity,
-                    new ParameterizedTypeReference<>() {
-                    });
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody()).getData();
-            }
-
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("[WowLibreClient] [login] Client/Server Error: {}. The request failed with a client or " +
-                            "server error. " +
-                            "HTTP Status: {}, Response Body: {}",
-                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
-            throw new InternalException("Transaction failed due to client or server error", transactionId);
-        } catch (Exception e) {
-            LOGGER.error("[WowLibreClient] [login]  Unexpected Error: {}. An unexpected error occurred during the " +
-                            "transaction with ID: {}.",
-                    e.getMessage(), transactionId, e);
-            throw new InternalException("Unexpected transaction failure", transactionId);
-        }
-
-        throw new InternalException("Unexpected transaction failure", transactionId);
-
-    }
-
     public GenericResponse<Void> sendPurchases(String jwt, Long serverId, Long userId, Long accountId, Double gold,
                                                List<ItemQuantityModel> items, String reference,
                                                String transactionId) {

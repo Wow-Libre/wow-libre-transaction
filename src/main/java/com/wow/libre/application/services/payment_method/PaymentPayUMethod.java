@@ -1,15 +1,15 @@
 package com.wow.libre.application.services.payment_method;
 
+import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.out.payu_credentials.*;
 import com.wow.libre.infrastructure.entities.*;
+import com.wow.libre.infrastructure.util.*;
 import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.math.*;
-import java.nio.charset.*;
-import java.security.*;
 import java.util.*;
 
 @Component
@@ -26,7 +26,7 @@ public class PaymentPayUMethod extends PaymentMethod {
     }
 
     @Override
-    public PaymentGatewayModel payment(Long idMethodGateway, String currency, Double amount,
+    public PaymentGatewayModel payment(Long idMethodGateway, String currency, BigDecimal amount,
                                        Integer quantity, String productName,
                                        String referenceCode, String transactionId) {
 
@@ -43,12 +43,25 @@ public class PaymentPayUMethod extends PaymentMethod {
         final String merchantId = payUCredentials.getMerchantId();
         final String accountId = payUCredentials.getAccountId();
 
+        String formattedAmount = amount.toPlainString();
 
-        BigDecimal amountBD = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
-        String formattedAmount = amountBD.toPlainString();
+// === Construcción de cadena para checkout ===
         final String concatenatedString =
                 apiKey + "~" + merchantId + "~" + referenceCode + "~" + formattedAmount + "~" + currency;
-        final String signature = generateHash(concatenatedString);
+        final String signature = PayUSignatureUtil.md5(concatenatedString);
+        // === LOGS DETALLADOS ===
+        LOGGER.info("=== 🛒 FIRMA GENERADA EN BACKEND (CHECKOUT) ===");
+        LOGGER.info("apiKey usado: [{}]", apiKey);
+        LOGGER.info("merchantId usado: [{}]", merchantId);
+        LOGGER.info("accountId usado: [{}]", accountId);
+        LOGGER.info("referenceCode usado: [{}]", referenceCode);
+
+        LOGGER.info("amount recibido (BigDecimal): [{}]", amount);
+        LOGGER.info("formattedAmount usado en firma: [{}]", formattedAmount);
+        LOGGER.info("currency usado: [{}]", currency);
+
+        LOGGER.info("Cadena exacta para firma (checkout): [{}]", concatenatedString);
+        LOGGER.info("Firma MD5 generada: [{}]", signature);
 
         return PaymentGatewayModel.builder()
                 .redirect(payUCredentials.getHost())
@@ -93,23 +106,44 @@ public class PaymentPayUMethod extends PaymentMethod {
         savePayUCredentials.delete(payuCredentialsEntity.get(), transactionId);
     }
 
-    private String generateHash(String input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+    @Override
+    public boolean validateCredentials(PaymentGatewaysEntity paymentGateway,
+                                       PaymentTransaction paymentTransaction, String transactionId) {
+        Optional<PayuCredentialsEntity> payuCredentialsEntity =
+                payuCredentials.findByPayUCredentials(paymentGateway.getId(), transactionId);
 
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("Error generating hash: {}", e.getMessage(), e);
-            throw new RuntimeException("Error al generar hash: " + e.getMessage());
+        if (payuCredentialsEntity.isEmpty()) {
+            LOGGER.error("[validateCredentials] PayU Credentials Not Found {} TransactionId {}",
+                    paymentGateway.getId(), transactionId);
+            throw new InternalException("PayU Credentials Not Found", transactionId);
         }
+
+        PayuCredentialsEntity payUCredentials = payuCredentialsEntity.get();
+        final String apiKey = payUCredentials.getApiKey();
+
+        final String merchantId = paymentTransaction.getMerchantId();
+        final String referenceSale = paymentTransaction.getReferenceSale();
+        final String valueRaw = paymentTransaction.getValue();
+        final String currency = paymentTransaction.getCurrency();
+        final String statePol = paymentTransaction.getStatePol();
+        final String signReceived = paymentTransaction.getSign();
+
+        final String normalizedValue = PayUSignatureUtil.normalizeValue(valueRaw);
+
+        final String signatureString = PayUSignatureUtil.buildSignatureString(
+                apiKey, merchantId, referenceSale, normalizedValue, currency, statePol);
+
+        final String expectedSign = PayUSignatureUtil.md5(signatureString);
+
+        if (signReceived == null || !signReceived.equalsIgnoreCase(expectedSign)) {
+            LOGGER.error("❌ Firma inválida. Notificación rechazada. " +
+                            "expected=[{}], received=[{}], cadena=[{}]",
+                    expectedSign, signReceived, signatureString);
+            return false;
+        }
+
+        return true;
     }
+
+
 }

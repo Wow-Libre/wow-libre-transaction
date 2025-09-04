@@ -4,11 +4,12 @@ import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.model.*;
 
+import java.math.*;
 import java.util.*;
 
 public interface PaymentGatewayPort {
 
-    PaymentGatewayModel generateUrlPayment(PaymentType paymentType, String currency, Double amount,
+    PaymentGatewayModel generateUrlPayment(PaymentType paymentType, String currency, BigDecimal amount,
                                            Integer quantity, String productName, String referenceCode,
                                            String transactionId);
 
@@ -17,4 +18,7 @@ public interface PaymentGatewayPort {
     List<PaymentMethodsDto> paymentMethods(String transactionId);
 
     void deletePayment(Long paymentTypeId, String transactionId);
+
+    boolean isValidPaymentSignature(PaymentTransaction paymentTransaction, PaymentType paymentType,
+                                    String transactionId);
 }

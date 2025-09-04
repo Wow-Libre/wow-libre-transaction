@@ -35,9 +35,6 @@ server:
 application:
   urls:
     wow-libre: http://localhost:8091/core
-  account:
-    username: play4chitiva@gmail.com
-    password: 'sebas'
   security:
     jwt:
       secret-key: 6E4D574873506B4A72434B6A614B39786F736B7855666B4D456A6E466F785572
@@ -69,9 +66,6 @@ server:
 application:
   urls:
     wow-libre: ${WOW_LIBRE_HOST}/core
-  account:
-    username: ${WOW_LIBRE_USERNAME}
-    password: ${WOW_LIBRE_PASSWORD}
   security:
     jwt:
       secret-key: ${SECRET-KEY}

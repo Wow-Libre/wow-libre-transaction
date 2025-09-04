@@ -9,8 +9,5 @@ import org.springframework.context.annotation.*;
 public class Configurations {
     @Value("${application.urls.wow-libre}")
     private String pathLoginWowLibre;
-    @Value("${application.account.username}")
-    private String loginUsername;
-    @Value("${application.account.password}")
-    private String loginPassword;
+ 
 }
