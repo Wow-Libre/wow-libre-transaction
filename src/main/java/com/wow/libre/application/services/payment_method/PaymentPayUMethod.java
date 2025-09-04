@@ -7,6 +7,7 @@ import com.wow.libre.infrastructure.entities.*;
 import org.slf4j.*;
 import org.springframework.stereotype.*;
 
+import java.math.*;
 import java.nio.charset.*;
 import java.security.*;
 import java.util.*;
@@ -42,8 +43,11 @@ public class PaymentPayUMethod extends PaymentMethod {
         final String merchantId = payUCredentials.getMerchantId();
         final String accountId = payUCredentials.getAccountId();
 
+
+        BigDecimal amountBD = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
+        String formattedAmount = amountBD.toPlainString();
         final String concatenatedString =
-                apiKey + "~" + merchantId + "~" + referenceCode + "~" + amount + "~" + currency;
+                apiKey + "~" + merchantId + "~" + referenceCode + "~" + formattedAmount + "~" + currency;
         final String signature = generateHash(concatenatedString);
 
         return PaymentGatewayModel.builder()

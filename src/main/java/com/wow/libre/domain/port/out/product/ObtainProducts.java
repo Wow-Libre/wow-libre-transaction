@@ -14,4 +14,6 @@ public interface ObtainProducts {
     Optional<ProductEntity> findByNameAndLanguage(String name, String language, String transactionId);
 
     List<ProductEntity> findAllByStatusIsTrue(String transactionId);
+
+    Optional<ProductEntity> findById(Long productId, String transactionId);
 }

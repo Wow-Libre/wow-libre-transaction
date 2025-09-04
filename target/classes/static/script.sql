@@ -134,8 +134,8 @@ CREATE TABLE transactions.wallet
 );
 
 
-CREATE TABLE payment_gateways (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE transactions.payment_gateways (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     type ENUM('STRIPE', 'PAYU') NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
@@ -143,8 +143,8 @@ CREATE TABLE payment_gateways (
     CONSTRAINT unique_type UNIQUE (type)
 );
 
-CREATE TABLE payu_credentials (
-    gateway_id INT PRIMARY KEY,
+CREATE TABLE transactions.payu_credentials (
+    gateway_id BIGINT PRIMARY KEY,
     host VARCHAR(255) NOT NULL,
     api_key VARCHAR(255) NOT NULL,
     api_login VARCHAR(255) NOT NULL,
@@ -155,4 +155,17 @@ CREATE TABLE payu_credentials (
     merchant_id VARCHAR(255) NOT NULL,
     account_id VARCHAR(255) NOT NULL,
     FOREIGN KEY (gateway_id) REFERENCES payment_gateways(id) ON DELETE CASCADE
+);
+
+CREATE TABLE transactions.stripe_credentials (
+    gateway_id BIGINT NOT NULL PRIMARY KEY,
+    api_secret VARCHAR(255) NOT NULL,
+    api_public VARCHAR(255) NOT NULL,
+    success_url VARCHAR(255) NOT NULL,
+    cancel_url VARCHAR(255) NOT NULL,
+    webhook_url VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_stripe_credentials_gateway
+        FOREIGN KEY (gateway_id)
+        REFERENCES payment_gateways(id)
+        ON DELETE CASCADE
 );

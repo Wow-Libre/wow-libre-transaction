@@ -69,6 +69,14 @@ public class PaymentStripeMethod extends PaymentMethod {
     @Override
     public void vinculate(PaymentGatewaysEntity paymentMethod,
                           Map<String, String> credentials, String transactionId) {
+        StripeCredentialsEntity stripeCredentialsEntity = new StripeCredentialsEntity();
+        stripeCredentialsEntity.setGateway(paymentMethod);
+        stripeCredentialsEntity.setApiSecret(credentials.get("apiSecret"));
+        stripeCredentialsEntity.setApiPublic(credentials.get("apiPublic"));
+        stripeCredentialsEntity.setSuccessUrl(credentials.get("successUrl"));
+        stripeCredentialsEntity.setCancelUrl(credentials.get("cancelUrl"));
+        stripeCredentialsEntity.setWebhookUrl(credentials.get("webhookUrl"));
+        saveStripeCredentials.save(stripeCredentialsEntity, transactionId);
     }
 
     @Override
@@ -80,7 +88,7 @@ public class PaymentStripeMethod extends PaymentMethod {
         if (stripeCredentials.isEmpty()) {
             throw new InternalException("Stripe Credentials Not Found", transactionId);
         }
-        
+
         saveStripeCredentials.delete(stripeCredentials.get(), transactionId);
     }
 

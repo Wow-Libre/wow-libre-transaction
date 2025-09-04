@@ -40,6 +40,11 @@ public class JpaProductAdapter implements ObtainProducts, SaveProducts {
     }
 
     @Override
+    public Optional<ProductEntity> findById(Long productId, String transactionId) {
+        return productRepository.findById(productId);
+    }
+
+    @Override
     public void save(ProductEntity product, String transactionId) {
         productRepository.save(product);
     }

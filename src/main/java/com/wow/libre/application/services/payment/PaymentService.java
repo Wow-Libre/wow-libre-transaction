@@ -10,25 +10,24 @@ import com.wow.libre.domain.port.in.payment_gateway.*;
 import com.wow.libre.domain.port.in.subscription.*;
 import com.wow.libre.domain.port.in.transaction.*;
 import com.wow.libre.domain.port.in.wallet.*;
-import com.wow.libre.infrastructure.conf.*;
 import com.wow.libre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
+import static com.wow.libre.domain.enums.PaymentType.*;
+
 @Service
 public class PaymentService implements PaymentPort {
     private final TransactionPort transactionPort;
-    private final Configurations configurations;
     private final SubscriptionPort subscriptionPort;
     private final WalletPort walletPort;
     private final PaymentGatewayPort paymentGatewayPort;
 
-    public PaymentService(TransactionPort transactionPort, Configurations configurations,
+    public PaymentService(TransactionPort transactionPort,
                           SubscriptionPort subscriptionPort, WalletPort walletPort,
                           PaymentGatewayPort paymentGatewayPort) {
         this.transactionPort = transactionPort;
-        this.configurations = configurations;
         this.subscriptionPort = subscriptionPort;
         this.walletPort = walletPort;
         this.paymentGatewayPort = paymentGatewayPort;
@@ -94,32 +93,48 @@ public class PaymentService implements PaymentPort {
     @Override
     public CreatePaymentRedirectDto createPayment(Long userId, String email, CreatePaymentDto createPaymentDto,
                                                   String transactionId) {
+        PaymentType paymentType = PaymentType.getType(createPaymentDto.getPaymentType());
+
+        if (paymentType.equals(NOT_MAPPED)) {
+            throw new InternalException("Invalid payment type", transactionId);
+        }
 
         PaymentApplicableModel paymentApplicableModel =
                 transactionPort.isRealPaymentApplicable(TransactionModel.builder()
                         .isSubscription(createPaymentDto.getIsSubscription())
                         .accountId(createPaymentDto.getAccountId())
-                        .serverId(createPaymentDto.getRealmId())
+                        .paymentType(paymentType)
+                        .realmId(createPaymentDto.getRealmId())
                         .productReference(createPaymentDto.getProductReference())
                         .userId(userId).build(), transactionId);
 
         if (paymentApplicableModel.isPayment()) {
-            final String merchantId = configurations.getPayUMerchantId();
-            final String accountId = configurations.getPayUAccountId();
             final String referenceCode = paymentApplicableModel.orderId();
             final String taxValue = paymentApplicableModel.tax();
-            final String amount = String.valueOf(paymentApplicableModel.amount().intValue());
+            final Double amount = paymentApplicableModel.amount();
             final String currency = paymentApplicableModel.currency();
             final String returnTax = paymentApplicableModel.returnTax();
-            PaymentType paymentType = PaymentType.getType(createPaymentDto.getPaymentType());
 
             PaymentGatewayModel paymentMethod = paymentGatewayPort.generateUrlPayment(paymentType, currency,
-                    paymentApplicableModel.amount(), 1, "", referenceCode, transactionId);
+                    amount, 1, paymentApplicableModel.productName(), referenceCode,
+                    transactionId);
+            String accountId = paymentMethod.payu != null ? paymentMethod.payu.accountId() : null;
+            String merchantId = paymentMethod.payu != null ? paymentMethod.payu.merchantId() : null;
 
-            return new CreatePaymentRedirectDto(paymentMethod.redirect, configurations.getPayUConfirmUrl(),
-                    "", email, "", currency, returnTax, taxValue, amount,
-                    referenceCode, paymentApplicableModel.description(), accountId, merchantId,
-                    configurations.getPayUIsTest(), true);
+            return CreatePaymentRedirectDto.builder()
+                    .redirect(paymentMethod.redirect)
+                    .isPayment(true)
+                    .confirmationUrl(paymentMethod.webhookUrl)
+                    .responseUrl(paymentMethod.successUrl)
+                    .buyerEmail(email)
+                    .currency(currency)
+                    .taxReturnBase(returnTax)
+                    .tax(taxValue)
+                    .amount(amount)
+                    .referenceCode(referenceCode)
+                    .description(paymentApplicableModel.description())
+                    .payu(new PayUCredentialsModel(accountId, merchantId, paymentMethod.signature, "0"))
+                    .build();
 
         }
 
@@ -127,7 +142,7 @@ public class PaymentService implements PaymentPort {
                 transactionPort.findByReferenceNumber(paymentApplicableModel.orderId(), transactionId);
 
         if (transaction.isEmpty() || transaction.get().isSubscription()) {
-            throw new InternalException("", transactionId);
+            throw new InternalException("Invalid Transaction", transactionId);
         }
 
         TransactionEntity transactionEntity = transaction.get();
@@ -145,7 +160,7 @@ public class PaymentService implements PaymentPort {
         transactionEntity.setStatus(TransactionStatus.PAID.getType());
         transactionPort.save(transactionEntity, transactionId);
 
-        return new CreatePaymentRedirectDto(false, "");
+        return CreatePaymentRedirectDto.builder().isPayment(false).redirect("/profile/purchases").build();
     }
 
 }

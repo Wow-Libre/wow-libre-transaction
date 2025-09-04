@@ -65,7 +65,7 @@ public class TransactionService implements TransactionPort {
             TransactionEntity transactionEntity = new TransactionEntity();
             transactionEntity.setUserId(transaction.getUserId());
             transactionEntity.setAccountId(transaction.getAccountId());
-            transactionEntity.setRealmId(transaction.getServerId());
+            transactionEntity.setRealmId(transaction.getRealmId());
             transactionEntity.setPrice(discountedPrice);
             transactionEntity.setStatus(TransactionStatus.CREATED.getType());
             transactionEntity.setProductId(null);
@@ -76,10 +76,12 @@ public class TransactionService implements TransactionPort {
             transactionEntity.setCreationDate(LocalDateTime.now());
             transactionEntity.setCurrency(currency);
             transactionEntity.setSubscription(true);
+            transactionEntity.setPaymentMethod(transaction.getPaymentType().getType());
             saveTransaction.save(transactionEntity, transactionId);
 
-            return new PaymentApplicableModel(true, discountedPrice, currency, orderId, description, plan.getTax(),
-                    plan.getReturnTax());
+            return new PaymentApplicableModel(discountedPrice > 0, discountedPrice, currency, orderId, description,
+                    plan.getTax(),
+                    plan.getReturnTax(), plan.getName());
         }
 
         String productReference = transaction.getProductReference();
@@ -93,13 +95,15 @@ public class TransactionService implements TransactionPort {
         }
 
         final String description = productDto.getName();
-        final boolean creditPoints = productDto.isUseCreditPoints();
+        final boolean hasCreditPoints = productDto.isUseCreditPoints();
         Double price = productDto.getPrice();
         Integer discountPercentage = productDto.getDiscount();
         double discountAmount = ((double) discountPercentage / 100) * price;
         final Double finalPrice = price - discountAmount;
-        final String currency = creditPoints ? "POINTS" : "USD";
-        final boolean isPaymentRedirectToCheckout = !creditPoints;
+        final String currency = hasCreditPoints ? "POINTS" : "USD";
+        final boolean isFree = finalPrice <= 0;
+
+        final boolean isPaymentRedirectToCheckout = !isFree && !hasCreditPoints;
 
         TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setAccountId(transaction.getAccountId());
@@ -113,11 +117,11 @@ public class TransactionService implements TransactionPort {
         transactionEntity.setSend(false);
         transactionEntity.setCurrency(currency);
         transactionEntity.setUserId(transaction.getUserId());
+        transactionEntity.setPaymentMethod(transaction.getPaymentType().getType());
         saveTransaction.save(transactionEntity, transactionId);
 
         return new PaymentApplicableModel(isPaymentRedirectToCheckout, finalPrice, currency, orderId, description,
-                productDto.getTax(),
-                productDto.getReturnTax());
+                productDto.getTax(), productDto.getReturnTax(), productDto.getName());
     }
 
 
