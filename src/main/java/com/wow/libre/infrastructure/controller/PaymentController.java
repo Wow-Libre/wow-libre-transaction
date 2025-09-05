@@ -85,11 +85,15 @@ public class PaymentController {
             LOGGER.warn("⚠️ 'data.object' vacío. No se encontró el objeto de pago.");
             throw new InternalException("", transactionId);
         }
+        
+        Map<String, Object> metadata = (Map<String, Object>) charge.get("metadata");
+        String referenceSale = metadata != null ? (String) metadata.get("referenceCode") : null;
 
         paymentPort.processPayment(PaymentTransaction.builder()
                 .stripePayment(new PaymentTransaction.StripePayment(payload, (String) charge.get("status"),
                         (Boolean) charge.get("paid"), (Boolean) charge.get("paid")))
                 .currency((String) charge.get("currency"))
+                .referenceSale(referenceSale)
                 .sign(sigHeader)
                 .build(), PaymentType.STRIPE, transactionId);
 

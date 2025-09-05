@@ -50,13 +50,18 @@ public class PaymentStripeMethod extends PaymentMethod {
                     .setMode(SessionCreateParams.Mode.PAYMENT)
                     .setSuccessUrl(stripe.getSuccessUrl())
                     .setCancelUrl(stripe.getCancelUrl())
-                    .addLineItem(
+                    .setClientReferenceId(referenceCode)
+                    .setPaymentIntentData(
+                            SessionCreateParams.PaymentIntentData.builder()
+                                    .putMetadata("referenceCode", referenceCode) // 👈 Aquí va tu ID interno
+                                    .build()
+                    ).addLineItem(
                             SessionCreateParams.LineItem.builder()
                                     .setQuantity(quantity.longValue())
                                     .setPriceData(
                                             SessionCreateParams.LineItem.PriceData.builder()
                                                     .setCurrency(currency)
-                                                    .setUnitAmount(amount.longValue())
+                                                    .setUnitAmount(amount.multiply(BigDecimal.valueOf(100)).longValue())
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                     .setName(productName)
