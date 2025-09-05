@@ -1,6 +1,7 @@
 package com.wow.libre.application.services.payment_method;
 
 import com.wow.libre.domain.dto.*;
+import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.out.payu_credentials.*;
@@ -143,6 +144,11 @@ public class PaymentPayUMethod extends PaymentMethod {
         }
 
         return true;
+    }
+
+    @Override
+    public PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, String transactionId) {
+        return PaymentStatus.getType(paymentTransaction.getResponseMessagePol());
     }
 
 

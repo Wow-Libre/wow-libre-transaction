@@ -1,8 +1,12 @@
 package com.wow.libre.infrastructure.controller;
 
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.type.*;
+import com.fasterxml.jackson.databind.*;
 import com.wow.libre.domain.*;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.enums.*;
+import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.port.in.payment.*;
 import com.wow.libre.domain.shared.*;
 import jakarta.validation.*;
@@ -10,12 +14,9 @@ import org.slf4j.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.*;
-import java.security.*;
 import java.util.*;
 
 import static com.wow.libre.domain.constant.Constants.*;
-import static java.lang.Double.*;
 import static java.lang.Integer.*;
 
 @RestController
@@ -45,30 +46,13 @@ public class PaymentController {
                 .sign(params.get("sign"))
                 .statePol(statePol)
                 .paymentMethodType(parseInt(params.get("payment_method_type")))
-                .franchise(params.get("franchise"))
-                .operationDate(params.get("operation_date"))
-                .paymentRequestState(params.get("payment_request_state"))
-                .bankId(params.get("bank_id"))
                 .paymentMethod(params.get("payment_method"))
-                .transactionId(params.get("transaction_id"))
-                .transactionDate(params.get("transaction_date"))
-                .exchangeRate(parseDouble(params.get("exchange_rate")))
-                .ip(params.get("ip"))
-                .referencePol(params.get("reference_pol"))
-                .ccHolder(params.get("cc_holder"))
-                .tax(parseDouble(params.get("tax")))
-                .transactionType(params.get("transaction_type"))
-                .shippingCountry(params.get("shipping_country"))
-                .billingCountry(params.get("billing_country"))
-                .authorizationCode(params.get("authorization_code"))
                 .currency(params.get("currency"))
                 .merchantId(params.get("merchant_id"))
-                .ccNumber(params.get("cc_number"))
-                .installmentsNumber(parseInt(params.get("installments_number")))
                 .value(valueRaw)
+                .responseMessagePol(params.get("response_message_pol"))
                 .paymentMethodName(params.get("payment_method_name"))
                 .emailBuyer(params.get("email_buyer"))
-                .responseMessagePol(params.get("response_message_pol"))
                 .accountId(params.get("account_id"))
                 .referenceSale(referenceSale)
                 .sign(params.get("sign"))
@@ -80,28 +64,37 @@ public class PaymentController {
         return ResponseEntity.ok(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 
+    @PostMapping("/notification/stripe")
+    public ResponseEntity<GenericResponse<Void>> handleStripeEvent(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestBody String payload,
+            @RequestHeader("Stripe-Signature") String sigHeader) throws JsonProcessingException {
 
-    // === FUNCIÓN AUXILIAR PARA GENERAR MD5 ===
-    private String generateHash(String input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            byte[] hashBytes = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> rawMap = mapper.readValue(payload, new TypeReference<>() {
+        });
 
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("Error generating hash: {}", e.getMessage(), e);
-            throw new RuntimeException("Error al generar hash: " + e.getMessage());
+        Map<String, Object> data = (Map<String, Object>) rawMap.get("data");
+        if (data == null) {
+            LOGGER.warn("⚠️ Payload sin campo 'data'. No es un evento válido de Stripe.");
+            throw new InternalException("", transactionId);
         }
-    }
 
+        Map<String, Object> charge = (Map<String, Object>) data.get("object");
+        if (charge == null) {
+            LOGGER.warn("⚠️ 'data.object' vacío. No se encontró el objeto de pago.");
+            throw new InternalException("", transactionId);
+        }
+
+        paymentPort.processPayment(PaymentTransaction.builder()
+                .stripePayment(new PaymentTransaction.StripePayment(payload, (String) charge.get("status"),
+                        (Boolean) charge.get("paid"), (Boolean) charge.get("paid")))
+                .currency((String) charge.get("currency"))
+                .sign(sigHeader)
+                .build(), PaymentType.STRIPE, transactionId);
+
+        return ResponseEntity.ok(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 
     @PostMapping
     public ResponseEntity<GenericResponse<CreatePaymentRedirectDto>> createPayment(

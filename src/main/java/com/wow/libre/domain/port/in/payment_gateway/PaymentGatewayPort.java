@@ -19,6 +19,6 @@ public interface PaymentGatewayPort {
 
     void deletePayment(Long paymentTypeId, String transactionId);
 
-    boolean isValidPaymentSignature(PaymentTransaction paymentTransaction, PaymentType paymentType,
-                                    String transactionId);
+    PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, PaymentType paymentType,
+                                String transactionId);
 }

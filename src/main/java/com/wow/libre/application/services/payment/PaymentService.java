@@ -38,27 +38,23 @@ public class PaymentService implements PaymentPort {
     @Override
     public void processPayment(PaymentTransaction paymentTransaction, PaymentType paymentType, String transactionId) {
 
-        if (!paymentGatewayPort.isValidPaymentSignature(paymentTransaction, paymentType, transactionId)) {
-            throw new InternalException("Invalid payment signature", transactionId);
-        }
+        PaymentStatus paymentStatus = paymentGatewayPort.paymentStatus(paymentTransaction, paymentType, transactionId);
 
         Optional<TransactionEntity> transaction =
                 transactionPort.findByReferenceNumber(paymentTransaction.getReferenceSale(), transactionId);
 
         if (transaction.isEmpty()) {
-            throw new InternalException("", transactionId);
+            throw new InternalException("transaction Not Found", transactionId);
         }
 
-        PaymentStatus paymentStatus = PaymentStatus.getType(paymentTransaction.getResponseMessagePol());
         TransactionEntity transactionUpdate = transaction.get();
+
         final boolean isSubscription = transactionUpdate.isSubscription();
         final Long userId = transactionUpdate.getUserId();
 
         switch (paymentStatus) {
             case APPROVED:
                 transactionUpdate.setStatus(TransactionStatus.PAID.getType());
-                transactionUpdate.setPaymentMethod(paymentTransaction.getPaymentMethodName());
-
                 if (isSubscription) {
                     SubscriptionEntity subscription =
                             subscriptionPort.createSubscription(transactionUpdate.getUserId(), transactionId);

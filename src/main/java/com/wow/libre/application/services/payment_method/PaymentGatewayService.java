@@ -125,8 +125,8 @@ public class PaymentGatewayService implements PaymentGatewayPort {
     }
 
     @Override
-    public boolean isValidPaymentSignature(PaymentTransaction paymentTransaction, PaymentType paymentType,
-                                           String transactionId) {
+    public PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, PaymentType paymentType,
+                                       String transactionId) {
         Optional<PaymentGatewaysEntity> paymentAvailable = obtainPaymentGateway.findByPaymentType(paymentType,
                 transactionId);
 
@@ -139,6 +139,10 @@ public class PaymentGatewayService implements PaymentGatewayPort {
                 obtainPayuCredentials, obtainStripeCredentials, savePayUCredentials, saveStripeCredentials,
                 transactionId);
 
-        return paymentMethodFactory.validateCredentials(paymentAvailable.get(), paymentTransaction, transactionId);
+        if (!paymentMethodFactory.validateCredentials(paymentAvailable.get(), paymentTransaction, transactionId)) {
+            throw new InternalException("Invalid payment signature", transactionId);
+        }
+
+        return paymentMethodFactory.paymentStatus(paymentTransaction, transactionId);
     }
 }

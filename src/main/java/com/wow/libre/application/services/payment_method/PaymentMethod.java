@@ -1,6 +1,7 @@
 package com.wow.libre.application.services.payment_method;
 
 import com.wow.libre.domain.dto.*;
+import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.infrastructure.entities.*;
 
@@ -19,4 +20,6 @@ public abstract class PaymentMethod {
 
     public abstract boolean validateCredentials(PaymentGatewaysEntity paymentGateway,
                                                 PaymentTransaction paymentTransaction, String transactionId);
+
+    public abstract PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, String transactionId);
 }

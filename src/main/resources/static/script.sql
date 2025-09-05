@@ -164,6 +164,7 @@ CREATE TABLE transactions.stripe_credentials (
     success_url VARCHAR(255) NOT NULL,
     cancel_url VARCHAR(255) NOT NULL,
     webhook_url VARCHAR(255) NOT NULL,
+    webhook_secret VARCHAR(255) NOT NULL,
     CONSTRAINT fk_stripe_credentials_gateway
         FOREIGN KEY (gateway_id)
         REFERENCES payment_gateways(id)
