@@ -1,28 +1,24 @@
 package com.wow.libre.domain;
 
+import com.wow.libre.domain.enums.*;
+import com.wow.libre.domain.model.*;
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.math.*;
+
+@Builder
 public class CreatePaymentRedirectDto {
     public String redirect;
     public String confirmationUrl;
     public String responseUrl;
     public String buyerEmail;
-    public String signature;
     public String currency;
     public String taxReturnBase;
     public String tax;
-    public String amount;
+    public BigDecimal amount;
     public String referenceCode;
     public String description;
-    public String accountId;
-    public String merchantId;
-    public String test;
     public boolean isPayment;
-
-    public CreatePaymentRedirectDto(boolean isPayment, String redirect) {
-        this.isPayment = isPayment;
-        this.redirect = redirect;
-    }
+    public PaymentType paymentType;
+    public PayUCredentialsModel payu;
 }

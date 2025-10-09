@@ -23,4 +23,6 @@ public class StripeCredentialsEntity {
     private String cancelUrl;
     @Column(name = "webhook_url", nullable = false)
     private String webhookUrl;
+    @Column(name = "webhook_secret", nullable = false)
+    private String webHookSecret;
 }

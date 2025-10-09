@@ -153,6 +153,11 @@ public class ProductService implements ProductPort {
 
         ProductCategoryEntity productCategory = productCategoryPort.findById(productCategoryId, transactionId);
 
+        if (productCategory == null) {
+            throw new InternalException("Product Category with id '" + productCategoryId + "' does not exist",
+                    transactionId);
+        }
+
         ProductEntity productEntity = new ProductEntity();
         productEntity.setName(name);
         productEntity.setDisclaimer(product.getDisclaimer());
@@ -165,12 +170,13 @@ public class ProductService implements ProductPort {
         productEntity.setImageUrl(product.getImageUrl());
         productEntity.setCreditPointsValue(product.getCreditPointsValue());
         productEntity.setLanguage(language);
-        productEntity.setStatus(true);
         productEntity.setReferenceNumber(randomString.nextString());
         productEntity.setRealmId(product.getRealmId());
         productEntity.setProductCategoryId(productCategory);
+        productEntity.setRealmName(product.getRealmName());
+        productEntity.setLanguage(product.getLanguage());
+        productEntity.setStatus(true);
         saveProducts.save(productEntity, transactionId);
-
     }
 
     @Override
@@ -199,6 +205,19 @@ public class ProductService implements ProductPort {
                 .returnTax(product.getReturnTax())
                 .referenceNumber(product.getReferenceNumber())
                 .build()).toList()).totalProducts(productsDb.size()).build();
+    }
+
+    @Override
+    public void deleteProduct(Long productId, String transactionId) {
+        Optional<ProductEntity> product = products.findById(productId, transactionId);
+
+        if (product.isEmpty()) {
+            throw new InternalException("Product Not Found", transactionId);
+        }
+        ProductEntity productEntity = product.get();
+        productEntity.setName(productEntity.getName() + "_deleted_" + System.currentTimeMillis());
+        productEntity.setStatus(false);
+        saveProducts.save(productEntity, transactionId);
     }
 
 }

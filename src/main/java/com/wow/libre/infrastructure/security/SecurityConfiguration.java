@@ -69,6 +69,8 @@ public class SecurityConfiguration {
                                         "/api/products/offer",
                                         "/api/products/{reference}",
                                         "/api/payment/notification",
+                                        "/api/payment/notification/stripe",
+
                                         "/api/partner/exist/{realmId}",
                                         //SWAGGER
                                         "/v2/api-docs",
@@ -81,7 +83,7 @@ public class SecurityConfiguration {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**")
                                 .permitAll()
-                                .requestMatchers("/api/partner","/api/product-category").hasAuthority("ADMIN")
+                                .requestMatchers("/api/partner", "/api/product-category").hasAuthority("ADMIN")
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -18,4 +18,5 @@ public interface ProductPort {
 
     ProductsDetailsDto allProducts(String transactionId);
 
+    void deleteProduct(Long productId, String transactionId);
 }

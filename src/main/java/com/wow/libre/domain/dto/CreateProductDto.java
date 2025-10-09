@@ -24,6 +24,8 @@ public class CreateProductDto {
     @NotNull
     private Long realmId;
     @NotNull
+    private String realmName;
+    @NotNull
     private String language;
     @NotNull
     private String tax;

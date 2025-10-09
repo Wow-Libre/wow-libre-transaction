@@ -83,6 +83,17 @@ public class ProductController {
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 
+    @DeleteMapping
+    public ResponseEntity<GenericResponse<Void>> deleteProduct(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam Long productId) {
+
+        productPort.deleteProduct(productId, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
 
     @GetMapping("/all")
     public ResponseEntity<GenericResponse<ProductsDetailsDto>> allProducts(
