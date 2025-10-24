@@ -71,6 +71,7 @@ public class PaymentStripeMethod extends PaymentMethod {
                     .build();
             Session session = Session.create(params);
             return PaymentGatewayModel.builder()
+                    .id(session.getId())
                     .redirect(session.getUrl())
                     .build();
         } catch (StripeException e) {

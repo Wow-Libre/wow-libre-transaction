@@ -45,4 +45,5 @@ public class TransactionEntity implements Serializable {
     private LocalDateTime creationDate;
     @Column(name = "is_subscription")
     private boolean isSubscription;
+    private String referencePayment;
 }

@@ -81,7 +81,7 @@ public class TransactionService implements TransactionPort {
 
             return new PaymentApplicableModel(discountedPrice > 0, discountedPrice, currency, orderId, description,
                     plan.getTax(),
-                    plan.getReturnTax(), plan.getName());
+                    plan.getReturnTax(), plan.getName(), transactionEntity);
         }
 
         String productReference = transaction.getProductReference();
@@ -121,7 +121,7 @@ public class TransactionService implements TransactionPort {
         saveTransaction.save(transactionEntity, transactionId);
 
         return new PaymentApplicableModel(isPaymentRedirectToCheckout, finalPrice, currency, orderId, description,
-                productDto.getTax(), productDto.getReturnTax(), productDto.getName());
+                productDto.getTax(), productDto.getReturnTax(), productDto.getName(), transactionEntity);
     }
 
 

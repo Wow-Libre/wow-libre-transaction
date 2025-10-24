@@ -99,7 +99,7 @@ CREATE TABLE transactions.transaction
     product_id        BIGINT,
     subscription_id   BIGINT,
     reference_number  VARCHAR(80) NOT NULL,
-    creation_date     DATE        NOT NULL,
+    creation_date     DATETIME(6) NOT NULL,
     payment_method    VARCHAR(60),
     credit_points     BOOLEAN NOT NULL,
     currency          VARCHAR(20) NOT NULL,

@@ -54,7 +54,7 @@ spring:
       hibernate:
         format_sql: false
   datasource:
-    url: ${DB_TRANSACTION_URL}
+    url: ${DB_TRANSACTION_HOST}
     username: ${DB_TRANSACTION_USERNAME}
     password: ${DB_TRANSACTION_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -62,13 +62,13 @@ server:
   servlet:
     context-path: /transaction
   address: 0.0.0.0
-  port: 8092
+  port: ${TRANSACTION_SERVER_PORT:8092}
 application:
   urls:
-    wow-libre: ${WOW_LIBRE_HOST}/core
+    wow-libre: ${HOST_BASE_CORE}
   security:
     jwt:
-      secret-key: ${SECRET-KEY}
+      secret-key: ${CORE_JWT_SECRET_KEY}
       expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
