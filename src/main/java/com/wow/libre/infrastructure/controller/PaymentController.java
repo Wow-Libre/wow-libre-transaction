@@ -30,7 +30,6 @@ public class PaymentController {
         this.paymentPort = paymentPort;
     }
 
-
     @PostMapping(value = "/notification", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<GenericResponse<Void>> notification(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
@@ -85,7 +84,7 @@ public class PaymentController {
             LOGGER.warn("⚠️ 'data.object' vacío. No se encontró el objeto de pago.");
             throw new InternalException("", transactionId);
         }
-        
+
         Map<String, Object> metadata = (Map<String, Object>) charge.get("metadata");
         String referenceSale = metadata != null ? (String) metadata.get("referenceCode") : null;
 

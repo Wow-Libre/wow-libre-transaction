@@ -8,7 +8,7 @@ import java.util.*;
 @AllArgsConstructor
 public enum TransactionStatus {
     PAID("PAID", 100),
-    CREATED("CREATED", 50),
+    CREATED("CREATED", 1),
     DELIVERED("DELIVERED", 100),
     REJECTED("REJECTED", 100),
     ERROR("ERROR", 100),

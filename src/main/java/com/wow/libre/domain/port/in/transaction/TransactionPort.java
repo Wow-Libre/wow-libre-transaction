@@ -16,7 +16,6 @@ public interface TransactionPort {
 
     TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId);
 
-    List<TransactionEntity> findByStatusIsPaidAndSendIsFalse(String transactionId);
 
     Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId);
 

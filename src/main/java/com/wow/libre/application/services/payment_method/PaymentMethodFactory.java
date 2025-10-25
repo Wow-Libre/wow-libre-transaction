@@ -2,20 +2,26 @@ package com.wow.libre.application.services.payment_method;
 
 import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.exception.*;
-import com.wow.libre.domain.port.out.payu_credentials.*;
-import com.wow.libre.domain.port.out.stripe_credentials.*;
+import org.springframework.stereotype.*;
 
+@Component
 public class PaymentMethodFactory {
 
-    public static PaymentMethod paymentMethod(PaymentType paymentType,
-                                              ObtainPayuCredentials payuCredentials,
-                                              ObtainStripeCredentials stripeCredentials,
-                                              SavePayUCredentials savePayUCredentials,
-                                              SaveStripeCredentials saveStripeCredentials,
-                                              String transactionId) {
+    private final PaymentServiceLocator serviceLocator;
+
+    public PaymentMethodFactory(PaymentServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
+
+    public PaymentMethod createPaymentMethod(PaymentType paymentType, String transactionId) {
         return switch (paymentType) {
-            case PAYU -> new PaymentPayUMethod(payuCredentials, savePayUCredentials);
-            case STRIPE -> new PaymentStripeMethod(stripeCredentials, saveStripeCredentials);
+            case PAYU -> new PaymentPayUMethod(
+                    serviceLocator.getObtainPayuCredentials(),
+                    serviceLocator.getSavePayUCredentials(),
+                    serviceLocator.getPayuPort());
+            case STRIPE -> new PaymentStripeMethod(
+                    serviceLocator.getObtainStripeCredentials(),
+                    serviceLocator.getSaveStripeCredentials());
             default -> throw new InternalException("Invalid Payment Method", transactionId);
         };
     }

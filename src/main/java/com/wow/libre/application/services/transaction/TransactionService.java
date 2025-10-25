@@ -29,8 +29,8 @@ public class TransactionService implements TransactionPort {
     private final PaymentGatewayPort paymentGatewayPort;
 
     public TransactionService(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
-            ProductPort productPort, @Qualifier("subscription-reference") RandomString randomString,
-            ObtainPlan obtainPlan, PaymentGatewayPort paymentGatewayPort) {
+                              ProductPort productPort, @Qualifier("subscription-reference") RandomString randomString,
+                              ObtainPlan obtainPlan, PaymentGatewayPort paymentGatewayPort) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
         this.productPort = productPort;
@@ -146,7 +146,8 @@ public class TransactionService implements TransactionPort {
     public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
         TransactionsDto data = new TransactionsDto();
         List<Transaction> transactions = obtainTransaction.findByUserId(userId, page, size, transactionId)
-                .stream().map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
+                .stream()
+                .map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
                         transaction.getCurrency(), transaction.getStatus(),
                         TransactionStatus.getType(transaction.getStatus()).getStatus(),
                         transaction.getCreationDate(), transaction.getReferenceNumber(),
@@ -162,10 +163,6 @@ public class TransactionService implements TransactionPort {
         return data;
     }
 
-    @Override
-    public List<TransactionEntity> findByStatusIsPaidAndSendIsFalse(String transactionId) {
-        return obtainTransaction.findByStatusIsPaidAndSendIsFalse(transactionId);
-    }
 
     @Override
     public Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
@@ -174,7 +171,7 @@ public class TransactionService implements TransactionPort {
 
     @Override
     public Optional<TransactionEntity> findByReferenceNumberAndUserId(String referenceNumber, Long userId,
-            String transactionId) {
+                                                                      String transactionId) {
         Optional<TransactionEntity> transaction = obtainTransaction.findByReferenceNumberAndUserId(referenceNumber,
                 userId, transactionId);
 
