@@ -4,6 +4,7 @@ import com.wow.libre.domain.dto.*;
 import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
+import com.wow.libre.domain.port.in.payment_gateway.*;
 import com.wow.libre.domain.port.in.product.*;
 import com.wow.libre.domain.port.in.transaction.*;
 import com.wow.libre.domain.port.out.plan.*;
@@ -25,17 +26,18 @@ public class TransactionService implements TransactionPort {
     private final ProductPort productPort;
     private final RandomString randomString;
     private final ObtainPlan obtainPlan;
+    private final PaymentGatewayPort paymentGatewayPort;
 
     public TransactionService(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
-                              ProductPort productPort, @Qualifier("subscription-reference") RandomString randomString,
-                              ObtainPlan obtainPlan) {
+            ProductPort productPort, @Qualifier("subscription-reference") RandomString randomString,
+            ObtainPlan obtainPlan, PaymentGatewayPort paymentGatewayPort) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
         this.productPort = productPort;
         this.randomString = randomString;
         this.obtainPlan = obtainPlan;
+        this.paymentGatewayPort = paymentGatewayPort;
     }
-
 
     @Override
     public void save(TransactionEntity transaction, String transactionId) {
@@ -124,7 +126,6 @@ public class TransactionService implements TransactionPort {
                 productDto.getTax(), productDto.getReturnTax(), productDto.getName(), transactionEntity);
     }
 
-
     private TransactionEntity getTransactionEntity(String reference, String transactionId) {
         Optional<TransactionEntity> transactionEntity = obtainTransaction.findByReferenceNumber(reference,
                 transactionId);
@@ -144,17 +145,17 @@ public class TransactionService implements TransactionPort {
     @Override
     public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
         TransactionsDto data = new TransactionsDto();
-        List<Transaction> transactions =
-                obtainTransaction.findByUserId(userId, page, size, transactionId)
-                        .stream().map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
-                                transaction.getCurrency(), transaction.getStatus(),
-                                TransactionStatus.getType(transaction.getStatus()).getStatus(),
-                                transaction.getCreationDate(), transaction.getReferenceNumber(),
-                                Optional.ofNullable(transaction.getProductId())
-                                        .map(ProductEntity::getName).orElse("VIP"),
-                                Optional.ofNullable(transaction.getProductId())
-                                        .map(ProductEntity::getImageUrl).orElse("https://static.wixstatic" +
-                                                ".com/media/5dd8a0_cbcd4683525e448c8502b031dfce2527~mv2.webp"))).toList();
+        List<Transaction> transactions = obtainTransaction.findByUserId(userId, page, size, transactionId)
+                .stream().map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
+                        transaction.getCurrency(), transaction.getStatus(),
+                        TransactionStatus.getType(transaction.getStatus()).getStatus(),
+                        transaction.getCreationDate(), transaction.getReferenceNumber(),
+                        Optional.ofNullable(transaction.getProductId())
+                                .map(ProductEntity::getName).orElse("VIP"),
+                        Optional.ofNullable(transaction.getProductId())
+                                .map(ProductEntity::getImageUrl).orElse("https://static.wixstatic" +
+                                        ".com/media/5dd8a0_cbcd4683525e448c8502b031dfce2527~mv2.webp")))
+                .toList();
         data.setTransactions(transactions);
         data.setSize(obtainTransaction.findByUserId(userId, transactionId));
 
@@ -169,6 +170,50 @@ public class TransactionService implements TransactionPort {
     @Override
     public Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
         return obtainTransaction.findByReferenceNumber(referenceNumber, transactionId);
+    }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumberAndUserId(String referenceNumber, Long userId,
+            String transactionId) {
+        Optional<TransactionEntity> transaction = obtainTransaction.findByReferenceNumberAndUserId(referenceNumber,
+                userId, transactionId);
+
+        if (transaction.isEmpty()) {
+            return Optional.empty();
+        }
+        TransactionEntity foundTransaction = transaction.get();
+
+        PaymentType paymentMethodType = PaymentType.valueOf(foundTransaction.getPaymentMethod());
+
+        PaymentStatus paymentStatus = paymentGatewayPort.findByStatus(paymentMethodType,
+                foundTransaction.getReferenceNumber(), foundTransaction.getReferencePayment(),
+                transactionId);
+
+        // Mapear el PaymentStatus a TransactionStatus
+        switch (paymentStatus) {
+            case APPROVED:
+                foundTransaction.setStatus(TransactionStatus.PAID.getType());
+                LOGGER.info("✅ Pago aprobado para transacción: {}", foundTransaction.getReferenceNumber());
+                break;
+            case PENDING:
+                foundTransaction.setStatus(TransactionStatus.PENDING.getType());
+                LOGGER.info("⏳ Pago pendiente para transacción: {}", foundTransaction.getReferenceNumber());
+                break;
+            case REJECTED:
+                foundTransaction.setStatus(TransactionStatus.REJECTED.getType());
+                LOGGER.warn("❌ Pago rechazado para transacción: {}", foundTransaction.getReferenceNumber());
+                break;
+            default:
+                foundTransaction.setStatus(TransactionStatus.REJECTED.getType());
+                LOGGER.warn("⚠️ Status de pago desconocido: {} para transacción: {}",
+                        paymentStatus, foundTransaction.getReferenceNumber());
+                break;
+        }
+
+        // Guardar la transacción actualizada
+        saveTransaction.save(foundTransaction, transactionId);
+
+        return Optional.of(foundTransaction);
     }
 
 }

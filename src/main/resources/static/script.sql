@@ -104,6 +104,7 @@ CREATE TABLE transactions.transaction
     credit_points     BOOLEAN NOT NULL,
     currency          VARCHAR(20) NOT NULL,
     send              BOOLEAN     NOT NULL,
+    reference_payment varchar (150),
     is_subscription   BOOLEAN NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT transaction_product_reference_uq UNIQUE (reference_number),

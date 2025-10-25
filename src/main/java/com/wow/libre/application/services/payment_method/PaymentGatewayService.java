@@ -145,4 +145,22 @@ public class PaymentGatewayService implements PaymentGatewayPort {
 
         return paymentMethodFactory.paymentStatus(paymentTransaction, transactionId);
     }
+
+    @Override
+    public PaymentStatus findByStatus(PaymentType paymentType, String referenceCode, String id, String transactionId) {
+        Optional<PaymentGatewaysEntity> paymentAvailable = obtainPaymentGateway.findByPaymentType(paymentType,
+                transactionId);
+
+        if (paymentAvailable.isEmpty()) {
+            LOGGER.error("[credentials] Payment method {} not available", paymentType);
+            throw new InternalException("Method payment is disable", transactionId);
+        }
+
+        PaymentMethod paymentMethodFactory = PaymentMethodFactory.paymentMethod(paymentType,
+                obtainPayuCredentials, obtainStripeCredentials, savePayUCredentials, saveStripeCredentials,
+                transactionId);
+
+
+        return paymentMethodFactory.findByStatus(paymentAvailable.get(), referenceCode, id, transactionId);
+    }
 }

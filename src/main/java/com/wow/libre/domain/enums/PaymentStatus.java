@@ -9,6 +9,7 @@ import java.util.*;
 public enum PaymentStatus {
     APPROVED("APPROVED"),
     REJECTED("REJECTED"),
+    PENDING("PENDING"),
     ERROR("ERROR");
 
     private final String type;

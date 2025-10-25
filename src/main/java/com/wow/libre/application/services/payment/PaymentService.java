@@ -166,7 +166,6 @@ public class PaymentService implements PaymentPort {
         Long pointsToUse = (long) (points - transactionEntity.getPrice());
         walletPort.addPoints(userId, pointsToUse, transactionId);
         transactionEntity.setStatus(TransactionStatus.PAID.getType());
-        transactionEntity.setReferencePayment(paymentMeh);
         transactionPort.save(transactionEntity, transactionId);
 
         return CreatePaymentRedirectDto.builder().isPayment(false).redirect("/profile/purchases").build();

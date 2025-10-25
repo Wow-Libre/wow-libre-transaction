@@ -21,4 +21,6 @@ public interface PaymentGatewayPort {
 
     PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, PaymentType paymentType,
                                 String transactionId);
+
+    PaymentStatus findByStatus(PaymentType paymentType, String referenceCode, String id, String transactionId);
 }

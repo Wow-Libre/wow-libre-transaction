@@ -46,23 +46,10 @@ public class PaymentPayUMethod extends PaymentMethod {
 
         String formattedAmount = amount.toPlainString();
 
-// === Construcción de cadena para checkout ===
         final String concatenatedString =
                 apiKey + "~" + merchantId + "~" + referenceCode + "~" + formattedAmount + "~" + currency;
         final String signature = PayUSignatureUtil.md5(concatenatedString);
-        // === LOGS DETALLADOS ===
-        LOGGER.info("=== 🛒 FIRMA GENERADA EN BACKEND (CHECKOUT) ===");
-        LOGGER.info("apiKey usado: [{}]", apiKey);
-        LOGGER.info("merchantId usado: [{}]", merchantId);
-        LOGGER.info("accountId usado: [{}]", accountId);
-        LOGGER.info("referenceCode usado: [{}]", referenceCode);
 
-        LOGGER.info("amount recibido (BigDecimal): [{}]", amount);
-        LOGGER.info("formattedAmount usado en firma: [{}]", formattedAmount);
-        LOGGER.info("currency usado: [{}]", currency);
-
-        LOGGER.info("Cadena exacta para firma (checkout): [{}]", concatenatedString);
-        LOGGER.info("Firma MD5 generada: [{}]", signature);
 
         return PaymentGatewayModel.builder()
                 .redirect(payUCredentials.getHost())
@@ -149,6 +136,12 @@ public class PaymentPayUMethod extends PaymentMethod {
     @Override
     public PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, String transactionId) {
         return PaymentStatus.getType(paymentTransaction.getResponseMessagePol());
+    }
+
+    @Override
+    public PaymentStatus findByStatus(PaymentGatewaysEntity paymentGateway, String referenceCode, String id,
+                                      String transactionId) {
+        return null;
     }
 
 
