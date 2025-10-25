@@ -2,6 +2,7 @@ package com.wow.libre.application.services.payment_method;
 
 import com.stripe.*;
 import com.stripe.exception.*;
+import com.stripe.model.*;
 import com.stripe.model.checkout.*;
 import com.stripe.net.*;
 import com.stripe.param.checkout.*;
@@ -34,9 +35,9 @@ public class PaymentStripeMethod extends PaymentMethod {
     public PaymentGatewayModel payment(Long idMethodGateway, String currency, BigDecimal amount, Integer quantity,
                                        String productName, String referenceCode, String transactionId) {
 
-        Optional<StripeCredentialsEntity> stripeCredential =
-                obtainStripeCredentials.findByPayUCredentials(idMethodGateway,
-                        transactionId);
+        Optional<StripeCredentialsEntity> stripeCredential = obtainStripeCredentials.findByPayUCredentials(
+                idMethodGateway,
+                transactionId);
 
         if (stripeCredential.isEmpty()) {
             throw new InternalException("PayUGateway Credentials Invalid", transactionId);
@@ -54,8 +55,8 @@ public class PaymentStripeMethod extends PaymentMethod {
                     .setPaymentIntentData(
                             SessionCreateParams.PaymentIntentData.builder()
                                     .putMetadata("referenceCode", referenceCode) // 👈 Aquí va tu ID interno
-                                    .build()
-                    ).addLineItem(
+                                    .build())
+                    .addLineItem(
                             SessionCreateParams.LineItem.builder()
                                     .setQuantity(quantity.longValue())
                                     .setPriceData(
@@ -65,12 +66,13 @@ public class PaymentStripeMethod extends PaymentMethod {
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                     .setName(productName)
-                                                                    .build()).build())
-                                    .build()
-                    )
+                                                                    .build())
+                                                    .build())
+                                    .build())
                     .build();
             Session session = Session.create(params);
             return PaymentGatewayModel.builder()
+                    .id(session.getId())
                     .redirect(session.getUrl())
                     .build();
         } catch (StripeException e) {
@@ -95,8 +97,8 @@ public class PaymentStripeMethod extends PaymentMethod {
     @Override
     public void delete(PaymentGatewaysEntity paymentMethod, String transactionId) {
 
-        Optional<StripeCredentialsEntity> stripeCredentials =
-                obtainStripeCredentials.findByPayUCredentials(paymentMethod.getId(), transactionId);
+        Optional<StripeCredentialsEntity> stripeCredentials = obtainStripeCredentials
+                .findByPayUCredentials(paymentMethod.getId(), transactionId);
 
         if (stripeCredentials.isEmpty()) {
             throw new InternalException("Stripe Credentials Not Found", transactionId);
@@ -145,5 +147,40 @@ public class PaymentStripeMethod extends PaymentMethod {
         return PaymentStatus.APPROVED;
     }
 
+    @Override
+    public PaymentStatus findByStatus(PaymentGatewaysEntity paymentGateway, String referenceCode, String sessionId,
+                                      String transactionId) {
+
+        StripeCredentialsEntity stripeCred = obtainStripeCredentials
+                .findByPayUCredentials(paymentGateway.getId(), transactionId)
+                .orElseThrow(() -> new InternalException("Stripe Credentials Not Found", transactionId));
+        Stripe.apiKey = stripeCred.getApiSecret();
+        try {
+            Session session = Session.retrieve(sessionId);
+            String paymentIntentId = session.getPaymentIntent();
+
+            // Obtener el PaymentIntent para verificar su status
+            PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+            String status = paymentIntent.getStatus();
+
+            LOGGER.info("🔍 Status del PaymentIntent: {}", status);
+
+            // Mapear el status de Stripe a tu enum PaymentStatus
+            return switch (status) {
+                case "succeeded" -> PaymentStatus.APPROVED;
+                case "requires_payment_method", "requires_confirmation", "requires_action", "processing" ->
+                        PaymentStatus.PENDING;
+                case "canceled", "payment_failed" -> PaymentStatus.REJECTED;
+                default -> {
+                    LOGGER.warn("⚠️ Status desconocido del PaymentIntent: {}", status);
+                    yield PaymentStatus.PENDING;
+                }
+            };
+
+        } catch (StripeException e) {
+            LOGGER.error("❌ Error al obtener el status del pago: {}", e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 
 }

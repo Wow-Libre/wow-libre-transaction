@@ -6,8 +6,6 @@ import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.payment_gateway.*;
 import com.wow.libre.domain.port.out.payment_gateway.*;
-import com.wow.libre.domain.port.out.payu_credentials.*;
-import com.wow.libre.domain.port.out.stripe_credentials.*;
 import com.wow.libre.infrastructure.entities.*;
 import org.slf4j.*;
 import org.springframework.stereotype.*;
@@ -24,29 +22,21 @@ public class PaymentGatewayService implements PaymentGatewayPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(PaymentGatewayService.class);
 
     private final ObtainPaymentGateway obtainPaymentGateway;
-    private final ObtainStripeCredentials obtainStripeCredentials;
-    private final ObtainPayuCredentials obtainPayuCredentials;
     private final SavePaymentGateway savePaymentGateway;
-    private final SavePayUCredentials savePayUCredentials;
-    private final SaveStripeCredentials saveStripeCredentials;
+    private final PaymentMethodFactory paymentMethodFactory;
 
     public PaymentGatewayService(ObtainPaymentGateway obtainPaymentGateway,
-                                 ObtainStripeCredentials obtainStripeCredentials,
-                                 ObtainPayuCredentials obtainPayuCredentials,
-                                 SavePaymentGateway savePaymentGateway, SavePayUCredentials savePayUCredentials,
-                                 SaveStripeCredentials saveStripeCredentials) {
+            SavePaymentGateway savePaymentGateway,
+            PaymentMethodFactory paymentMethodFactory) {
         this.obtainPaymentGateway = obtainPaymentGateway;
-        this.obtainStripeCredentials = obtainStripeCredentials;
-        this.obtainPayuCredentials = obtainPayuCredentials;
         this.savePaymentGateway = savePaymentGateway;
-        this.savePayUCredentials = savePayUCredentials;
-        this.saveStripeCredentials = saveStripeCredentials;
+        this.paymentMethodFactory = paymentMethodFactory;
     }
 
     @Override
     public PaymentGatewayModel generateUrlPayment(PaymentType paymentType, String currency, BigDecimal amount,
-                                                  Integer quantity, String productName, String referenceCode,
-                                                  String transactionId) {
+            Integer quantity, String productName, String referenceCode,
+            String transactionId) {
 
         Optional<PaymentGatewaysEntity> paymentAvailable = obtainPaymentGateway.findByPaymentType(paymentType,
                 transactionId);
@@ -58,8 +48,7 @@ public class PaymentGatewayService implements PaymentGatewayPort {
 
         PaymentGatewaysEntity paymentGateway = paymentAvailable.get();
 
-        PaymentMethod paymentMethod = PaymentMethodFactory.paymentMethod(paymentType, obtainPayuCredentials,
-                obtainStripeCredentials, savePayUCredentials, saveStripeCredentials, transactionId);
+        PaymentMethod paymentMethod = paymentMethodFactory.createPaymentMethod(paymentType, transactionId);
 
         return paymentMethod.payment(paymentGateway.getId(), currency, amount, quantity, productName, referenceCode,
                 transactionId);
@@ -83,17 +72,15 @@ public class PaymentGatewayService implements PaymentGatewayPort {
             throw new InternalException("Payment Method Exist", transactionId);
         }
 
-
         PaymentGatewaysEntity paymentMethod = new PaymentGatewaysEntity();
         paymentMethod.setName(name);
         paymentMethod.setActive(true);
         paymentMethod.setCreatedAt(LocalDateTime.now());
         paymentMethod.setType(paymentMethodType);
         savePaymentGateway.save(paymentMethod, transactionId);
-        PaymentMethod paymentMethodFactory = PaymentMethodFactory.paymentMethod(paymentMethodType,
-                obtainPayuCredentials, obtainStripeCredentials, savePayUCredentials, saveStripeCredentials,
+        PaymentMethod paymentMethodInstance = paymentMethodFactory.createPaymentMethod(paymentMethodType,
                 transactionId);
-        paymentMethodFactory.vinculate(paymentMethod, credentials, transactionId);
+        paymentMethodInstance.vinculate(paymentMethod, credentials, transactionId);
     }
 
     @Override
@@ -103,7 +90,8 @@ public class PaymentGatewayService implements PaymentGatewayPort {
 
         return paymentMethodGateways.stream()
                 .map(payment -> new PaymentMethodsDto(payment.getId(), payment.getType(),
-                        payment.getName(), payment.getCreatedAt())).toList();
+                        payment.getName(), payment.getCreatedAt()))
+                .toList();
     }
 
     @Override
@@ -117,16 +105,15 @@ public class PaymentGatewayService implements PaymentGatewayPort {
             throw new InternalException("Payment Method Not Exist", transactionId);
         }
 
-        PaymentMethod paymentMethodFactory = PaymentMethodFactory.paymentMethod(paymentGatewayDelete.get().getType(),
-                obtainPayuCredentials, obtainStripeCredentials, savePayUCredentials, saveStripeCredentials,
-                transactionId);
-        paymentMethodFactory.delete(paymentGatewayDelete.get(), transactionId);
+        PaymentMethod paymentMethodInstance = paymentMethodFactory
+                .createPaymentMethod(paymentGatewayDelete.get().getType(), transactionId);
+        paymentMethodInstance.delete(paymentGatewayDelete.get(), transactionId);
         savePaymentGateway.delete(paymentGatewayDelete.get(), transactionId);
     }
 
     @Override
     public PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, PaymentType paymentType,
-                                       String transactionId) {
+            String transactionId) {
         Optional<PaymentGatewaysEntity> paymentAvailable = obtainPaymentGateway.findByPaymentType(paymentType,
                 transactionId);
 
@@ -135,14 +122,27 @@ public class PaymentGatewayService implements PaymentGatewayPort {
             throw new InternalException("Method payment is disable", transactionId);
         }
 
-        PaymentMethod paymentMethodFactory = PaymentMethodFactory.paymentMethod(paymentType,
-                obtainPayuCredentials, obtainStripeCredentials, savePayUCredentials, saveStripeCredentials,
-                transactionId);
+        PaymentMethod paymentMethodInstance = paymentMethodFactory.createPaymentMethod(paymentType, transactionId);
 
-        if (!paymentMethodFactory.validateCredentials(paymentAvailable.get(), paymentTransaction, transactionId)) {
+        if (!paymentMethodInstance.validateCredentials(paymentAvailable.get(), paymentTransaction, transactionId)) {
             throw new InternalException("Invalid payment signature", transactionId);
         }
 
-        return paymentMethodFactory.paymentStatus(paymentTransaction, transactionId);
+        return paymentMethodInstance.paymentStatus(paymentTransaction, transactionId);
+    }
+
+    @Override
+    public PaymentStatus findByStatus(PaymentType paymentType, String referenceCode, String id, String transactionId) {
+        Optional<PaymentGatewaysEntity> paymentAvailable = obtainPaymentGateway.findByPaymentType(paymentType,
+                transactionId);
+
+        if (paymentAvailable.isEmpty()) {
+            LOGGER.error("[credentials] Payment method {} not available", paymentType);
+            throw new InternalException("Method payment is disable", transactionId);
+        }
+
+        PaymentMethod paymentMethodInstance = paymentMethodFactory.createPaymentMethod(paymentType, transactionId);
+
+        return paymentMethodInstance.findByStatus(paymentAvailable.get(), referenceCode, id, transactionId);
     }
 }

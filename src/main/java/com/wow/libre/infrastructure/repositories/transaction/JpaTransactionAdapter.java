@@ -52,4 +52,10 @@ public class JpaTransactionAdapter implements SaveTransaction, ObtainTransaction
     public Optional<TransactionEntity> findById(Long id) {
         return transactionRepository.findById(id);
     }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumberAndUserId(String reference, Long userId,
+                                                                      String transactionId) {
+        return transactionRepository.findByReferenceNumberAndUserId(reference, userId);
+    }
 }

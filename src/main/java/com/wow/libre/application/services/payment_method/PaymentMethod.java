@@ -22,4 +22,7 @@ public abstract class PaymentMethod {
                                                 PaymentTransaction paymentTransaction, String transactionId);
 
     public abstract PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, String transactionId);
+
+    public abstract PaymentStatus findByStatus(PaymentGatewaysEntity paymentGateway, String referenceCode, String id,
+                                               String transactionId);
 }

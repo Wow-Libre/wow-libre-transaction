@@ -1,9 +1,11 @@
 package com.wow.libre.application.services.payment_method;
 
 import com.wow.libre.domain.dto.*;
+import com.wow.libre.domain.dto.payu.*;
 import com.wow.libre.domain.enums.*;
 import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
+import com.wow.libre.domain.port.in.payu.*;
 import com.wow.libre.domain.port.out.payu_credentials.*;
 import com.wow.libre.infrastructure.entities.*;
 import com.wow.libre.infrastructure.util.*;
@@ -19,11 +21,13 @@ public class PaymentPayUMethod extends PaymentMethod {
 
     private final ObtainPayuCredentials payuCredentials;
     private final SavePayUCredentials savePayUCredentials;
+    private final PayuPort payuPort;
 
-
-    public PaymentPayUMethod(ObtainPayuCredentials payuCredentials, SavePayUCredentials savePayUCredentials) {
+    public PaymentPayUMethod(ObtainPayuCredentials payuCredentials, SavePayUCredentials savePayUCredentials,
+                             PayuPort payuPort) {
         this.payuCredentials = payuCredentials;
         this.savePayUCredentials = savePayUCredentials;
+        this.payuPort = payuPort;
     }
 
     @Override
@@ -46,23 +50,10 @@ public class PaymentPayUMethod extends PaymentMethod {
 
         String formattedAmount = amount.toPlainString();
 
-// === Construcción de cadena para checkout ===
         final String concatenatedString =
                 apiKey + "~" + merchantId + "~" + referenceCode + "~" + formattedAmount + "~" + currency;
         final String signature = PayUSignatureUtil.md5(concatenatedString);
-        // === LOGS DETALLADOS ===
-        LOGGER.info("=== 🛒 FIRMA GENERADA EN BACKEND (CHECKOUT) ===");
-        LOGGER.info("apiKey usado: [{}]", apiKey);
-        LOGGER.info("merchantId usado: [{}]", merchantId);
-        LOGGER.info("accountId usado: [{}]", accountId);
-        LOGGER.info("referenceCode usado: [{}]", referenceCode);
 
-        LOGGER.info("amount recibido (BigDecimal): [{}]", amount);
-        LOGGER.info("formattedAmount usado en firma: [{}]", formattedAmount);
-        LOGGER.info("currency usado: [{}]", currency);
-
-        LOGGER.info("Cadena exacta para firma (checkout): [{}]", concatenatedString);
-        LOGGER.info("Firma MD5 generada: [{}]", signature);
 
         return PaymentGatewayModel.builder()
                 .redirect(payUCredentials.getHost())
@@ -149,6 +140,36 @@ public class PaymentPayUMethod extends PaymentMethod {
     @Override
     public PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, String transactionId) {
         return PaymentStatus.getType(paymentTransaction.getResponseMessagePol());
+    }
+
+    @Override
+    public PaymentStatus findByStatus(PaymentGatewaysEntity paymentGateway, String referenceCode, String id,
+                                      String transactionId) {
+        PayuCredentialsEntity payUCredentials = payuCredentials
+                .findByPayUCredentials(paymentGateway.getId(), transactionId)
+                .orElseThrow(() -> new InternalException("Stripe Credentials Not Found", transactionId));
+
+        PayUOrderDetailResponse response = payuPort.getOrderDetailByReference(payUCredentials.getHost(),
+                referenceCode, payUCredentials.getApiLogin(),
+                payUCredentials.getApiKey());
+
+        String state = response.getResult().getPayload().stream()
+                .findFirst()
+                .flatMap(order -> order.getTransactions().stream().findFirst())
+                .map(tx -> tx.getTransactionResponse().getState())
+                .orElseThrow(() -> new NotFoundException("Transaction not found", transactionId));
+
+
+        return switch (state) {
+            case "APPROVED" -> PaymentStatus.APPROVED;
+            case "requires_payment_method", "requires_confirmation", "requires_action", "processing" ->
+                    PaymentStatus.PENDING;
+            case "canceled", "payment_failed" -> PaymentStatus.REJECTED;
+            default -> {
+                LOGGER.warn("⚠️ Status desconocido del PaymentIntent: {}", state);
+                yield PaymentStatus.PENDING;
+            }
+        };
     }
 
 

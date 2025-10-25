@@ -123,6 +123,11 @@ public class PaymentService implements PaymentPort {
                     transactionId);
             String accountId = paymentMethod.payu != null ? paymentMethod.payu.accountId() : null;
             String merchantId = paymentMethod.payu != null ? paymentMethod.payu.merchantId() : null;
+            final String uuidReferencePayment = paymentMethod.id;
+
+            TransactionEntity transactionEntity = paymentApplicableModel.transactionEntity();
+            transactionEntity.setReferencePayment(uuidReferencePayment);
+            transactionPort.save(transactionEntity, transactionId);
 
             return CreatePaymentRedirectDto.builder()
                     .redirect(paymentMethod.redirect)

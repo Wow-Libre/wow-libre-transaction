@@ -5,6 +5,7 @@ import lombok.*;
 
 @Builder
 public class PaymentGatewayModel {
+    public final String id;
     public final String payment;
     public final PaymentType type;
     public final String redirect;
