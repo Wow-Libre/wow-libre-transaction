@@ -14,8 +14,8 @@ public class PayUService implements PayuPort {
     }
 
     @Override
-    public PayUOrderDetailResponse getOrderDetailByReference(String host, String referenceCode, String apiLogin,
+    public PayUOrderDetailResponse getOrderDetailByReference(String referenceCode, String apiLogin,
                                                              String apiKey) {
-        return payUClient.getOrderDetailByReference(host, referenceCode, apiLogin, apiKey);
+        return payUClient.getOrderDetailByReference(referenceCode, apiLogin, apiKey);
     }
 }

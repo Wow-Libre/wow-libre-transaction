@@ -28,17 +28,16 @@ public class WowLibreClient {
         this.configurations = configurations;
     }
 
-    public GenericResponse<Void> sendPurchases(String jwt, Long serverId, Long userId, Long accountId, Double gold,
+    public GenericResponse<Void> sendPurchases(Long serverId, Long userId, Long accountId, Double gold,
                                                List<ItemQuantityModel> items, String reference,
                                                String transactionId) {
 
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
-        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         HttpEntity<CreateTransactionItemsDto> entity = new HttpEntity<>(new CreateTransactionItemsDto(serverId,
-                userId, accountId, reference, items, gold), headers);
+                userId, accountId, reference, items, gold, ""), headers);
 
         String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/purchase",
                         configurations.getPathLoginWowLibre()))

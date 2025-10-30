@@ -4,6 +4,7 @@ import com.wow.libre.domain.port.out.subscription.*;
 import com.wow.libre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 @Repository
@@ -27,5 +28,10 @@ public class JpaSubscriptionAdapter implements SaveSubscription, ObtainSubscript
     @Override
     public Optional<SubscriptionEntity> findByReferenceNumber(String reference) {
         return subscriptionRepository.findByReferenceNumber(reference);
+    }
+
+    @Override
+    public List<SubscriptionEntity> findByExpirateSubscription() {
+        return subscriptionRepository.findExpiredActiveSubscriptions(LocalDateTime.now());
     }
 }

@@ -6,7 +6,7 @@ import java.util.*;
 
 public interface WowLibrePort {
 
-    void sendPurchases(String jwt, Long serverId, Long userId, Long accountId, Double gold,
+    void sendPurchases(Long serverId, Long userId, Long accountId, Double gold,
                        List<ItemQuantityModel> items,
                        String reference,
                        String transactionId);

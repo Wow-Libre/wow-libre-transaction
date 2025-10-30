@@ -67,7 +67,7 @@ server:
 application:
   urls:
     wow-libre: ${HOST_BASE_CORE}
-    payu: ${PAYU_API_URL:https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi}
+    payu: ${PAYU_API_URL:https://api.payulatam.com/reports-api/4.0/service.cgi}
   security:
     jwt:
       secret-key: ${CORE_JWT_SECRET_KEY}

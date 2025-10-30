@@ -3,6 +3,8 @@ package com.wow.libre.domain.port.in.subscription;
 import com.wow.libre.domain.dto.*;
 import com.wow.libre.infrastructure.entities.*;
 
+import java.util.*;
+
 public interface SubscriptionPort {
 
     PillWidgetHomeDto getPillHome(Long userId, String language, String transactionId);
@@ -15,5 +17,9 @@ public interface SubscriptionPort {
 
     void claimBenefits(Long serverId, Long userId, Long accountId, Long characterId, String language, Long benefitId,
                        String transactionId);
+
+    List<SubscriptionEntity> findByExpirateSubscription();
+
+    void save(SubscriptionEntity subscription);
 
 }
