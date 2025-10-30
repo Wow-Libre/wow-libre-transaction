@@ -1,6 +1,7 @@
 package com.wow.libre.infrastructure.client;
 
 import com.wow.libre.domain.dto.payu.*;
+import com.wow.libre.infrastructure.conf.*;
 import org.slf4j.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
@@ -11,12 +12,14 @@ public class PayUClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(PayUClient.class);
 
     private final RestTemplate restTemplate;
+    private final Configurations configurations;
 
-    public PayUClient(RestTemplate restTemplate) {
+    public PayUClient(RestTemplate restTemplate, Configurations configurations) {
         this.restTemplate = restTemplate;
+        this.configurations = configurations;
     }
 
-    public PayUOrderDetailResponse getOrderDetailByReference(String host, String referenceCode, String apiLogin,
+    public PayUOrderDetailResponse getOrderDetailByReference(String referenceCode, String apiLogin,
                                                              String apiKey) {
         try {
             LOGGER.info("Getting order detail for reference code: {}", referenceCode);
@@ -40,7 +43,7 @@ public class PayUClient {
             HttpEntity<PayUOrderDetailRequest> entity = new HttpEntity<>(request, headers);
 
             PayUOrderDetailResponse response = restTemplate.postForObject(
-                    "https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi",
+                    configurations.getPathPayU(),
                     entity,
                     PayUOrderDetailResponse.class);
 

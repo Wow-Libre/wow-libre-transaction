@@ -10,7 +10,7 @@
       "reactivable": true,
       "btn_txt": "Cambiar Ahora",
       "type": "CHANGE_FACTION",
-      "server_id": 7
+      "server_id": 3
     },
     {
       "id": 602,
@@ -22,7 +22,7 @@
       "reactivable": true,
       "btn_txt": "Cambiar Ahora",
       "type": "CHANGE_RACE",
-      "server_id": 7
+      "server_id": 3
     },
     {
       "id": 603,

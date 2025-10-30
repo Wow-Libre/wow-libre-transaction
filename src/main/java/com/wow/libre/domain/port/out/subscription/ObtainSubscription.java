@@ -8,4 +8,6 @@ public interface ObtainSubscription {
     Optional<SubscriptionEntity> findByUserIdAndStatus(Long userId, String status);
 
     Optional<SubscriptionEntity> findByReferenceNumber(String reference);
+
+    List<SubscriptionEntity> findByExpirateSubscription();
 }

@@ -149,8 +149,8 @@ public class PaymentPayUMethod extends PaymentMethod {
                 .findByPayUCredentials(paymentGateway.getId(), transactionId)
                 .orElseThrow(() -> new InternalException("Stripe Credentials Not Found", transactionId));
 
-        PayUOrderDetailResponse response = payuPort.getOrderDetailByReference(payUCredentials.getHost(),
-                referenceCode, payUCredentials.getApiLogin(),
+        PayUOrderDetailResponse response = payuPort.getOrderDetailByReference(referenceCode,
+                payUCredentials.getApiLogin(),
                 payUCredentials.getApiKey());
 
         String state = response.getResult().getPayload().stream()

@@ -8,7 +8,8 @@ import java.util.*;
 @AllArgsConstructor
 public enum SubscriptionStatus {
     ACTIVE("ACTIVE", 100),
-    PENDING("PENDING", 50);
+    PENDING("PENDING", 50),
+    INACTIVE("INACTIVE", 1);
 
     private final String type;
     private final int status;
