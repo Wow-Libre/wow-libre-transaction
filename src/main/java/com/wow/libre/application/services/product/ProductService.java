@@ -214,6 +214,7 @@ public class ProductService implements ProductPort {
         if (product.isEmpty()) {
             throw new InternalException("Product Not Found", transactionId);
         }
+
         ProductEntity productEntity = product.get();
         productEntity.setName(productEntity.getName() + "_deleted_" + System.currentTimeMillis());
         productEntity.setStatus(false);
