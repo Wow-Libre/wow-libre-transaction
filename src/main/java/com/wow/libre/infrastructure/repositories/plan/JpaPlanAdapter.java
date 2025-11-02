@@ -15,7 +15,17 @@ public class JpaPlanAdapter implements ObtainPlan {
     }
 
     @Override
-    public Optional<PlanEntity> findByStatusIsTrue(String transactionId) {
+    public List<PlanEntity> findByStatusIsTrue(String transactionId) {
         return planRepository.findByStatusIsTrue();
+    }
+    
+    @Override
+    public List<PlanEntity> findByStatusIsTrueAndLanguage(String language, String transactionId) {
+        return planRepository.findByStatusIsTrueAndLanguage(language);
+    }
+    
+    @Override
+    public Optional<PlanEntity> findById(Long planId, String transactionId) {
+        return planRepository.findById(planId);
     }
 }

@@ -10,6 +10,7 @@ import com.wow.libre.domain.port.in.payment_gateway.*;
 import com.wow.libre.domain.port.in.subscription.*;
 import com.wow.libre.domain.port.in.transaction.*;
 import com.wow.libre.domain.port.in.wallet.*;
+import com.wow.libre.domain.port.out.plan.*;
 import com.wow.libre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
 
@@ -24,14 +25,16 @@ public class PaymentService implements PaymentPort {
     private final SubscriptionPort subscriptionPort;
     private final WalletPort walletPort;
     private final PaymentGatewayPort paymentGatewayPort;
+    private final ObtainPlan obtainPlan;
 
     public PaymentService(TransactionPort transactionPort,
                           SubscriptionPort subscriptionPort, WalletPort walletPort,
-                          PaymentGatewayPort paymentGatewayPort) {
+                          PaymentGatewayPort paymentGatewayPort, ObtainPlan obtainPlan) {
         this.transactionPort = transactionPort;
         this.subscriptionPort = subscriptionPort;
         this.walletPort = walletPort;
         this.paymentGatewayPort = paymentGatewayPort;
+        this.obtainPlan = obtainPlan;
     }
 
 
@@ -56,8 +59,13 @@ public class PaymentService implements PaymentPort {
             case APPROVED:
                 transactionUpdate.setStatus(TransactionStatus.PAID.getType());
                 if (isSubscription) {
+                    List<PlanEntity> activePlans = obtainPlan.findByStatusIsTrue(transactionId);
+                    if (activePlans.isEmpty()) {
+                        throw new InternalException("There is no active plan", transactionId);
+                    }
+                    Long planId = activePlans.get(0).getId();
                     SubscriptionEntity subscription =
-                            subscriptionPort.createSubscription(transactionUpdate.getUserId(), transactionId);
+                            subscriptionPort.createSubscription(transactionUpdate.getUserId(), planId, transactionId);
                     transactionUpdate.setSubscriptionId(subscription);
                     transactionUpdate.setSend(true);
                 }

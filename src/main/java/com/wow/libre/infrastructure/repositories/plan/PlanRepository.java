@@ -7,5 +7,7 @@ import java.util.*;
 
 public interface PlanRepository extends CrudRepository<PlanEntity, Long> {
 
-    Optional<PlanEntity> findByStatusIsTrue();
+    List<PlanEntity> findByStatusIsTrue();
+    
+    List<PlanEntity> findByStatusIsTrueAndLanguage(String language);
 }

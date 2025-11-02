@@ -6,6 +6,7 @@ import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.packages.*;
 import com.wow.libre.domain.port.in.subscription.*;
 import com.wow.libre.domain.port.in.wowlibre.*;
+import com.wow.libre.domain.port.out.plan.*;
 import com.wow.libre.domain.port.out.transaction.*;
 import com.wow.libre.infrastructure.entities.*;
 import jakarta.transaction.*;
@@ -24,15 +25,17 @@ public class TransactionSchedule {
     private final WowLibrePort wowLibrePort;
     private final PackagesPort packagesPort;
     private final SubscriptionPort subscriptionPort;
+    private final ObtainPlan obtainPlan;
 
     public TransactionSchedule(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
                                WowLibrePort wowLibrePort,
-                               PackagesPort packagesPort, SubscriptionPort subscriptionPort) {
+                               PackagesPort packagesPort, SubscriptionPort subscriptionPort, ObtainPlan obtainPlan) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
         this.wowLibrePort = wowLibrePort;
         this.packagesPort = packagesPort;
         this.subscriptionPort = subscriptionPort;
+        this.obtainPlan = obtainPlan;
     }
 
     @Transactional
@@ -50,7 +53,13 @@ public class TransactionSchedule {
                             transactionId);
 
                     if (!activeSubscription) {
-                        subscriptionPort.createSubscription(transaction.getUserId(), transactionId);
+                        List<PlanEntity> activePlans = obtainPlan.findByStatusIsTrue(transactionId);
+                        if (activePlans.isEmpty()) {
+                            LOGGER.error("There is no active plan. TransactionId: {}", transactionId);
+                            throw new InternalException("There is no active plan", transactionId);
+                        }
+                        Long planId = activePlans.get(0).getId();
+                        subscriptionPort.createSubscription(transaction.getUserId(), planId, transactionId);
                         transaction.setStatus(TransactionStatus.DELIVERED.getType());
                         transaction.setSend(true);
                     }
