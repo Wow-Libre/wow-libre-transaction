@@ -1,3 +1,4 @@
+CREATE SCHEMA IF NOT EXISTS transactions;
 
 CREATE TABLE transactions.plan
 (
