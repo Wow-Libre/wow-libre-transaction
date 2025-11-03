@@ -8,7 +8,7 @@ import org.springframework.stereotype.*;
 import java.util.*;
 
 @Repository
-public class JpaPackagesAdapter implements ObtainPackages {
+public class JpaPackagesAdapter implements ObtainPackages, SavePackages {
     private final PackagesRepository packagesRepository;
 
     public JpaPackagesAdapter(PackagesRepository packagesRepository) {
@@ -18,6 +18,11 @@ public class JpaPackagesAdapter implements ObtainPackages {
     @Override
     public List<PackagesEntity> findByProductId(ProductEntity product, String transactionId) {
         return packagesRepository.findByProductId(product);
+    }
+
+    @Override
+    public void save(PackagesEntity packageEntity, String transactionId) {
+        packagesRepository.save(packageEntity);
     }
 
 }
