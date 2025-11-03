@@ -1,182 +1,185 @@
 package com.wow.libre.application.services.payment;
 
-import com.wow.libre.domain.*;
-import com.wow.libre.domain.dto.*;
-import com.wow.libre.domain.enums.*;
-import com.wow.libre.domain.exception.*;
-import com.wow.libre.domain.model.*;
-import com.wow.libre.domain.port.in.payment.*;
-import com.wow.libre.domain.port.in.payment_gateway.*;
-import com.wow.libre.domain.port.in.subscription.*;
-import com.wow.libre.domain.port.in.transaction.*;
-import com.wow.libre.domain.port.in.wallet.*;
-import com.wow.libre.domain.port.out.plan.*;
-import com.wow.libre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import static com.wow.libre.domain.enums.PaymentType.NOT_MAPPED;
 
-import java.math.*;
-import java.util.*;
-
-import static com.wow.libre.domain.enums.PaymentType.*;
+import com.wow.libre.domain.CreatePaymentRedirectDto;
+import com.wow.libre.domain.dto.CreatePaymentDto;
+import com.wow.libre.domain.dto.PaymentTransaction;
+import com.wow.libre.domain.enums.PaymentStatus;
+import com.wow.libre.domain.enums.PaymentType;
+import com.wow.libre.domain.enums.TransactionStatus;
+import com.wow.libre.domain.exception.InternalException;
+import com.wow.libre.domain.model.PayUCredentialsModel;
+import com.wow.libre.domain.model.PaymentApplicableModel;
+import com.wow.libre.domain.model.PaymentGatewayModel;
+import com.wow.libre.domain.model.TransactionModel;
+import com.wow.libre.domain.port.in.payment.PaymentPort;
+import com.wow.libre.domain.port.in.payment_gateway.PaymentGatewayPort;
+import com.wow.libre.domain.port.in.subscription.SubscriptionPort;
+import com.wow.libre.domain.port.in.transaction.TransactionPort;
+import com.wow.libre.domain.port.in.wallet.WalletPort;
+import com.wow.libre.domain.port.out.plan.ObtainPlan;
+import com.wow.libre.infrastructure.entities.ProductEntity;
+import com.wow.libre.infrastructure.entities.SubscriptionEntity;
+import com.wow.libre.infrastructure.entities.TransactionEntity;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService implements PaymentPort {
-    private final TransactionPort transactionPort;
-    private final SubscriptionPort subscriptionPort;
-    private final WalletPort walletPort;
-    private final PaymentGatewayPort paymentGatewayPort;
-    private final ObtainPlan obtainPlan;
+  private final TransactionPort transactionPort;
+  private final SubscriptionPort subscriptionPort;
+  private final WalletPort walletPort;
+  private final PaymentGatewayPort paymentGatewayPort;
 
-    public PaymentService(TransactionPort transactionPort,
-                          SubscriptionPort subscriptionPort, WalletPort walletPort,
-                          PaymentGatewayPort paymentGatewayPort, ObtainPlan obtainPlan) {
-        this.transactionPort = transactionPort;
-        this.subscriptionPort = subscriptionPort;
-        this.walletPort = walletPort;
-        this.paymentGatewayPort = paymentGatewayPort;
-        this.obtainPlan = obtainPlan;
+  public PaymentService(TransactionPort transactionPort,
+                        SubscriptionPort subscriptionPort, WalletPort walletPort,
+                        PaymentGatewayPort paymentGatewayPort, ObtainPlan obtainPlan) {
+    this.transactionPort = transactionPort;
+    this.subscriptionPort = subscriptionPort;
+    this.walletPort = walletPort;
+    this.paymentGatewayPort = paymentGatewayPort;
+  }
+
+
+  @Override
+  public void processPayment(PaymentTransaction paymentTransaction, PaymentType paymentType, String transactionId) {
+
+    PaymentStatus paymentStatus = paymentGatewayPort.paymentStatus(paymentTransaction, paymentType, transactionId);
+
+    Optional<TransactionEntity> transaction =
+        transactionPort.findByReferenceNumber(paymentTransaction.getReferenceSale(), transactionId);
+
+    if (transaction.isEmpty()) {
+      throw new InternalException("transaction Not Found", transactionId);
     }
 
+    TransactionEntity transactionUpdate = transaction.get();
 
-    @Override
-    public void processPayment(PaymentTransaction paymentTransaction, PaymentType paymentType, String transactionId) {
+    final boolean isSubscription = transactionUpdate.isSubscription();
+    final Long userId = transactionUpdate.getUserId();
 
-        PaymentStatus paymentStatus = paymentGatewayPort.paymentStatus(paymentTransaction, paymentType, transactionId);
+    switch (paymentStatus) {
+      case APPROVED:
+        transactionUpdate.setStatus(TransactionStatus.PAID.getType());
 
-        Optional<TransactionEntity> transaction =
-                transactionPort.findByReferenceNumber(paymentTransaction.getReferenceSale(), transactionId);
-
-        if (transaction.isEmpty()) {
-            throw new InternalException("transaction Not Found", transactionId);
+        if (isSubscription) {
+          SubscriptionEntity subscription =
+              subscriptionPort.createSubscription(transactionUpdate.getUserId(), Long.valueOf(transactionUpdate.getReferenceNumber()),
+                  transactionId);
+          transactionUpdate.setSubscriptionId(subscription);
+          transactionUpdate.setSend(true);
         }
 
-        TransactionEntity transactionUpdate = transaction.get();
+        ProductEntity product = transactionUpdate.getProductId();
 
-        final boolean isSubscription = transactionUpdate.isSubscription();
-        final Long userId = transactionUpdate.getUserId();
-
-        switch (paymentStatus) {
-            case APPROVED:
-                transactionUpdate.setStatus(TransactionStatus.PAID.getType());
-                if (isSubscription) {
-                    List<PlanEntity> activePlans = obtainPlan.findByStatusIsTrue(transactionId);
-                    if (activePlans.isEmpty()) {
-                        throw new InternalException("There is no active plan", transactionId);
-                    }
-                    Long planId = activePlans.get(0).getId();
-                    SubscriptionEntity subscription =
-                            subscriptionPort.createSubscription(transactionUpdate.getUserId(), planId, transactionId);
-                    transactionUpdate.setSubscriptionId(subscription);
-                    transactionUpdate.setSend(true);
-                }
-
-                ProductEntity product = transactionUpdate.getProductId();
-
-                if (product != null && product.getCreditPointsValue() != null) {
-                    long pointsRecharge = product.getCreditPointsValue();
-                    if (pointsRecharge > 0) {
-                        Long currentPoints = walletPort.getPoints(userId, transactionId);
-                        Long updatedPoints = (currentPoints != null ? currentPoints : 0) + pointsRecharge;
-                        walletPort.addPoints(userId, updatedPoints, transactionId);
-                        transactionUpdate.setSend(true);
-                    }
-                }
-
-                transactionPort.save(transactionUpdate, transactionId);
-                break;
-            case REJECTED:
-                transactionUpdate.setStatus(TransactionStatus.REJECTED.getType());
-                transactionUpdate.setSend(true);
-                transactionUpdate.setPaymentMethod(paymentTransaction.getPaymentMethodName());
-                transactionPort.save(transactionUpdate, transactionId);
-                break;
-            default:
-                transactionUpdate.setStatus(TransactionStatus.ERROR.getType());
-                transactionUpdate.setSend(true);
-                transactionUpdate.setPaymentMethod(paymentTransaction.getPaymentMethodName());
-                transactionPort.save(transactionUpdate, transactionId);
-                break;
+        if (product != null && product.getCreditPointsValue() != null) {
+          long pointsRecharge = product.getCreditPointsValue();
+          if (pointsRecharge > 0) {
+            Long currentPoints = walletPort.getPoints(userId, transactionId);
+            Long updatedPoints = (currentPoints != null ? currentPoints : 0) + pointsRecharge;
+            walletPort.addPoints(userId, updatedPoints, transactionId);
+            transactionUpdate.setSend(true);
+          }
         }
+
+        transactionPort.save(transactionUpdate, transactionId);
+        break;
+      case REJECTED:
+        transactionUpdate.setStatus(TransactionStatus.REJECTED.getType());
+        transactionUpdate.setSend(true);
+        transactionUpdate.setPaymentMethod(paymentTransaction.getPaymentMethodName());
+        transactionPort.save(transactionUpdate, transactionId);
+        break;
+      default:
+        transactionUpdate.setStatus(TransactionStatus.ERROR.getType());
+        transactionUpdate.setSend(true);
+        transactionUpdate.setPaymentMethod(paymentTransaction.getPaymentMethodName());
+        transactionPort.save(transactionUpdate, transactionId);
+        break;
+    }
+  }
+
+
+  @Override
+  public CreatePaymentRedirectDto createPayment(Long userId, String email, CreatePaymentDto createPaymentDto,
+                                                String transactionId) {
+    PaymentType paymentType = PaymentType.getType(createPaymentDto.getPaymentType());
+
+    if (paymentType.equals(NOT_MAPPED)) {
+      throw new InternalException("Invalid payment type", transactionId);
     }
 
+    PaymentApplicableModel paymentApplicableModel =
+        transactionPort.isRealPaymentApplicable(TransactionModel.builder()
+            .isSubscription(createPaymentDto.getIsSubscription())
+            .accountId(createPaymentDto.getAccountId())
+            .paymentType(paymentType)
+            .realmId(createPaymentDto.getRealmId())
+            .productReference(createPaymentDto.getProductReference())
+            .userId(userId).build(), transactionId);
 
-    @Override
-    public CreatePaymentRedirectDto createPayment(Long userId, String email, CreatePaymentDto createPaymentDto,
-                                                  String transactionId) {
-        PaymentType paymentType = PaymentType.getType(createPaymentDto.getPaymentType());
+    if (paymentApplicableModel.isPayment()) {
+      final String referenceCode = paymentApplicableModel.orderId();
+      final String taxValue = paymentApplicableModel.tax();
+      final Double amount = paymentApplicableModel.amount();
+      BigDecimal amountBD = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
+      final String currency = paymentApplicableModel.currency();
+      final String returnTax = paymentApplicableModel.returnTax();
 
-        if (paymentType.equals(NOT_MAPPED)) {
-            throw new InternalException("Invalid payment type", transactionId);
-        }
+      PaymentGatewayModel paymentMethod = paymentGatewayPort.generateUrlPayment(paymentType, currency,
+          amountBD, 1, paymentApplicableModel.productName(), referenceCode,
+          transactionId);
+      String accountId = paymentMethod.payu != null ? paymentMethod.payu.accountId() : null;
+      String merchantId = paymentMethod.payu != null ? paymentMethod.payu.merchantId() : null;
+      final String uuidReferencePayment = paymentMethod.id;
 
-        PaymentApplicableModel paymentApplicableModel =
-                transactionPort.isRealPaymentApplicable(TransactionModel.builder()
-                        .isSubscription(createPaymentDto.getIsSubscription())
-                        .accountId(createPaymentDto.getAccountId())
-                        .paymentType(paymentType)
-                        .realmId(createPaymentDto.getRealmId())
-                        .productReference(createPaymentDto.getProductReference())
-                        .userId(userId).build(), transactionId);
+      TransactionEntity transactionEntity = paymentApplicableModel.transactionEntity();
+      transactionEntity.setReferencePayment(uuidReferencePayment);
+      transactionPort.save(transactionEntity, transactionId);
 
-        if (paymentApplicableModel.isPayment()) {
-            final String referenceCode = paymentApplicableModel.orderId();
-            final String taxValue = paymentApplicableModel.tax();
-            final Double amount = paymentApplicableModel.amount();
-            BigDecimal amountBD = BigDecimal.valueOf(amount).setScale(2, RoundingMode.HALF_UP);
-            final String currency = paymentApplicableModel.currency();
-            final String returnTax = paymentApplicableModel.returnTax();
+      return CreatePaymentRedirectDto.builder()
+          .redirect(paymentMethod.redirect)
+          .isPayment(true)
+          .confirmationUrl(paymentMethod.webhookUrl)
+          .responseUrl(paymentMethod.successUrl)
+          .buyerEmail(email)
+          .currency(currency)
+          .taxReturnBase(returnTax)
+          .tax(taxValue)
+          .amount(amountBD)
+          .referenceCode(referenceCode)
+          .description(paymentApplicableModel.description())
+          .payu(new PayUCredentialsModel(accountId, merchantId, paymentMethod.signature, "0"))
+          .build();
 
-            PaymentGatewayModel paymentMethod = paymentGatewayPort.generateUrlPayment(paymentType, currency,
-                    amountBD, 1, paymentApplicableModel.productName(), referenceCode,
-                    transactionId);
-            String accountId = paymentMethod.payu != null ? paymentMethod.payu.accountId() : null;
-            String merchantId = paymentMethod.payu != null ? paymentMethod.payu.merchantId() : null;
-            final String uuidReferencePayment = paymentMethod.id;
-
-            TransactionEntity transactionEntity = paymentApplicableModel.transactionEntity();
-            transactionEntity.setReferencePayment(uuidReferencePayment);
-            transactionPort.save(transactionEntity, transactionId);
-
-            return CreatePaymentRedirectDto.builder()
-                    .redirect(paymentMethod.redirect)
-                    .isPayment(true)
-                    .confirmationUrl(paymentMethod.webhookUrl)
-                    .responseUrl(paymentMethod.successUrl)
-                    .buyerEmail(email)
-                    .currency(currency)
-                    .taxReturnBase(returnTax)
-                    .tax(taxValue)
-                    .amount(amountBD)
-                    .referenceCode(referenceCode)
-                    .description(paymentApplicableModel.description())
-                    .payu(new PayUCredentialsModel(accountId, merchantId, paymentMethod.signature, "0"))
-                    .build();
-
-        }
-
-        Optional<TransactionEntity> transaction =
-                transactionPort.findByReferenceNumber(paymentApplicableModel.orderId(), transactionId);
-
-        if (transaction.isEmpty() || transaction.get().isSubscription()) {
-            throw new InternalException("Invalid Transaction", transactionId);
-        }
-
-        TransactionEntity transactionEntity = transaction.get();
-
-        long points = walletPort.getPoints(userId, transactionId);
-
-        if (transactionEntity.getPrice() > points) {
-            transactionEntity.setStatus(TransactionStatus.INSUFFICIENT_MONEY.getType());
-            transactionPort.save(transactionEntity, transactionId);
-            throw new InternalException("SALDO INSUFICIENTE", transactionId);
-        }
-
-        Long pointsToUse = (long) (points - transactionEntity.getPrice());
-        walletPort.addPoints(userId, pointsToUse, transactionId);
-        transactionEntity.setStatus(TransactionStatus.PAID.getType());
-        transactionPort.save(transactionEntity, transactionId);
-
-        return CreatePaymentRedirectDto.builder().isPayment(false).redirect("/profile/purchases").build();
     }
+
+    Optional<TransactionEntity> transaction =
+        transactionPort.findByReferenceNumber(paymentApplicableModel.orderId(), transactionId);
+
+    if (transaction.isEmpty() || transaction.get().isSubscription()) {
+      throw new InternalException("Invalid Transaction", transactionId);
+    }
+
+    TransactionEntity transactionEntity = transaction.get();
+
+    long points = walletPort.getPoints(userId, transactionId);
+
+    if (transactionEntity.getPrice() > points) {
+      transactionEntity.setStatus(TransactionStatus.INSUFFICIENT_MONEY.getType());
+      transactionPort.save(transactionEntity, transactionId);
+      throw new InternalException("SALDO INSUFICIENTE", transactionId);
+    }
+
+    Long pointsToUse = (long) (points - transactionEntity.getPrice());
+    walletPort.addPoints(userId, pointsToUse, transactionId);
+    transactionEntity.setStatus(TransactionStatus.PAID.getType());
+    transactionPort.save(transactionEntity, transactionId);
+
+    return CreatePaymentRedirectDto.builder().isPayment(false).redirect("/profile/purchases").build();
+  }
 
 }
