@@ -1,7 +1,6 @@
 package com.wow.libre.infrastructure.schedule;
 
 import com.wow.libre.domain.enums.*;
-import com.wow.libre.domain.exception.*;
 import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.packages.*;
 import com.wow.libre.domain.port.in.subscription.*;
@@ -76,18 +75,15 @@ public class TransactionSchedule {
                             Long currentPoints = walletPort.getPoints(transaction.getUserId(), transactionId);
                             Long updatedPoints = (currentPoints != null ? currentPoints : 0) + pointsRecharge;
                             walletPort.addPoints(transaction.getUserId(), updatedPoints, transactionId);
-                            transaction.setSend(true);
-                            transaction.setStatus(TransactionStatus.DELIVERED.getType());
-                            return;
                         }
                     }
 
-                    if (amount <= 0 && items.isEmpty()) {
-                        throw new InternalException("No send transaction invalid", "");
+                    if (amount > 0 || !items.isEmpty()) {
+                        wowLibrePort.sendPurchases(transaction.getRealmId(), transaction.getUserId(),
+                                transaction.getAccountId(), amount, items, transaction.getReferenceNumber(),
+                                transactionId);
                     }
-
-                    wowLibrePort.sendPurchases(transaction.getRealmId(), transaction.getUserId(),
-                            transaction.getAccountId(), amount, items, transaction.getReferenceNumber(), transactionId);
+                    
                     transaction.setSend(true);
                     transaction.setStatus(TransactionStatus.DELIVERED.getType());
                 }
