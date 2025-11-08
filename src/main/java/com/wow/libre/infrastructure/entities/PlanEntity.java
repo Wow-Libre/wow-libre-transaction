@@ -7,7 +7,7 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "plan")
+@Table(name = "plan", schema = "transactions")
 public class PlanEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +15,9 @@ public class PlanEntity {
     private Long id;
     private String name;
     private Double price;
+    @Column(name = "price_title")
+    private String priceTitle;
+    private String description;
     private Integer discount;
     private boolean status;
     private String currency;
@@ -28,6 +31,9 @@ public class PlanEntity {
     private String tax;
     @Column(name = "return_tax")
     private String returnTax;
+    @Column(name = "features", columnDefinition = "JSON")
+    private String features;
+    private String language;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")

@@ -1,36 +1,70 @@
 package com.wow.libre.application.services.plan;
 
-import com.wow.libre.domain.dto.*;
-import com.wow.libre.domain.port.in.plan.*;
-import com.wow.libre.domain.port.out.plan.*;
-import org.springframework.stereotype.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wow.libre.domain.dto.PlanDetailDto;
+import com.wow.libre.domain.port.in.plan.PlanPort;
+import com.wow.libre.domain.port.out.plan.ObtainPlan;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PlanService implements PlanPort {
 
-    private final ObtainPlan obtainPlan;
+  private final ObtainPlan obtainPlan;
+  private final ObjectMapper objectMapper;
 
-    public PlanService(ObtainPlan obtainPlan) {
-        this.obtainPlan = obtainPlan;
+  public PlanService(ObtainPlan obtainPlan, ObjectMapper objectMapper) {
+    this.obtainPlan = obtainPlan;
+    this.objectMapper = objectMapper;
+  }
+
+  @Override
+  public List<PlanDetailDto> getPlan(String language, String transactionId) {
+    return obtainPlan.findByStatusIsTrueAndLanguage(language, transactionId)
+        .stream()
+        .map(plan -> {
+          double discountPercentage = plan.getDiscount() / 100.0; // Convierte el descuento entero a
+          // porcentaje
+          double discountedPrice = plan.getPrice() * (1 - discountPercentage); // Calcula el precio con
+          // descuento
+
+          List<String> features = parseFeatures(plan.getFeatures());
+
+          return new PlanDetailDto(
+              plan.getId(),
+              plan.getName(),
+              plan.getPrice(),
+              plan.getPriceTitle(),
+              plan.getDescription(),
+              discountedPrice,
+              plan.getDiscount(),
+              plan.isStatus(),
+              plan.getCurrency(),
+              plan.getFrequencyType(),
+              plan.getFrequencyValue(),
+              plan.getFreeTrialDays(),
+              plan.getTax(),
+              plan.getReturnTax(),
+              features,
+              plan.getLanguage()
+          );
+        })
+        .toList();
+
+  }
+
+  private List<String> parseFeatures(String featuresJson) {
+    if (featuresJson == null || featuresJson.trim().isEmpty()) {
+      return new ArrayList<>();
     }
 
-    @Override
-    public PlanDetailDto getPlan(String transactionId) {
-        return obtainPlan.findByStatusIsTrue(transactionId)
-                .map(plan -> {
-                    double discountPercentage = plan.getDiscount() / 100.0; // Convierte el descuento entero a
-                    // porcentaje
-                    double discountedPrice = plan.getPrice() * (1 - discountPercentage); // Calcula el precio con
-                    // descuento
-                    return new PlanDetailDto(
-                            plan.getName(),
-                            plan.getPrice(),
-                            discountedPrice,
-                            plan.getDiscount(),
-                            plan.isStatus()
-                    );
-                })
-                .orElse(null);
-
+    try {
+      return objectMapper.readValue(featuresJson, new TypeReference<>() {
+      });
+    } catch (Exception e) {
+      return new ArrayList<>();
     }
+  }
 }

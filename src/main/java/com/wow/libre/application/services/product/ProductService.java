@@ -6,6 +6,7 @@ import com.wow.libre.domain.model.*;
 import com.wow.libre.domain.port.in.product.*;
 import com.wow.libre.domain.port.in.product_category.*;
 import com.wow.libre.domain.port.in.product_details.*;
+import com.wow.libre.domain.port.out.packages.*;
 import com.wow.libre.domain.port.out.product.*;
 import com.wow.libre.infrastructure.entities.*;
 import com.wow.libre.infrastructure.util.*;
@@ -22,15 +23,17 @@ public class ProductService implements ProductPort {
     private final ProductDetailsPort productDetailsPort;
     private final RandomString randomString;
     private final ProductCategoryPort productCategoryPort;
+    private final SavePackages savePackages;
 
     public ProductService(ObtainProducts products, SaveProducts saveProducts, ProductDetailsPort productDetailsPort,
                           @Qualifier("product-reference") RandomString randomString,
-                          ProductCategoryPort productCategoryPort) {
+                          ProductCategoryPort productCategoryPort, SavePackages savePackages) {
         this.products = products;
         this.saveProducts = saveProducts;
         this.productDetailsPort = productDetailsPort;
         this.randomString = randomString;
         this.productCategoryPort = productCategoryPort;
+        this.savePackages = savePackages;
     }
 
     @Override
@@ -177,6 +180,15 @@ public class ProductService implements ProductPort {
         productEntity.setLanguage(product.getLanguage());
         productEntity.setStatus(true);
         saveProducts.save(productEntity, transactionId);
+
+        if (product.getPackages() != null && !product.getPackages().isEmpty()) {
+            product.getPackages().forEach(packageCode -> {
+                PackagesEntity packageEntity = new PackagesEntity();
+                packageEntity.setCodeCore(packageCode);
+                packageEntity.setProductId(productEntity);
+                savePackages.save(packageEntity, transactionId);
+            });
+        }
     }
 
     @Override
@@ -214,6 +226,7 @@ public class ProductService implements ProductPort {
         if (product.isEmpty()) {
             throw new InternalException("Product Not Found", transactionId);
         }
+
         ProductEntity productEntity = product.get();
         productEntity.setName(productEntity.getName() + "_deleted_" + System.currentTimeMillis());
         productEntity.setStatus(false);

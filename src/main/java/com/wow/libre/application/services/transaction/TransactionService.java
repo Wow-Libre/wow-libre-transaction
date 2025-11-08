@@ -50,8 +50,9 @@ public class TransactionService implements TransactionPort {
         final String orderId = randomString.nextString();
 
         if (transaction.isSubscription()) {
+            String productReference = transaction.getProductReference();
 
-            Optional<PlanEntity> planDetailDto = obtainPlan.findByStatusIsTrue(transactionId);
+            Optional<PlanEntity> planDetailDto = obtainPlan.findById(Long.valueOf(productReference), transactionId);
 
             if (planDetailDto.isEmpty()) {
                 LOGGER.error("There is no active plan.  transactionId: {}", transaction);
@@ -189,8 +190,10 @@ public class TransactionService implements TransactionPort {
         // Mapear el PaymentStatus a TransactionStatus
         switch (paymentStatus) {
             case APPROVED:
-                foundTransaction.setStatus(TransactionStatus.PAID.getType());
-                LOGGER.info("✅ Pago aprobado para transacción: {}", foundTransaction.getReferenceNumber());
+                if (!foundTransaction.getStatus().equalsIgnoreCase(TransactionStatus.PAID.getType())) {
+                    foundTransaction.setStatus(TransactionStatus.PAID.getType());
+                    LOGGER.info("✅ Pago aprobado para transacción: {}", foundTransaction.getReferenceNumber());
+                }
                 break;
             case PENDING:
                 foundTransaction.setStatus(TransactionStatus.PENDING.getType());

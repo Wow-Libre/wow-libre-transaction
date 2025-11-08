@@ -66,7 +66,7 @@ public class SubscriptionService implements SubscriptionPort {
     }
 
     @Override
-    public SubscriptionEntity createSubscription(Long userId, String transactionId) {
+    public SubscriptionEntity createSubscription(Long userId, Long planId, String transactionId) {
 
         Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
                 SubscriptionStatus.ACTIVE.getType());
@@ -75,22 +75,20 @@ public class SubscriptionService implements SubscriptionPort {
             throw new InternalException("You already have an active subscription", transactionId);
         }
 
-        Optional<PlanEntity> planActive = obtainPlan.findByStatusIsTrue(transactionId);
+        Optional<PlanEntity> plan = obtainPlan.findById(planId, transactionId);
 
-        if (planActive.isEmpty()) {
-            LOGGER.error("There is no active plan and the transaction could not be completed UserId {} " +
-                            "TransactionId {}", userId,
-                    transactionId);
-            throw new InternalException("There is no active plan", transactionId);
+        if (plan.isEmpty()) {
+            LOGGER.error("Plan not found: planId {} UserId {} TransactionId {}", planId, userId, transactionId);
+            throw new InternalException("Plan not found", transactionId);
         }
 
-        PlanEntity plan = planActive.get();
+        PlanEntity planEntity = plan.get();
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextInvoiceDate = now.plusDays(30);
 
         SubscriptionEntity subscription = new SubscriptionEntity();
         subscription.setUserId(userId);
-        subscription.setPlanId(plan);
+        subscription.setPlanId(planEntity);
         subscription.setCreationDate(LocalDateTime.now());
         subscription.setNextInvoiceDate(nextInvoiceDate);
         subscription.setReferenceNumber(randomString.nextString());
