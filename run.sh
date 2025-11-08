@@ -38,37 +38,36 @@ command_exists() {
 # Verificar Java
 check_java() {
     if ! command_exists java; then
-        print_error "Java no está instalado. Por favor instala Java 17."
+        print_error "Java no está instalado. Por favor instala Java 21."
         exit 1
     fi
     
-    # Intentar configurar Java 17 si está disponible
+    # Intentar configurar Java 21 si está disponible
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        JAVA_17_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || echo "")
-        if [ -n "$JAVA_17_HOME" ] && [ "$JAVA_HOME" != "$JAVA_17_HOME" ]; then
-            export JAVA_HOME="$JAVA_17_HOME"
+        JAVA_21_HOME=$(/usr/libexec/java_home -v 21 2>/dev/null || echo "")
+        if [ -n "$JAVA_21_HOME" ] && [ "$JAVA_HOME" != "$JAVA_21_HOME" ]; then
+            export JAVA_HOME="$JAVA_21_HOME"
             export PATH="$JAVA_HOME/bin:$PATH"
-            print_info "Configurando Java 17 automáticamente..."
+            print_info "Configurando Java 21 automáticamente..."
         fi
     fi
     
     JAVA_VERSION=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}' | cut -d'.' -f1)
-    if [ "$JAVA_VERSION" -lt 17 ]; then
-        print_error "Java $JAVA_VERSION detectado. Este proyecto requiere Java 17."
-        print_info "Instala Java 17 o configúralo con: export JAVA_HOME=\$(/usr/libexec/java_home -v 17)"
+    if [ "$JAVA_VERSION" -lt 21 ]; then
+        print_error "Java $JAVA_VERSION detectado. Este proyecto requiere Java 21."
+        print_info "Instala Java 21 o configúralo con: export JAVA_HOME=\$(/usr/libexec/java_home -v 21)"
         exit 1
-    elif [ "$JAVA_VERSION" -gt 17 ]; then
-        print_warning "Java $JAVA_VERSION detectado. Este proyecto está configurado para Java 17."
-        print_warning "Puede haber problemas de compatibilidad con Lombok."
-        print_info "Para usar Java 17: export JAVA_HOME=\$(/usr/libexec/java_home -v 17)"
+    elif [ "$JAVA_VERSION" -gt 21 ]; then
+        print_warning "Java $JAVA_VERSION detectado. Este proyecto está configurado para Java 21."
+        print_info "Para usar Java 21: export JAVA_HOME=\$(/usr/libexec/java_home -v 21)"
         read -p "¿Deseas continuar de todas formas? (s/N): " -n 1 -r
         echo
         if [[ ! $REPLY =~ ^[Ss]$ ]]; then
-            print_info "Ejecución cancelada. Configura Java 17 y vuelve a intentar."
+            print_info "Ejecución cancelada. Configura Java 21 y vuelve a intentar."
             exit 1
         fi
     else
-        print_success "Java 17 detectado"
+        print_success "Java 21 detectado"
     fi
 }
 

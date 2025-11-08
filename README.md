@@ -15,13 +15,11 @@ Microservicio de transacciones para el ecosistema Wow Libre. Maneja pagos, suscr
 
 ## 🔧 Requisitos
 
-- **Java 17** (requerido - no usar Java 21+ por problemas de compatibilidad con Lombok)
+- **Java 21** (requerido)
 - Maven 3.6+
 - MySQL 8.0+
 - Docker (opcional, para ejecutar con contenedores)
 - **Lombok Plugin** (para IDEs: IntelliJ IDEA, Eclipse, VS Code)
-
-> ⚠️ **Nota importante:** Este proyecto está configurado para Java 17. Usar versiones más recientes (Java 21, 24, etc.) puede causar problemas de compilación con Lombok. Se recomienda usar Java 17.
 
 ## 🚀 Instalación
 
@@ -252,16 +250,16 @@ Si encuentras errores de compilación como `cannot find symbol: method getX()`, 
 1. **Verifica la versión de Java:**
 ```bash
 java -version
-# Debe mostrar Java 17. Si muestra Java 21+, cambia a Java 17
+# Debe mostrar Java 21
 ```
 
-2. **Configura Java 17 (macOS con Homebrew):**
+2. **Configura Java 21 (macOS con Homebrew):**
 ```bash
 # Ver versiones disponibles
 /usr/libexec/java_home -V
 
-# Configurar Java 17
-export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+# Configurar Java 21
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 ```
 
 3. **Limpiar y recompilar:**
