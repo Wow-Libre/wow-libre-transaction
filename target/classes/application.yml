@@ -23,22 +23,22 @@ spring:
       hibernate:
         format_sql: false
   datasource:
-    url: jdbc:mysql://localhost:3306/transactions
-    username: root
-    password: Wowlibre96@@
+    url: ${DB_TRANSACTION_HOST:jdbc:mysql://localhost:3306/transactions}
+    username: ${DB_TRANSACTION_USERNAME:root}
+    password: ${DB_TRANSACTION_PASSWORD:Wowlibre96@@}
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   servlet:
     context-path: /transaction
   address: 0.0.0.0
-  port: 8092
+  port: ${TRANSACTION_SERVER_PORT:8092}
 application:
   urls:
-    wow-libre: http://localhost:8091/core
-    payu: https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi
+    wow-libre: ${HOST_BASE_CORE:http://localhost:8091/core}
+    payu: ${PAYU_API_URL:https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi}
   security:
     jwt:
-      secret-key: 6E4D574873506B4A72434B6A614B39786F736B7855666B4D456A6E466F785572
+      secret-key: ${CORE_JWT_SECRET_KEY:6E4D574873506B4A72434B6A614B39786F736B7855666B4D456A6E466F785572}
       expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
