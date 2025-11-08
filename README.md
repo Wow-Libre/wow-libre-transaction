@@ -32,18 +32,20 @@ cd wow-libre-transaction
 
 ### 2. Configurar la base de datos
 
-Ejecuta el script de setup para crear la base de datos y las tablas:
+**Opción 1: Usando el script run.sh (Recomendado)**
 
 ```bash
-chmod +x setup.sh
-./setup.sh
+# Asegúrate de tener configurado tu archivo .env con las credenciales de BD
+./run.sh sql
 ```
 
-O manualmente:
+**Opción 2: Manualmente con MySQL**
 
 ```bash
 mysql -u root -p < src/main/resources/static/script.sql
 ```
+
+El script `run.sh sql` usa automáticamente las credenciales de tu archivo `.env`, por lo que es la forma más conveniente de ejecutar el SQL.
 
 ### 3. Configurar variables de entorno (Local)
 
@@ -115,6 +117,12 @@ El proyecto incluye un script `run.sh` que facilita la ejecución:
 
 # Verificar dependencias
 ./run.sh check
+
+# Ejecutar script SQL
+./run.sh sql
+
+# Ejecutar script SQL específico
+./run.sh sql ruta/al/script.sql
 
 # Ver ayuda
 ./run.sh help
@@ -202,6 +210,45 @@ El script de inicialización se encuentra en:
 ```
 src/main/resources/static/script.sql
 ```
+
+#### Ejecutar Script SQL
+
+Puedes ejecutar el script SQL usando el comando `sql` del script `run.sh`:
+
+```bash
+# Ejecutar el script SQL por defecto (src/main/resources/static/script.sql)
+./run.sh sql
+```
+
+El comando:
+- ✅ Verifica que el cliente MySQL esté instalado
+- ✅ Carga las variables de entorno desde `.env`
+- ✅ Usa las mismas credenciales de base de datos que la aplicación
+- ✅ Parsea automáticamente la URL JDBC de la configuración
+- ✅ Muestra información de conexión antes de ejecutar
+
+**Ejemplo de salida:**
+```
+ℹ️  Ejecutando script SQL: src/main/resources/static/script.sql
+ℹ️  Conectando a MySQL...
+ℹ️    Host: localhost
+ℹ️    Puerto: 3306
+ℹ️    Base de datos: transactions
+ℹ️    Usuario: root
+✅ Script SQL ejecutado correctamente
+```
+
+**Ejecutar un script SQL específico:**
+```bash
+./run.sh sql mi_script_personalizado.sql
+```
+
+**Nota:** El script usa las variables de entorno:
+- `DB_TRANSACTION_HOST` (default: `jdbc:mysql://localhost:3306/transactions`)
+- `DB_TRANSACTION_USERNAME` (default: `root`)
+- `DB_TRANSACTION_PASSWORD` (default: `Wowlibre96@@`)
+
+Si no tienes un archivo `.env`, el script usará los valores por defecto del perfil `local`.
 
 ## 🐳 Docker
 

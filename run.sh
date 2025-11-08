@@ -82,6 +82,90 @@ check_maven() {
     print_success "Maven wrapper encontrado"
 }
 
+# Verificar MySQL
+check_mysql() {
+    if ! command_exists mysql; then
+        print_error "MySQL client no está instalado."
+        print_info "Instala MySQL client:"
+        print_info "  macOS: brew install mysql-client"
+        print_info "  Ubuntu/Debian: sudo apt-get install mysql-client"
+        return 1
+    fi
+    print_success "MySQL client encontrado"
+    return 0
+}
+
+# Extraer información de conexión de la URL de la BD
+parse_db_url() {
+    local db_url="${DB_TRANSACTION_HOST:-jdbc:mysql://localhost:3306/transactions}"
+    
+    # Remover el prefijo jdbc:mysql:// si existe
+    db_url="${db_url#jdbc:mysql://}"
+    
+    # Extraer host, puerto y base de datos
+    if [[ $db_url == *"/"* ]]; then
+        local host_port="${db_url%%/*}"
+        local database="${db_url#*/}"
+        
+        if [[ $host_port == *":"* ]]; then
+            DB_HOST="${host_port%%:*}"
+            DB_PORT="${host_port#*:}"
+        else
+            DB_HOST="$host_port"
+            DB_PORT="3306"
+        fi
+        
+        DB_NAME="$database"
+    else
+        DB_HOST="localhost"
+        DB_PORT="3306"
+        DB_NAME="transactions"
+    fi
+    
+    DB_USER="${DB_TRANSACTION_USERNAME:-root}"
+    DB_PASS="${DB_TRANSACTION_PASSWORD:-Wowlibre96@@}"
+}
+
+# Ejecutar script SQL
+run_sql() {
+    local sql_file="${1:-src/main/resources/static/script.sql}"
+    
+    if [ ! -f "$sql_file" ]; then
+        print_error "Archivo SQL no encontrado: $sql_file"
+        return 1
+    fi
+    
+    print_info "Ejecutando script SQL: $sql_file"
+    
+    # Cargar variables de entorno
+    load_env
+    
+    # Parsear URL de la base de datos
+    parse_db_url
+    
+    print_info "Conectando a MySQL..."
+    print_info "  Host: $DB_HOST"
+    print_info "  Puerto: $DB_PORT"
+    print_info "  Base de datos: $DB_NAME"
+    print_info "  Usuario: $DB_USER"
+    
+    # Ejecutar el script SQL usando variable de entorno para la contraseña (más seguro)
+    export MYSQL_PWD="$DB_PASS"
+    mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" "$DB_NAME" < "$sql_file" 2>&1
+    unset MYSQL_PWD
+    
+    local exit_code=$?
+    
+    if [ $exit_code -eq 0 ]; then
+        print_success "Script SQL ejecutado correctamente"
+        return 0
+    else
+        print_error "Error al ejecutar el script SQL"
+        print_info "Verifica las credenciales de la base de datos en tu archivo .env"
+        return 1
+    fi
+}
+
 # Verificar archivo .env
 check_env() {
     if [ ! -f ".env" ]; then
@@ -332,6 +416,7 @@ show_help() {
     echo "  status       Muestra el estado de la aplicación"
     echo "  build        Solo compila la aplicación"
     echo "  run [perfil] Ejecuta el JAR compilado (opcional: perfil Spring)"
+    echo "  sql [archivo] Ejecuta el script SQL (default: src/main/resources/static/script.sql)"
     echo "  check        Verifica dependencias y configuración"
     echo "  help         Muestra esta ayuda"
     echo ""
@@ -343,6 +428,8 @@ show_help() {
     echo "  ./run.sh run              # Ejecuta JAR"
     echo "  ./run.sh run prod         # Ejecuta JAR con perfil prod"
     echo "  ./run.sh build            # Solo compilar"
+    echo "  ./run.sh sql              # Ejecuta script.sql por defecto"
+    echo "  ./run.sh sql mi_script.sql # Ejecuta un script SQL específico"
     echo "  ./run.sh check            # Verificar configuración"
     echo ""
 }
@@ -397,6 +484,11 @@ main() {
         run)
             check_java
             run_app "$2"
+            ;;
+        sql)
+            check_mysql
+            check_env
+            run_sql "$2"
             ;;
         check)
             check_all
