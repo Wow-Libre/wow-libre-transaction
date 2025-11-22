@@ -1,4 +1,5 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/TransactionApplication.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/application/services/benefit_premium/BenefitPremiumService.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/application/services/jwt/JwtPortService.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/application/services/packages/PackagesService.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/application/services/payment/PaymentService.java
@@ -20,7 +21,9 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/CreatePaymentRedirectDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/constant/Constants.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/constant/DateHelper.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/BenefitsPremiumDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/ClaimSubscriptionBenefitsDto.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/CreateBenefitPremiumDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/CreatePaymentDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/CreatePaymentMethodDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/CreateProductCategoryDto.java
@@ -42,6 +45,7 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/SubscriptionBenefitsDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/SubscriptionCreateDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/TransactionsDto.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/UpdateBenefitPremiumDto.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/client/CreatePaymentRequest.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/client/CreatePaymentResponse.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/client/CreateTransactionItemsDto.java
@@ -49,6 +53,8 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/client/SubscriptionBenefitsRequest.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/payu/PayUOrderDetailRequest.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/dto/payu/PayUOrderDetailResponse.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/enums/BenefitPremiumCommand.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/enums/BenefitPremiumType.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/enums/PaymentStatus.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/enums/PaymentType.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/enums/SubscriptionStatus.java
@@ -72,6 +78,7 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/model/UserModel.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/model/security/CustomUserDetails.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/model/security/JwtDto.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/in/benefit_premium/BenefitPremiumPort.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/in/jwt/JwtPort.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/in/packages/PackagesPort.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/in/payment/PaymentPort.java
@@ -85,6 +92,8 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/in/transaction/TransactionPort.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/in/wallet/WalletPort.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/in/wowlibre/WowLibrePort.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/out/benefit_premium/ObtainBenefitPremium.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/out/benefit_premium/SaveBenefitPremium.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/out/packages/ObtainPackages.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/out/packages/SavePackages.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/domain/port/out/payment_gateway/ObtainPaymentGateway.java
@@ -117,6 +126,7 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/conf/Configurations.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/conf/JwtProperties.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/conf/RestemplateConfiguration.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/controller/BenefitPremiumController.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/controller/PaymentController.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/controller/PaymentMethodController.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/controller/PlanController.java
@@ -125,6 +135,7 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/controller/SubscriptionController.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/controller/TransactionController.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/controller/WalletController.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/entities/BenefitPremiumEntity.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/entities/PackagesEntity.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/entities/PaymentGatewaysEntity.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/entities/PayuCredentialsEntity.java
@@ -144,6 +155,8 @@
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/filter/dto/RequestWrapper.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/filter/dto/ResponseWrapper.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/handler/ManagerExceptionHandler.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/repositories/benefit_premium/BenefitPremiumRepository.java
+/Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/repositories/benefit_premium/JpaBenefitPremiumAdapter.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/repositories/jsonLoader/JsonLoader.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/repositories/packages/JpaPackagesAdapter.java
 /Users/machitiva/Documents/wow-libre-transaction/src/main/java/com/wow/libre/infrastructure/repositories/packages/PackagesRepository.java

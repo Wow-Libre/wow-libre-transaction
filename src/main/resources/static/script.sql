@@ -194,3 +194,34 @@ INSERT INTO transactions.plan (name, price, price_title, description, discount, 
 ('Campeão',12,'$12/ ano','Aproveite uma experiência premium durante todo o ano com um único pagamento anual.',0,true,'USD','YEARLY',1,NULL,'0','0','["Tudo incluído no plano Viajante","Economia anual exclusiva"]','pt');
 
 
+
+CREATE TABLE `benefit_premium` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `img` VARCHAR(255) DEFAULT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT DEFAULT NULL,
+  `command` VARCHAR(255) DEFAULT NULL,
+  `send_item` TINYINT(1) NOT NULL DEFAULT 0,
+  `reactivable` TINYINT(1) NOT NULL DEFAULT 0,
+  `btn_text` VARCHAR(255) DEFAULT NULL,
+  `type` VARCHAR(100) DEFAULT NULL,
+  `realm_id` BIGINT DEFAULT NULL,
+  `language` VARCHAR(20) DEFAULT NULL,
+  `status` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `benefit_premium_item` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `benefit_premium_id` BIGINT NOT NULL,
+  `code` VARCHAR(255) NOT NULL,
+  `quantity` INT NOT NULL,
+
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_benefit_premium_item_benefit_premium`
+    FOREIGN KEY (`benefit_premium_id`)
+    REFERENCES `benefit_premium` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
