@@ -11,6 +11,7 @@ public class BenefitsPremiumDto {
   public final String name;
   public final String description;
   public final String command;
+  public final Double amount;
   public final boolean sendItem;
   public final boolean reactivable;
   public final String btnText;

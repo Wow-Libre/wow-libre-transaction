@@ -3,7 +3,6 @@ package com.wow.libre.application.services.benefit_premium;
 import com.wow.libre.domain.dto.BenefitPremiumItemDto;
 import com.wow.libre.domain.dto.BenefitsPremiumDto;
 import com.wow.libre.domain.dto.CreateBenefitPremiumDto;
-import com.wow.libre.domain.dto.UpdateBenefitPremiumDto;
 import com.wow.libre.domain.exception.InternalException;
 import com.wow.libre.domain.port.in.benefit_premium.BenefitPremiumPort;
 import com.wow.libre.domain.port.out.benefit_premium.ObtainBenefitPremium;
@@ -39,6 +38,7 @@ public class BenefitPremiumService implements BenefitPremiumPort {
     benefitPremiumEntity.setType(request.getType());
     benefitPremiumEntity.setRealmId(request.getRealmId());
     benefitPremiumEntity.setLanguage(request.getLanguage());
+    benefitPremiumEntity.setAmount(request.getAmount() != null ? request.getAmount() : 0);
     benefitPremiumEntity.setStatus(true);
 
     // Guardar items si existen
@@ -59,63 +59,28 @@ public class BenefitPremiumService implements BenefitPremiumPort {
 
   @Override
   public void deleteBenefitPremium(Long id, String transactionId) {
+
     Optional<BenefitPremiumEntity> benefitPremium = obtainBenefitPremium.findById(id);
 
     if (benefitPremium.isEmpty()) {
       throw new InternalException("Benefit Not found", transactionId);
     }
+
     BenefitPremiumEntity benefitPremiumEntity = benefitPremium.get();
     benefitPremiumEntity.setStatus(false);
     saveBenefitPremium.save(benefitPremiumEntity);
   }
 
-  @Override
-  public void updateBenefitPremium(UpdateBenefitPremiumDto request, String transactionId) {
-
-    Optional<BenefitPremiumEntity> benefitPremium = obtainBenefitPremium.findById(request.getId());
-
-    if (benefitPremium.isEmpty()) {
-      throw new InternalException("Benefit Not found", transactionId);
-    }
-
-    BenefitPremiumEntity benefitPremiumEntity = benefitPremium.get();
-    benefitPremiumEntity.setImg(request.getImg() != null ? request.getImg() : benefitPremiumEntity.getImg());
-    benefitPremiumEntity.setName(request.getName() != null ? request.getName() : benefitPremiumEntity.getName());
-    benefitPremiumEntity.setDescription(
-        request.getDescription() != null ? request.getDescription() : benefitPremiumEntity.getDescription());
-    benefitPremiumEntity.setCommand(request.getCommand() != null ? request.getCommand() : benefitPremiumEntity.getCommand());
-    benefitPremiumEntity.setSendItem(request.getSendItem() != null ? request.getSendItem() : benefitPremiumEntity.isSendItem());
-    benefitPremiumEntity.setReactivable(request.getReactivable() != null ? request.getReactivable() : benefitPremiumEntity.isReactivable());
-    benefitPremiumEntity.setBtnText(request.getBtnText() != null ? request.getBtnText() : benefitPremiumEntity.getBtnText());
-    benefitPremiumEntity.setType(request.getType() != null ? request.getType() : benefitPremiumEntity.getType());
-    benefitPremiumEntity.setRealmId(request.getRealmId() != null ? request.getRealmId() : benefitPremiumEntity.getRealmId());
-    benefitPremiumEntity.setLanguage(request.getLanguage() != null ? request.getLanguage() : benefitPremiumEntity.getLanguage());
-
-    // Actualizar items si se proporcionan
-    if (request.getItems() != null) {
-      // Eliminar items existentes
-      if (benefitPremiumEntity.getItems() != null) {
-        benefitPremiumEntity.getItems().clear();
-      } else {
-        benefitPremiumEntity.setItems(new ArrayList<>());
-      }
-
-      // Agregar nuevos items
-      for (BenefitPremiumItemDto itemDto : request.getItems()) {
-        BenefitPremiumItemEntity itemEntity = new BenefitPremiumItemEntity();
-        itemEntity.setCode(itemDto.getCode());
-        itemEntity.setQuantity(itemDto.getQuantity());
-        itemEntity.setBenefitPremium(benefitPremiumEntity);
-        benefitPremiumEntity.getItems().add(itemEntity);
-      }
-    }
-
-    saveBenefitPremium.save(benefitPremiumEntity);
-  }
 
   @Override
   public List<BenefitsPremiumDto> findByLanguageAndRealmId(String language, Long realmId, String transactionId) {
     return obtainBenefitPremium.findByRealmIdAndLanguageAndStatusIsTrue(realmId, language, transactionId).stream().map(this::mapToModel)
+        .toList();
+  }
+
+  @Override
+  public List<BenefitsPremiumDto> findByRealmIdStatusIsTrue(Long realmId, String transactionId) {
+    return obtainBenefitPremium.findByRealmIdAndStatusIsTrue(realmId).stream().map(this::mapToModel)
         .toList();
   }
 

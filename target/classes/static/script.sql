@@ -203,6 +203,7 @@ CREATE TABLE `benefit_premium` (
   `command` VARCHAR(255) DEFAULT NULL,
   `send_item` TINYINT(1) NOT NULL DEFAULT 0,
   `reactivable` TINYINT(1) NOT NULL DEFAULT 0,
+   amount DOUBLE NOT NULL,
   `btn_text` VARCHAR(255) DEFAULT NULL,
   `type` VARCHAR(100) DEFAULT NULL,
   `realm_id` BIGINT DEFAULT NULL,

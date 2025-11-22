@@ -4,8 +4,8 @@ import com.wow.libre.domain.enums.BenefitPremiumType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,8 +37,9 @@ public class BenefitPremiumEntity {
   @Column(name = "realm_id")
   private Long realmId;
   private String language;
+  private Double amount;
   private boolean status;
-  
+
   @OneToMany(mappedBy = "benefitPremium", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private List<BenefitPremiumItemEntity> items;
 }

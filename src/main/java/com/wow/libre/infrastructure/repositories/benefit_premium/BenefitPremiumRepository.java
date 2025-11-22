@@ -9,4 +9,5 @@ public interface BenefitPremiumRepository extends CrudRepository<BenefitPremiumE
 
   List<BenefitPremiumEntity> findByStatusIsTrue();
 
+  List<BenefitPremiumEntity> findByRealmIdAndStatusIsTrue(Long realmId);
 }

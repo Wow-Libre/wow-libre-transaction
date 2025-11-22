@@ -10,4 +10,6 @@ public interface ObtainBenefitPremium {
   List<BenefitPremiumEntity> findByRealmIdAndLanguageAndStatusIsTrue(Long realmId, String language, String transactionId);
 
   Optional<BenefitPremiumEntity> findById(Long id);
+
+  List<BenefitPremiumEntity> findByRealmIdAndStatusIsTrue(Long realmId);
 }

@@ -7,6 +7,7 @@ public class Constants {
     // HEADERS
     public static final String HEADER_TRANSACTION_ID = "transaction_id";
     public static final String HEADER_ACCEPT_LANGUAGE = "Accept-Language";
+    public static final String HEADER_SIGNATURE = "X-Signature";
 
     /* JWT HEADERS */
     public static final String HEADER_EMAIL = "x-email";

@@ -34,4 +34,9 @@ public class JpaBenefitPremiumAdapter implements ObtainBenefitPremium, SaveBenef
   public Optional<BenefitPremiumEntity> findById(Long id) {
     return benefitPremiumRepository.findById(id);
   }
+
+  @Override
+  public List<BenefitPremiumEntity> findByRealmIdAndStatusIsTrue(Long realmId) {
+    return benefitPremiumRepository.findByRealmIdAndStatusIsTrue(realmId);
+  }
 }

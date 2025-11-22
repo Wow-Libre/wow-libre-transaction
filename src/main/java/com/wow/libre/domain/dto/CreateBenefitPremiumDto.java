@@ -27,5 +27,6 @@ public class CreateBenefitPremiumDto {
   private Long realmId;
   @NotNull
   private String language;
+  private Double amount;
   private List<BenefitPremiumItemDto> items;
 }

@@ -7,6 +7,6 @@ import java.util.*;
 @AllArgsConstructor
 @Getter
 public class SubscriptionBenefitsDto {
-    private List<SubscriptionBenefitDto> benefits;
+    private List<BenefitsPremiumDto> benefits;
     private int size;
 }

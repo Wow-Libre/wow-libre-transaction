@@ -8,5 +8,4 @@ import java.util.*;
 public interface ObtainJsonLoader {
     PillHomeModel getResourcePillHome(String language, String transactionId);
 
-    List<SubscriptionBenefitDto> getBenefitsPremium(String language, String transactionId);
 }
