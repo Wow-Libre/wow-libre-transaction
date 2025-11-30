@@ -25,7 +25,7 @@ spring:
   datasource:
     url: ${DB_TRANSACTION_HOST:jdbc:mysql://localhost:3306/transactions}
     username: ${DB_TRANSACTION_USERNAME:root}
-    password: ${DB_TRANSACTION_PASSWORD:sebastian}
+    password: ${DB_TRANSACTION_PASSWORD:Wowlibre96@@}
     driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   servlet:
@@ -37,7 +37,7 @@ application:
     wow-libre: ${HOST_BASE_CORE:http://localhost:8091/core}
     payu: ${PAYU_API_URL:https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi}
   signature:
-    secret-key: ${APP_SIGNATURE_SECRET_KEY:your-secret-key-change-in-production}
+    secret-key: ${APP_SIGNATURE_SECRET_KEY:wowLibreSecret}
   security:
     jwt:
       secret-key: ${CORE_JWT_SECRET_KEY:6E4D574873506B4A72434B6A614B39786F736B7855666B4D456A6E466F785572}

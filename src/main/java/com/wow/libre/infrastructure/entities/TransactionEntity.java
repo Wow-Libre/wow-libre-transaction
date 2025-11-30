@@ -41,6 +41,8 @@ public class TransactionEntity implements Serializable {
     private boolean creditPoints;
     private String currency;
     private boolean send;
+    @Column(name = "plan_id")
+    private Long planId;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
     @Column(name = "is_subscription")

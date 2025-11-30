@@ -52,9 +52,8 @@ public class TransactionSchedule {
                             transactionId);
 
                     if (!activeSubscription) {
-
-                        Long planId = Long.valueOf(transaction.getReferenceNumber());
-                        subscriptionPort.createSubscription(transaction.getUserId(), planId, transactionId);
+                        subscriptionPort.createSubscription(transaction.getUserId(), transaction.getPlanId(),
+                                transactionId);
                         transaction.setStatus(TransactionStatus.DELIVERED.getType());
                         transaction.setSend(true);
                     }
@@ -83,7 +82,7 @@ public class TransactionSchedule {
                                 transaction.getAccountId(), amount, items, transaction.getReferenceNumber(),
                                 transactionId);
                     }
-                    
+
                     transaction.setSend(true);
                     transaction.setStatus(TransactionStatus.DELIVERED.getType());
                 }

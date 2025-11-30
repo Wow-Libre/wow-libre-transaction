@@ -1,190 +1,182 @@
 package com.wow.libre.application.services.subscription;
 
-import com.wow.libre.domain.dto.BenefitsPremiumDto;
-import com.wow.libre.domain.dto.PillWidgetHomeDto;
-import com.wow.libre.domain.dto.SubscriptionBenefitsDto;
-import com.wow.libre.domain.enums.SubscriptionStatus;
-import com.wow.libre.domain.exception.InternalException;
-import com.wow.libre.domain.model.ItemQuantityModel;
-import com.wow.libre.domain.model.PillHomeModel;
-import com.wow.libre.domain.port.in.benefit_premium.BenefitPremiumPort;
-import com.wow.libre.domain.port.in.subscription.SubscriptionPort;
-import com.wow.libre.domain.port.in.wowlibre.WowLibrePort;
-import com.wow.libre.domain.port.out.plan.ObtainPlan;
-import com.wow.libre.domain.port.out.resources.ObtainJsonLoader;
-import com.wow.libre.domain.port.out.subscription.ObtainSubscription;
-import com.wow.libre.domain.port.out.subscription.SaveSubscription;
-import com.wow.libre.domain.port.out.subscription_benefit.ObtainSubscriptionBenefit;
-import com.wow.libre.domain.port.out.subscription_benefit.SaveSubscriptionBenefit;
-import com.wow.libre.infrastructure.entities.PlanEntity;
-import com.wow.libre.infrastructure.entities.SubscriptionBenefitEntity;
-import com.wow.libre.infrastructure.entities.SubscriptionEntity;
-import com.wow.libre.infrastructure.util.RandomString;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import com.wow.libre.domain.dto.*;
+import com.wow.libre.domain.enums.*;
+import com.wow.libre.domain.exception.*;
+import com.wow.libre.domain.model.*;
+import com.wow.libre.domain.port.in.benefit_premium.*;
+import com.wow.libre.domain.port.in.subscription.*;
+import com.wow.libre.domain.port.in.wowlibre.*;
+import com.wow.libre.domain.port.out.plan.*;
+import com.wow.libre.domain.port.out.resources.*;
+import com.wow.libre.domain.port.out.subscription.*;
+import com.wow.libre.domain.port.out.subscription_benefit.*;
+import com.wow.libre.infrastructure.entities.*;
+import com.wow.libre.infrastructure.util.*;
+import jakarta.transaction.*;
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
+
+import java.time.*;
+import java.util.*;
 
 @Service
 public class SubscriptionService implements SubscriptionPort {
-  private static final Logger LOGGER =
-      LoggerFactory.getLogger(SubscriptionService.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SubscriptionService.class);
 
-  private final ObtainSubscription obtainSubscription;
-  private final ObtainJsonLoader obtainJsonLoader;
-  private final ObtainSubscriptionBenefit obtainSubscriptionBenefit;
-  private final SaveSubscriptionBenefit saveSubscriptionBenefit;
-  private final SaveSubscription saveSubscription;
-  private final ObtainPlan obtainPlan;
-  private final WowLibrePort wowLibrePort;
-  private final RandomString randomString;
-  private final BenefitPremiumPort benefitPremiumPort;
+    private final ObtainSubscription obtainSubscription;
+    private final ObtainJsonLoader obtainJsonLoader;
+    private final ObtainSubscriptionBenefit obtainSubscriptionBenefit;
+    private final SaveSubscriptionBenefit saveSubscriptionBenefit;
+    private final SaveSubscription saveSubscription;
+    private final ObtainPlan obtainPlan;
+    private final WowLibrePort wowLibrePort;
+    private final RandomString randomString;
+    private final BenefitPremiumPort benefitPremiumPort;
 
-  public SubscriptionService(ObtainSubscription obtainSubscription, ObtainJsonLoader obtainJsonLoader,
-                             ObtainSubscriptionBenefit obtainSubscriptionBenefit
-      , SaveSubscriptionBenefit saveSubscriptionBenefit
-      , WowLibrePort wowLibrePort, SaveSubscription saveSubscription, ObtainPlan obtainPlan,
-                             @Qualifier("product-reference") RandomString randomString, BenefitPremiumPort benefitPremiumPort) {
-    this.obtainSubscription = obtainSubscription;
-    this.obtainJsonLoader = obtainJsonLoader;
-    this.obtainSubscriptionBenefit = obtainSubscriptionBenefit;
-    this.saveSubscriptionBenefit = saveSubscriptionBenefit;
-    this.wowLibrePort = wowLibrePort;
-    this.saveSubscription = saveSubscription;
-    this.obtainPlan = obtainPlan;
-    this.randomString = randomString;
-    this.benefitPremiumPort = benefitPremiumPort;
-  }
-
-  @Override
-  public PillWidgetHomeDto getPillHome(Long userId, String language, String transactionId) {
-    PillHomeModel pillHomeModel = obtainJsonLoader.getResourcePillHome(language, transactionId);
-
-    if (userId != null) {
-
-      Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
-          SubscriptionStatus.ACTIVE.getType());
-
-      if (subscriptionEntity.isPresent()) {
-        return new PillWidgetHomeDto(pillHomeModel.getActive(), "/accounts");
-      }
-
-    }
-    return new PillWidgetHomeDto(pillHomeModel.getInactive(), "/subscriptions");
-  }
-
-  @Override
-  public SubscriptionEntity createSubscription(Long userId, Long planId, String transactionId) {
-
-    Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
-        SubscriptionStatus.ACTIVE.getType());
-
-    if (subscriptionEntity.isPresent()) {
-      throw new InternalException("You already have an active subscription", transactionId);
+    public SubscriptionService(ObtainSubscription obtainSubscription, ObtainJsonLoader obtainJsonLoader,
+                               ObtainSubscriptionBenefit obtainSubscriptionBenefit
+            , SaveSubscriptionBenefit saveSubscriptionBenefit
+            , WowLibrePort wowLibrePort, SaveSubscription saveSubscription, ObtainPlan obtainPlan,
+                               @Qualifier("product-reference") RandomString randomString,
+                               BenefitPremiumPort benefitPremiumPort) {
+        this.obtainSubscription = obtainSubscription;
+        this.obtainJsonLoader = obtainJsonLoader;
+        this.obtainSubscriptionBenefit = obtainSubscriptionBenefit;
+        this.saveSubscriptionBenefit = saveSubscriptionBenefit;
+        this.wowLibrePort = wowLibrePort;
+        this.saveSubscription = saveSubscription;
+        this.obtainPlan = obtainPlan;
+        this.randomString = randomString;
+        this.benefitPremiumPort = benefitPremiumPort;
     }
 
-    Optional<PlanEntity> plan = obtainPlan.findById(planId, transactionId);
+    @Override
+    public PillWidgetHomeDto getPillHome(Long userId, String language, String transactionId) {
+        PillHomeModel pillHomeModel = obtainJsonLoader.getResourcePillHome(language, transactionId);
 
-    if (plan.isEmpty()) {
-      LOGGER.error("Plan not found: planId {} UserId {} TransactionId {}", planId, userId, transactionId);
-      throw new InternalException("Plan not found", transactionId);
+        if (userId != null) {
+
+            Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
+                    SubscriptionStatus.ACTIVE.getType());
+
+            if (subscriptionEntity.isPresent()) {
+                return new PillWidgetHomeDto(pillHomeModel.getActive(), "/accounts");
+            }
+
+        }
+        return new PillWidgetHomeDto(pillHomeModel.getInactive(), "/subscriptions");
     }
 
-    PlanEntity planEntity = plan.get();
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime nextInvoiceDate = now.plusDays(30);
+    @Override
+    public SubscriptionEntity createSubscription(Long userId, Long planId, String transactionId) {
 
-    SubscriptionEntity subscription = new SubscriptionEntity();
-    subscription.setUserId(userId);
-    subscription.setPlanId(planEntity);
-    subscription.setCreationDate(LocalDateTime.now());
-    subscription.setNextInvoiceDate(nextInvoiceDate);
-    subscription.setReferenceNumber(randomString.nextString());
-    subscription.setStatus(SubscriptionStatus.ACTIVE.getType());
-    return saveSubscription.save(subscription, transactionId);
-  }
+        Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
+                SubscriptionStatus.ACTIVE.getType());
 
-  @Override
-  public boolean isActiveSubscription(Long userId, String transactionId) {
-    Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
-        SubscriptionStatus.ACTIVE.getType());
+        if (subscriptionEntity.isPresent()) {
+            throw new InternalException("You already have an active subscription", transactionId);
+        }
 
-    return subscriptionEntity.isPresent();
-  }
+        Optional<PlanEntity> plan = obtainPlan.findById(planId, transactionId);
 
-  @Override
-  public SubscriptionBenefitsDto benefits(Long userId, Long realmId, String language, String transactionId) {
+        if (plan.isEmpty()) {
+            LOGGER.error("Plan not found: planId {} UserId {} TransactionId {}", planId, userId, transactionId);
+            throw new InternalException("Plan not found", transactionId);
+        }
 
-    if (!isActiveSubscription(userId, transactionId)) {
-      return new SubscriptionBenefitsDto(new ArrayList<>(), 0);
+        PlanEntity planEntity = plan.get();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextInvoiceDate = now.plusDays(30);
+
+        SubscriptionEntity subscription = new SubscriptionEntity();
+        subscription.setUserId(userId);
+        subscription.setPlanId(planEntity);
+        subscription.setCreationDate(LocalDateTime.now());
+        subscription.setNextInvoiceDate(nextInvoiceDate);
+        subscription.setReferenceNumber(randomString.nextString());
+        subscription.setStatus(SubscriptionStatus.ACTIVE.getType());
+        return saveSubscription.save(subscription, transactionId);
     }
 
-    List<BenefitsPremiumDto> benefits =
-        benefitPremiumPort.findByLanguageAndRealmId(language, realmId, transactionId).stream()
-            .filter(benefit -> realmId.equals(benefit.realmId) && (benefit.reactivable
-                || obtainSubscriptionBenefit.findByUserIdAndBenefitIdAndServerId(userId,
-                benefit.id, realmId).isEmpty())).toList();
+    @Override
+    public boolean isActiveSubscription(Long userId, String transactionId) {
+        Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
+                SubscriptionStatus.ACTIVE.getType());
 
-    return new SubscriptionBenefitsDto(benefits, benefits.size());
-  }
-
-  @Override
-  public void claimBenefits(Long realmId, Long userId, Long accountId, Long characterId, String language,
-                            Long benefitId, String transactionId) {
-
-    if (!isActiveSubscription(userId, transactionId)) {
-      throw new InternalException("Subscription Inactive", transactionId);
+        return subscriptionEntity.isPresent();
     }
 
-    Optional<BenefitsPremiumDto> benefits =
-        benefitPremiumPort.findByLanguageAndRealmId(language, realmId, transactionId).stream()
-            .filter(benefit -> Objects.equals(benefit.id, benefitId)
-                && benefit.realmId.equals(realmId)).findAny();
+    @Override
+    public SubscriptionBenefitsDto benefits(Long userId, Long realmId, String language, String transactionId) {
 
-    if (benefits.isEmpty()) {
-      throw new InternalException("Benefits not available", transactionId);
+        if (!isActiveSubscription(userId, transactionId)) {
+            return new SubscriptionBenefitsDto(new ArrayList<>(), 0);
+        }
+
+        List<BenefitsPremiumDto> benefits =
+                benefitPremiumPort.findByLanguageAndRealmId(language, realmId, transactionId).stream()
+                        .filter(benefit -> realmId.equals(benefit.realmId) && (benefit.reactivable
+                                || obtainSubscriptionBenefit.findByUserIdAndBenefitIdAndServerId(userId,
+                                benefit.id, realmId).isEmpty())).toList();
+
+        return new SubscriptionBenefitsDto(benefits, benefits.size());
     }
 
-    BenefitsPremiumDto benefitModel = benefits.get();
+    @Transactional
+    @Override
+    public void claimBenefits(Long realmId, Long userId, Long accountId, Long characterId, String language,
+                              Long benefitId, String transactionId) {
 
-    if (!benefitModel.reactivable) {
-      if (obtainSubscriptionBenefit.findByUserIdAndBenefitIdAndServerId(userId, benefitModel.id, realmId).isPresent()) {
-        throw new InternalException("benefit has been claimed", transactionId);
-      }
-      SubscriptionBenefitEntity subscriptionBenefit = new SubscriptionBenefitEntity();
-      subscriptionBenefit.setBenefitId(benefitModel.id);
-      subscriptionBenefit.setCreatedAt(new Date());
-      subscriptionBenefit.setUserId(userId);
-      subscriptionBenefit.setRealmId(benefitModel.realmId);
-      saveSubscriptionBenefit.save(subscriptionBenefit);
+        if (!isActiveSubscription(userId, transactionId)) {
+            throw new InternalException("Subscription Inactive", transactionId);
+        }
+
+        Optional<BenefitsPremiumDto> benefits =
+                benefitPremiumPort.findByLanguageAndRealmId(language, realmId, transactionId).stream()
+                        .filter(benefit -> Objects.equals(benefit.id, benefitId)
+                                && benefit.realmId.equals(realmId)).findAny();
+
+        if (benefits.isEmpty()) {
+            throw new InternalException("Benefits not available", transactionId);
+        }
+
+        BenefitsPremiumDto benefitModel = benefits.get();
+
+        if (!benefitModel.reactivable) {
+            if (obtainSubscriptionBenefit.findByUserIdAndBenefitIdAndServerId(userId, benefitModel.id, realmId).isPresent()) {
+                throw new InternalException("benefit has been claimed", transactionId);
+            }
+            SubscriptionBenefitEntity subscriptionBenefit = new SubscriptionBenefitEntity();
+            subscriptionBenefit.setBenefitId(benefitModel.id);
+            subscriptionBenefit.setCreatedAt(new Date());
+            subscriptionBenefit.setUserId(userId);
+            subscriptionBenefit.setRealmId(benefitModel.realmId);
+            saveSubscriptionBenefit.save(subscriptionBenefit);
+        }
+
+        List<ItemQuantityModel> items = new ArrayList<>();
+        if (benefitModel.sendItem && !benefitModel.items.isEmpty()) {
+            items = benefitModel.items.stream().map(benefit -> new ItemQuantityModel(benefit.getCode(),
+                    benefit.getQuantity())).toList();
+        }
+
+
+        wowLibrePort.sendBenefitsPremium(realmId, userId, accountId, characterId, items, benefitModel.type.getType(),
+                benefitModel.amount, transactionId);
     }
 
-    List<ItemQuantityModel> items = new ArrayList<>();
-    if (benefitModel.sendItem && !benefitModel.items.isEmpty()) {
-      items = benefitModel.items.stream().map(benefit -> new ItemQuantityModel(benefit.getCode(),
-          benefit.getQuantity())).toList();
+    @Override
+    public List<SubscriptionEntity> findByExpirateSubscription() {
+        return obtainSubscription.findByExpirateSubscription();
     }
 
-
-    wowLibrePort.sendBenefitsPremium(realmId, userId, accountId, characterId, items, benefitModel.type.getType(),
-        benefitModel.amount, transactionId);
-  }
-
-  @Override
-  public List<SubscriptionEntity> findByExpirateSubscription() {
-    return obtainSubscription.findByExpirateSubscription();
-  }
-
-  @Override
-  public void save(SubscriptionEntity subscription) {
-    saveSubscription.save(subscription, "");
-  }
+    @Override
+    public void save(SubscriptionEntity subscription) {
+        saveSubscription.save(subscription, "");
+    }
 
 
 }

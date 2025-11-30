@@ -102,6 +102,7 @@ CREATE TABLE transactions.transaction
     status            VARCHAR(50) NOT NULL,
     product_id        BIGINT,
     subscription_id   BIGINT,
+    plan_id         BIGINT,
     reference_number  VARCHAR(80) NOT NULL,
     creation_date     DATETIME(6) NOT NULL,
     payment_method    VARCHAR(60),

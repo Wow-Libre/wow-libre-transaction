@@ -78,6 +78,7 @@ public class TransactionService implements TransactionPort {
             transactionEntity.setSend(false);
             transactionEntity.setCreationDate(LocalDateTime.now());
             transactionEntity.setCurrency(currency);
+            transactionEntity.setPlanId(plan.getId());
             transactionEntity.setSubscription(true);
             transactionEntity.setPaymentMethod(transaction.getPaymentType().getType());
             saveTransaction.save(transactionEntity, transactionId);
