@@ -153,11 +153,18 @@ public class PaymentPayUMethod extends PaymentMethod {
                 payUCredentials.getApiLogin(),
                 payUCredentials.getApiKey());
 
-        String state = response.getResult().getPayload().stream()
-                .findFirst()
-                .flatMap(order -> order.getTransactions().stream().findFirst())
-                .map(tx -> tx.getTransactionResponse().getState())
-                .orElseThrow(() -> new NotFoundException("Transaction not found", transactionId));
+        // java
+        String state = Optional.ofNullable(response)
+                .map(PayUOrderDetailResponse::getResult)
+                .map(PayUOrderDetailResponse.PayUResult::getPayload)
+                .filter(payload -> !payload.isEmpty())
+                .flatMap(payload -> payload.stream().findFirst())
+                .flatMap(order -> Optional.ofNullable(order.getTransactions())
+                        .flatMap(txList -> txList.stream().findFirst()))
+                .map(tx -> Optional.ofNullable(tx.getTransactionResponse())
+                        .map(PayUOrderDetailResponse.PayUTransactionResponse::getState)
+                        .orElse(PaymentStatus.PENDING.getType()))
+                .orElse(PaymentStatus.PENDING.getType());
 
 
         return switch (state) {
