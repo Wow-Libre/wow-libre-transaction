@@ -89,8 +89,13 @@ public class SubscriptionService implements SubscriptionPort {
 
         PlanEntity planEntity = plan.get();
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime nextInvoiceDate = now.plusDays(30);
-
+        LocalDateTime nextInvoiceDate;
+        if (planEntity.getFrequencyType().equalsIgnoreCase("YEARLY")) {
+            nextInvoiceDate = now.plusYears(planEntity.getFrequencyValue());
+        } else {
+            nextInvoiceDate = now.plusMonths(planEntity.getFrequencyValue());
+        }
+        
         SubscriptionEntity subscription = new SubscriptionEntity();
         subscription.setUserId(userId);
         subscription.setPlanId(planEntity);

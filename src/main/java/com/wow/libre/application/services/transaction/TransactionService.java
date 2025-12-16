@@ -180,7 +180,15 @@ public class TransactionService implements TransactionPort {
         if (transaction.isEmpty()) {
             return Optional.empty();
         }
+
         TransactionEntity foundTransaction = transaction.get();
+
+        boolean statusPaid = foundTransaction.getStatus().equalsIgnoreCase(TransactionStatus.PAID.getType())
+                || foundTransaction.getStatus().equalsIgnoreCase(TransactionStatus.DELIVERED.getType());
+
+        if (statusPaid) {
+            return Optional.of(foundTransaction);
+        }
 
         PaymentType paymentMethodType = PaymentType.valueOf(foundTransaction.getPaymentMethod());
 
