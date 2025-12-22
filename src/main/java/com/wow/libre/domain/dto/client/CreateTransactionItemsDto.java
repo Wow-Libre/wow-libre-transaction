@@ -7,11 +7,19 @@ import lombok.*;
 
 import java.util.*;
 
+@JsonPropertyOrder({
+        "realm_id",
+        "user_id",
+        "account_id",
+        "reference",
+        "items",
+        "amount"
+})
 @AllArgsConstructor
 @Getter
 public class CreateTransactionItemsDto {
-    @JsonProperty("server_id")
-    private Long serverId;
+    @JsonProperty("realm_id")
+    private Long realmId;
     @JsonProperty("user_id")
     private Long userId;
     @JsonProperty("account_id")
