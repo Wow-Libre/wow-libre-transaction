@@ -44,8 +44,7 @@ public class JpaTransactionAdapter implements SaveTransaction, ObtainTransaction
 
     @Override
     public List<TransactionEntity> findByStatusIsPaidAndSendIsFalse(String transactionId) {
-        return transactionRepository.findByStatusAndSendIsFalse(TransactionStatus.PAID.getType(),
-                TransactionStatus.PENDING.getType());
+        return transactionRepository.findByStatusAndSendIsFalse(TransactionStatus.PAID.getType());
     }
 
     @Override

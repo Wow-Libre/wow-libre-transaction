@@ -166,6 +166,8 @@ public class PaymentPayUMethod extends PaymentMethod {
                         .orElse(PaymentStatus.PENDING.getType()))
                 .orElse(PaymentStatus.PENDING.getType());
 
+        LOGGER.error("⚠️ Estado del PaymentIntent obtenido de PayU: {} ReferenceCode {} Response {}", state,
+                referenceCode, response);
 
         return switch (state) {
             case "APPROVED" -> PaymentStatus.APPROVED;
