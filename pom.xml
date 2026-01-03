@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.5.3</version>
         <relativePath/>
     </parent>
     <groupId>com.wow.libre</groupId>
@@ -30,8 +30,18 @@
         <java.version>21</java.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <tomcat.version>10.1.45</tomcat.version>
+        <spring-security.version>6.5.4</spring-security.version>
+        <spring.version>6.2.11</spring.version>
+
     </properties>
     <dependencies>
+        <!-- Parche de seguridad CVE-2025-41248: Actualizar spring-core a 6.2.11+ para mitigar vulnerabilidad -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>6.2.11</version>
+        </dependency>
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
