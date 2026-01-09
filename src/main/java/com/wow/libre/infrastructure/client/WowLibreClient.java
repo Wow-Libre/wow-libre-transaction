@@ -40,7 +40,9 @@ public class WowLibreClient {
                               String transactionId) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        if (transactionId != null && !transactionId.isEmpty()) {
+            headers.set(HEADER_TRANSACTION_ID, transactionId);
+        }
 
         CreateTransactionItemsDto requestBody = new CreateTransactionItemsDto(realmId,
                 userId, accountId, reference, items, gold);
@@ -80,7 +82,9 @@ public class WowLibreClient {
 
     public void sendBenefitsPremium(SubscriptionBenefitsRequest request, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        if (transactionId != null && !transactionId.isEmpty()) {
+            headers.set(HEADER_TRANSACTION_ID, transactionId);
+        }
 
         addSignatureToHeaders(headers, request, transactionId);
 
