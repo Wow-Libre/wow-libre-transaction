@@ -177,23 +177,6 @@ CREATE TABLE transactions.stripe_credentials (
         ON DELETE CASCADE
 );
 
--- Insert plans
-INSERT INTO transactions.plan (name, price, price_title, description, discount, status, currency, frequency_type, frequency_value, free_trial_days, tax, return_tax, features, language) VALUES
--- Spanish plans
-('Explorador',0,'Gratis','Crea una cuenta y comienza a disfrutar del juego completo sin costo alguno. Perfecto para nuevos jugadores.',0,true,'USD',NULL,NULL,NULL,'0','0','["Una cuenta de juego por usuario","Acceso completo a todo el contenido del juego","Participación en eventos globales","Acceso a la app móvil (Android)","Soporte comunitario a través del foro y Discord"]','es'),
-('Campeón',12,'$12/año','Disfruta de una experiencia premium durante todo el año con un único pago anual. Ahorra dinero y accede a beneficios exclusivos.',0,true,'USD','YEARLY',1,NULL,'0','0','["Ahorro exclusivo anual","Acceso a la app móvil (Android)","Gestión de cuentas desde web y móvil","Paquete de 100 Slots para la ruleta mensual","Equipo inicial para todos los personajes","Soporte técnico prioritario","Hasta 20 cuentas de juego","Cambio de facción y renombrado de personajes gratis","Items y monturas gratuitas cada mes","Montura personalizada VIP"]','es'),
-('Viajero',2,'$2/mes','Accede a beneficios adicionales con una suscripción mensual asequible y flexible. Perfecto para jugadores activos que buscan ventajas continuas.',0,true,'USD','MONTHLY',1,NULL,'0','0','["Acceso a la app móvil (Android)","Gestión de cuentas desde web y móvil","Paquete de 100 Slots para la ruleta","Equipo inicial para todos los personajes","Soporte técnico prioritario","Hasta 20 cuentas de juego","Cambio de facción y renombrado de personajes gratis","Items y monturas gratuitas al suscribirte"]','es');
-
--- English plans
-('Explorer',0,'Free','Create an account and start enjoying the full game at no cost. Perfect for new players.',0,true,'USD',NULL,NULL,NULL,'0','0','["One game account per user","Full access to all game content","Participation in global events","Access to the mobile app (Android)","Community support via forum and Discord"]','en'),
-('Champion',12,'$12/year','Enjoy a premium experience all year long with a single annual payment. Save money and access exclusive benefits.',0,true,'USD','YEARLY',1,NULL,'0','0','["Exclusive annual savings","Access to the mobile app (Android)","Account management via web and mobile","100 Slots package for the monthly roulette","Starter gear for all characters","Priority technical support","Up to 20 game accounts","Faction change and character renaming for free","Free items and mounts every month","VIP custom mount"]','en'),
-('Traveler',2,'$2/month','Access additional benefits with an affordable and flexible monthly subscription. Perfect for active players seeking continuous advantages.',0,true,'USD','MONTHLY',1,NULL,'0','0','["Access to the mobile app (Android)","Account management via web and mobile","100 Slots package for the roulette","Starter gear for all characters","Priority technical support","Up to 20 game accounts","Faction change and character renaming for free","Free items and mounts upon subscribing"]','en');
-
--- Portuguese plans
-('Explorador',0,'Grátis','Crie uma conta e comece a desfrutar do jogo completo sem nenhum custo. Perfeito para novos jogadores.',0,true,'USD',NULL,NULL,NULL,'0','0','["Uma conta de jogo por usuário","Acesso completo a todo o conteúdo do jogo","Participação em eventos globais","Acesso ao app móvel (Android)","Suporte da comunidade via fórum e Discord"]','pt'),
-('Campeão',12,'$12/ano','Desfrute de uma experiência premium durante todo o ano com um único pagamento anual. Economize e acesse benefícios exclusivos.',0,true,'USD','YEARLY',1,NULL,'0','0','["Economia anual exclusiva","Acesso ao app móvel (Android)","Gestão de contas via web e mobile","Pacote de 100 Slots para a roleta mensal","Equipamento inicial para todos os personagens","Suporte técnico prioritário","Até 20 contas de jogo","Mudança de facção e renomeação de personagens grátis","Itens e montarias gratuitas todo mês","Montaria VIP personalizada"]','pt'),
-('Viajante',2,'$2/mês','Acesse benefícios adicionais com uma assinatura mensal acessível e flexível. Perfeito para jogadores ativos que buscam vantagens contínuas.',0,true,'USD','MONTHLY',1,NULL,'0','0','["Acesso ao app móvel (Android)","Gestão de contas via web e mobile","Pacote de 100 Slots para a roleta","Equipamento inicial para todos os personagens","Suporte técnico prioritário","Até 20 contas de jogo","Mudança de facção e renomeação de personagens grátis","Itens e montarias gratuitas ao assinar"]','pt');
-
 
 CREATE TABLE `benefit_premium` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -226,3 +209,32 @@ CREATE TABLE `benefit_premium_item` (
     ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- =====================
+-- Spanish plans
+-- =====================
+INSERT INTO transactions.plan
+(name, price, price_title, description, discount, status, currency, frequency_type, frequency_value, free_trial_days, tax, return_tax, features, language)
+VALUES
+('Explorador',0,'Gratis','Crea una cuenta y comienza a disfrutar del juego completo sin costo alguno. Perfecto para nuevos jugadores.',0,true,'USD',NULL,NULL,NULL,0,0,'["Una cuenta de juego por usuario","Acceso completo a todo el contenido del juego","Participación en eventos globales","Acceso a la app móvil (Android)","Soporte comunitario a través del foro y Discord"]','es'),
+('Campeón',12,'$12/año','Disfruta de una experiencia premium durante todo el año con un único pago anual. Ahorra dinero y accede a beneficios exclusivos.',0,true,'USD','YEARLY',1,NULL,0,0,'["Ahorro exclusivo anual","Acceso a la app móvil (Android)","Gestión de cuentas desde web y móvil","Paquete de 100 Slots para la ruleta mensual","Equipo inicial para todos los personajes","Soporte técnico prioritario","Hasta 20 cuentas de juego","Cambio de facción y renombrado de personajes gratis","Items y monturas gratuitas cada mes","Montura personalizada VIP"]','es'),
+('Viajero',2,'$2/mes','Accede a beneficios adicionales con una suscripción mensual asequible y flexible. Perfecto para jugadores activos que buscan ventajas continuas.',0,true,'USD','MONTHLY',1,NULL,0,0,'["Acceso a la app móvil (Android)","Gestión de cuentas desde web y móvil","Paquete de 100 Slots para la ruleta","Equipo inicial para todos los personajes","Soporte técnico prioritario","Hasta 20 cuentas de juego","Cambio de facción y renombrado de personajes gratis","Items y monturas gratuitas al suscribirte"]','es');
+
+-- =====================
+-- English plans
+-- =====================
+INSERT INTO transactions.plan
+(name, price, price_title, description, discount, status, currency, frequency_type, frequency_value, free_trial_days, tax, return_tax, features, language)
+VALUES
+('Explorer',0,'Free','Create an account and start enjoying the full game at no cost. Perfect for new players.',0,true,'USD',NULL,NULL,NULL,0,0,'["One game account per user","Full access to all game content","Participation in global events","Access to the mobile app (Android)","Community support via forum and Discord"]','en'),
+('Champion',12,'$12/year','Enjoy a premium experience all year long with a single annual payment. Save money and access exclusive benefits.',0,true,'USD','YEARLY',1,NULL,0,0,'["Exclusive annual savings","Access to the mobile app (Android)","Account management via web and mobile","100 Slots package for the monthly roulette","Starter gear for all characters","Priority technical support","Up to 20 game accounts","Faction change and character renaming for free","Free items and mounts every month","VIP custom mount"]','en'),
+('Traveler',2,'$2/month','Access additional benefits with an affordable and flexible monthly subscription. Perfect for active players seeking continuous advantages.',0,true,'USD','MONTHLY',1,NULL,0,0,'["Access to the mobile app (Android)","Account management via web and mobile","100 Slots package for the roulette","Starter gear for all characters","Priority technical support","Up to 20 game accounts","Faction change and character renaming for free","Free items and mounts upon subscribing"]','en');
+
+-- =====================
+-- Portuguese plans
+-- =====================
+INSERT INTO transactions.plan
+(name, price, price_title, description, discount, status, currency, frequency_type, frequency_value, free_trial_days, tax, return_tax, features, language)
+VALUES
+('Explorador',0,'Grátis','Crie uma conta e comece a desfrutar do jogo completo sem nenhum custo. Perfeito para novos jogadores.',0,true,'USD',NULL,NULL,NULL,0,0,'["Uma conta de jogo por usuário","Acesso completo a todo o conteúdo do jogo","Participação em eventos globais","Acesso ao app móvel (Android)","Suporte da comunidade via fórum e Discord"]','pt'),
+('Campeão',12,'$12/ano','Desfrute de uma experiência premium durante todo o ano com um único pagamento anual. Economize e acesse benefícios exclusivos.',0,true,'USD','YEARLY',1,NULL,0,0,'["Economia anual exclusiva","Acesso ao app móvel (Android)","Gestão de contas via web e mobile","Pacote de 100 Slots para a roleta mensal","Equipamento inicial para todos os personagens","Suporte técnico prioritário","Até 20 contas de jogo","Mudança de facção e renomeação de personagens grátis","Itens e montarias gratuitas todo mês","Montaria VIP personalizada"]','pt'),
+('Viajante',2,'$2/mês','Acesse benefícios adicionais com uma assinatura mensal acessível e flexível. Perfeito para jogadores ativos que buscam vantagens contínuas.',0,true,'USD','MONTHLY',1,NULL,0,0,'["Acesso ao app móvel (Android)","Gestão de contas via web e mobile","Pacote de 100 Slots para a roleta","Equipamento inicial para todos os personagens","Suporte técnico prioritário","Até 20 contas de jogo","Mudança de facção e renomeação de personagens grátis","Itens e montarias gratuitas ao assinar"]','pt');

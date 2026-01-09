@@ -13,6 +13,7 @@ public enum BenefitPremiumType {
     CHANGE_FACTION("CHANGE_FACTION"),
     CHANGE_RACE("CHANGE_RACE"),
     CUSTOMIZE("CUSTOMIZE"),
+    LEVEL("LEVEL"),
     ITEM("ITEM");
 
     @JsonValue
